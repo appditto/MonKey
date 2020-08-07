@@ -1,5 +1,6 @@
 <script>
   import Hero from "../components/Hero.svelte";
+  import How from "../components/How.svelte";
 </script>
 
 <style global>
@@ -17,3 +18,4 @@
 
 <!-- HTML -->
 <Hero />
+<How />
