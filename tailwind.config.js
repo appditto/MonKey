@@ -1,7 +1,17 @@
 module.exports = {
   purge: [],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#404040"
+      },
+      spacing: {
+        '36': '9rem'
+      },
+      borderRadius: {
+        'xl': '0.65rem'
+      }
+    },
   },
   variants: {},
   plugins: [],

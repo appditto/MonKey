@@ -1,8 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Now Alt';
+    src: url('/fonts/now-alt-bold.woff2') format('woff2'),
+         url('/fonts/now-alt-bold.woff') format('woff'),
+         url('/fonts/now-alt-bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: fallback;
+}
+
+@font-face {
+    font-family: 'Now Alt';
+    src: url('/fonts/now-alt-medium.woff2') format('woff2'),
+         url('/fonts/now-alt-medium.woff') format('woff'),
+         url('/fonts/now-alt-medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: fallback;
+}
+
+@font-face {
+    font-family: 'Now Alt';
+    src: url('/fonts/now-alt-regular.woff2') format('woff2'),
+         url('/fonts/now-alt-regular.woff') format('woff'),
+         url('/fonts/now-alt-regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: fallback;
+}
+
+body{
+    font-family: 'Now Alt'
+}
+
 .y-container {
 	max-width: 1280px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.btn-primary {
+    transition: all 0.15s ease-out;
+    box-shadow: 0rem 0.3rem 0rem 0rem black;
+    transform: translateY(0rem);
+}
+
+.btn-primary:hover {
+    box-shadow: 0rem 0.5rem 0rem 0rem black;
+    transform: translateY(-0.2rem);
 }
