@@ -10,10 +10,10 @@
 <!-- HTML -->
 <div class="w-full flex flex-col justify-center pt-20 bg-hero">
   <h1
-    class="font-bold text-5xl mx-6 text-center leading-none tracking-tight mt-5">
+    class="font-bold text-5xl mx-5 text-center leading-none tracking-tight mt-5">
     Welcome to the jungle.
   </h1>
-  <p class="text-center mx-2 mt-4 text-xl">
+  <p class="text-center mx-5 mt-5 text-2xl">
     In here, Banano addresses are MonKeys.
   </p>
   <button

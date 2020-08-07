@@ -31,19 +31,20 @@
         src="images/logos/logo-monkey-horizontal.svg" />
     </a>
     <!-- Menu Options -->
-    <div class="flex flex-row justify-end items-center w-1/2 font-medium">
+    <div
+      class="flex flex-row flex-wrap justify-end items-center w-2/3 font-medium">
       <a
         href="/documentation"
-        class="m-2 md:ml-4 line {segment === 'documentation' ? 'line-active' : ''}">
+        class="mx-2 md:ml-4 line {segment === 'documentation' ? 'line-active' : ''}">
         API
       </a>
       <a
         href="https://github.com/appditto/monkey"
         target="_blank"
-        class="m-2 md:ml-4 line">
+        class="mx-2 md:ml-4 line">
         GitHub
       </a>
-      <a href="https://banano.cc" target="_blank" class="m-2 md:ml-4 line">
+      <a href="https://banano.cc" target="_blank" class="mx-2 md:ml-4 line">
         Banano
       </a>
     </div>
