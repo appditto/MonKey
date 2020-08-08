@@ -24,9 +24,9 @@
 <div class="w-full px-2 py-2 md:px-4 md:py-3 absolute">
   <div class="y-container flex flex-row justify-between items-center">
     <!-- Logo -->
-    <a href="/">
+    <a class="w-32 md:w-36" href="/">
       <img
-        class="w-32 md:w-36 h-auto m-2"
+        class="w-full h-auto m-2"
         alt="Logo"
         src="images/logos/logo-monkey-horizontal.svg" />
     </a>

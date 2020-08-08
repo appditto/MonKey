@@ -1,6 +1,6 @@
 <!-- HTML -->
-<div class="w-full flex-col justify-center py-12 relative md:my-20">
-  <div class="y-container flex flex-col items-center relative">
+<div class="w-full flex-col justify-center py-12 md:my-20">
+  <div class="y-container flex flex-col items-center">
     <h2
       class="font-bold text-5xl mx-4 text-center leading-none tracking-tight
       mt-5">

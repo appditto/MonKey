@@ -5,6 +5,7 @@
   import Available from "../components/Available.svelte";
   import OpenSource from "../components/OpenSource.svelte";
   import Integrate from "../components/Integrate.svelte";
+  import Stats from "../components/Stats.svelte";
 </script>
 
 <style global>
@@ -27,3 +28,4 @@
 <Available />
 <OpenSource />
 <Integrate />
+<Stats />

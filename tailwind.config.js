@@ -14,8 +14,15 @@ module.exports = {
       maxWidth: {
         'xxs': '16rem'
       },
+      width: {
+        '28': '7rem'
+      },
       margin: {
         '-14': '-3.5rem'
+      },
+      scale: {
+        '200': '2',
+        '300': '3'
       }
     },
   },
