@@ -53,3 +53,14 @@ body{
     box-shadow: 0rem 0.5rem 0rem 0rem black;
     transform: translateY(-0.2rem);
 }
+
+.btn-danger {
+    transition: all 0.15s ease-out;
+    box-shadow: 0rem 0.3rem 0rem 0rem #97000E;
+    transform: translateY(0rem);
+}
+
+.btn-danger:hover {
+    box-shadow: 0rem 0.5rem 0rem 0rem #97000E;
+    transform: translateY(-0.2rem);
+}

@@ -3,7 +3,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#404040"
+        primary: "#404040",
+        danger: "#BF1323",
+        dangerDark: "#97000E"
       },
       spacing: {
         '36': '9rem'
