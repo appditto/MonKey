@@ -1,3 +1,7 @@
+<script>
+  import LazyImage from "../components/LazyImage.svelte";
+</script>
+
 <style>
   .bg-banano {
     background-image: url("/images/illustrations-background/bg-banano.svg");
@@ -51,19 +55,49 @@
       </div>
       <div
         class="w-full flex flex-row flex-wrap justify-center items-center mt-6">
-        <img
-          class="w-full max-w-xs h-auto px-2 md:px-4 my-6"
-          src="images/illustrations-foreground/kalium.svg"
-          alt="Kalium Illustration" />
-        <div class="flex flex-col items-center">
-          <img
-            class="w-full max-w-md h-auto mx-auto px-2 my-2"
-            src="images/illustrations-foreground/creeper-1.svg"
-            alt="Creeper 1 Illustration" />
-          <img
-            class="w-full max-w-md h-auto px-2 md:px-6 my-2"
-            src="images/illustrations-foreground/creeper-2.svg"
-            alt="Creeper 2 Illustration" />
+        <div class="max-w-xs px-2 md:px-4 my-6">
+          <LazyImage>
+            <img
+              slot="content"
+              class="w-full h-auto"
+              src="images/illustrations-foreground/kalium.svg"
+              alt="Kalium Illustration" />
+            <img
+              slot="placeholder"
+              class="w-full h-auto"
+              src="images/illustrations-foreground/kalium-placeholder.svg"
+              alt="Kalium Illustration Placeholder" />
+          </LazyImage>
+        </div>
+        <div class="flex flex-col items-center md:mt-4">
+          <div class="max-w-md mx-auto px-2 my-2">
+            <LazyImage>
+              <img
+                slot="content"
+                class="w-full h-auto"
+                src="images/illustrations-foreground/creeper-1.svg"
+                alt="Creeper 1 Illustration" />
+              <img
+                slot="placeholder"
+                class="w-full h-auto "
+                src="images/illustrations-foreground/creeper-1-placeholder.svg"
+                alt="Creeper 1 Illustration Placeholder" />
+            </LazyImage>
+          </div>
+          <div class="max-w-md mx-auto px-2 md:px-6 my-2">
+            <LazyImage>
+              <img
+                slot="content"
+                class="w-full h-auto"
+                src="images/illustrations-foreground/creeper-2.svg"
+                alt="Creeper 2 Illustration" />
+              <img
+                slot="placeholder"
+                class="w-full h-auto "
+                src="images/illustrations-foreground/creeper-2-placeholder.svg"
+                alt="Creeper 2 Illustration Placeholder" />
+            </LazyImage>
+          </div>
         </div>
       </div>
     </div>

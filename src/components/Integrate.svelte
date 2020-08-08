@@ -1,3 +1,7 @@
+<script>
+  import LazyImage from "../components/LazyImage.svelte";
+</script>
+
 <!-- HTML -->
 <div class="w-full flex-col justify-center py-12 md:my-20">
   <div class="y-container flex flex-col items-center">
@@ -18,14 +22,35 @@
       </a>
     </div>
     <!-- Desktop Illustration -->
-    <img
-      class="w-full h-auto hidden md:block px-12 xl:px-8 mt-12"
-      src="images/illustrations-foreground/integrate.svg"
-      alt="Integrate Illustration" />
+    <div class="w-full hidden md:block px-12 xl:px-8 mt-12">
+      <LazyImage>
+        <img
+          slot="content"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/integrate.svg"
+          alt="Integrate Illustration" />
+        <img
+          slot="placeholder"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/integrate-placeholder.svg"
+          alt="Integrate Illustration Placeholder" />
+      </LazyImage>
+    </div>
     <!-- Mobile Illustration-->
-    <img
-      class="w-full max-w-sm h-auto md:hidden mx-auto mt-12 px-6"
-      src="images/illustrations-foreground/integrate-mobile.svg"
-      alt="Integrate Illustration" />
+    <div class="w-full max-w-sm md:hidden mx-auto mt-12 px-6">
+      <LazyImage>
+        <img
+          slot="content"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/integrate-mobile.svg"
+          alt="Integrate Illustration" />
+        <img
+          slot="placeholder"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/integrate-mobile-placeholder.svg"
+          alt="Integrate Illustration Placeholder" />
+      </LazyImage>
+    </div>
+
   </div>
 </div>

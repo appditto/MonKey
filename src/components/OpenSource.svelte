@@ -1,3 +1,7 @@
+<script>
+  import LazyImage from "../components/LazyImage.svelte";
+</script>
+
 <!-- HTML -->
 <div class="w-full flex-col justify-center py-12 relative md:my-20">
   <!-- Background Illusration Left -->
@@ -29,15 +33,34 @@
         Visit the Repo
       </a>
     </div>
-    <!-- Desktop Illustration -->
-    <img
-      class="w-full h-auto hidden md:block px-12 xl:px-8 mt-12"
-      src="images/illustrations-foreground/open-source.svg"
-      alt="Open Source Illustration" />
+    <div class="w-full hidden md:block px-12 xl:px-8 mt-12">
+      <LazyImage>
+        <img
+          slot="content"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/open-source.svg"
+          alt="Open Source Illustration" />
+        <img
+          slot="placeholder"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/open-source-placeholder.svg"
+          alt="Open Source Illustration Placeholder" />
+      </LazyImage>
+    </div>
     <!-- Mobile Illustration-->
-    <img
-      class="w-full h-auto md:hidden mx-auto mt-12 px-6"
-      src="images/illustrations-foreground/open-source-mobile.svg"
-      alt="Open Source Illustration" />
+    <div class="w-full md:hidden mx-auto mt-12 px-6">
+      <LazyImage>
+        <img
+          slot="content"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/open-source-mobile.svg"
+          alt="Open Source Illustration" />
+        <img
+          slot="placeholder"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/open-source-mobile-placeholder.svg"
+          alt="Open Source Illustration Placeholder" />
+      </LazyImage>
+    </div>
   </div>
 </div>

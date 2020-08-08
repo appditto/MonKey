@@ -1,7 +1,7 @@
 <script>
   import { fade } from "svelte/transition";
   export let height = 0;
-  export let offset = -500;
+  export let offset = -750;
   export let resetHeightDelay = 0;
   export let onload = null;
   let className = "";
@@ -109,7 +109,7 @@
   <div
     class="{transitionClass}
     {loaded ? 'opacity-0' : 'opacity-100'} w-full transition-opacity
-    duration-500 ease-out">
+    duration-500">
     <slot name="placeholder" />
   </div>
   <div

@@ -1,3 +1,7 @@
+<script>
+  import LazyImage from "../components/LazyImage.svelte";
+</script>
+
 <!-- HTML -->
 <div
   class="w-full flex flex-col justify-center py-16 md:pb-32 relative md:my-20">
@@ -23,14 +27,34 @@
       advanced science to it, and it turns into MonKey.
     </p>
     <!-- Desktop Illustration -->
-    <img
-      class="w-full h-auto hidden md:block px-12 xl:px-8 mt-8"
-      src="images/illustrations-foreground/formula.svg"
-      alt="Formula Illustration" />
+    <div class="w-full px-12 xl:px-8 mt-8 hidden md:block">
+      <LazyImage>
+        <img
+          slot="content"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/formula.svg"
+          alt="Formula Illustration" />
+        <img
+          slot="placeholder"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/formula-placeholder.svg"
+          alt="Formula Illustration Placeholder" />
+      </LazyImage>
+    </div>
     <!-- Mobile Illustration-->
-    <img
-      class="w-full max-w-xxs h-auto md:hidden mx-auto mt-8"
-      src="images/illustrations-foreground/formula-mobile.svg"
-      alt="Formula Illustration" />
+    <div class="w-full max-w-xs mt-8 md:hidden mx-auto">
+      <LazyImage>
+        <img
+          slot="content"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/formula-mobile.svg"
+          alt="Formula Illustration" />
+        <img
+          slot="placeholder"
+          class="w-full h-auto"
+          src="images/illustrations-foreground/formula-mobile-placeholder.svg"
+          alt="Formula Illustration Placeholder" />
+      </LazyImage>
+    </div>
   </div>
 </div>
