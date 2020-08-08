@@ -68,7 +68,7 @@
             src="images/illustrations-foreground/kalium-placeholder.svg"
             alt="Kalium Illustration Placeholder" />
         </LazyImage>
-        <div class="flex flex-col items-center md:mt-4">
+        <div class="flex flex-col items-center justify-center md:mt-4">
           <LazyImage classes="w-full max-w-md mx-auto px-2 my-2">
             <img
               slot="content"
