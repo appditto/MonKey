@@ -2,6 +2,9 @@
   import Hero from "../components/Hero.svelte";
   import How from "../components/How.svelte";
   import Rigged from "../components/Rigged.svelte";
+  import Available from "../components/Available.svelte";
+  import OpenSource from "../components/OpenSource.svelte";
+  import Integrate from "../components/Integrate.svelte";
 </script>
 
 <style global>
@@ -21,3 +24,6 @@
 <Hero />
 <How />
 <Rigged />
+<Available />
+<OpenSource />
+<Integrate />

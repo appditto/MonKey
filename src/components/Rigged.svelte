@@ -1,5 +1,7 @@
 <!-- HTML -->
-<div class="w-full ex-col justify-center py-12 md:py-20 relative md:my-20">
+<div
+  class="w-full ex-col justify-center py-12 md:py-20 relative md:my-20
+  overflow-x-hidden">
   <!-- Background Illusration Right -->
   <img
     class="hidden md:block w-1/3 lg:w-1/4 h-auto absolute right-0 top-0"

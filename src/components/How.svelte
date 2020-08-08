@@ -29,7 +29,7 @@
       alt="Formula Illustration" />
     <!-- Mobile Illustration-->
     <img
-      class="max-w-xxs h-auto md:hidden mx-auto mt-8"
+      class="w-full max-w-xxs h-auto md:hidden mx-auto mt-8"
       src="images/illustrations-foreground/formula-mobile.svg"
       alt="Formula Illustration" />
   </div>
