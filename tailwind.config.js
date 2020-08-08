@@ -13,6 +13,9 @@ module.exports = {
       },
       maxWidth: {
         'xxs': '16rem'
+      },
+      margin: {
+        '-14': '-3.5rem'
       }
     },
   },
