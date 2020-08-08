@@ -1,5 +1,5 @@
 <script>
-  import StatsCard from "../components/StatsCard.svelte";
+  import StatsCard from "../StatsCard.svelte";
 </script>
 
 <!-- HTML -->

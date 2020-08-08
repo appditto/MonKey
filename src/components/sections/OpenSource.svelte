@@ -1,5 +1,5 @@
 <script>
-  import LazyImage from "../components/LazyImage.svelte";
+  import LazyImage from "../LazyImage.svelte";
 </script>
 
 <!-- HTML -->
@@ -33,34 +33,30 @@
         Visit the Repo
       </a>
     </div>
-    <div class="w-full hidden md:block px-12 xl:px-8 mt-12">
-      <LazyImage>
-        <img
-          slot="content"
-          class="w-full h-auto"
-          src="images/illustrations-foreground/open-source.svg"
-          alt="Open Source Illustration" />
-        <img
-          slot="placeholder"
-          class="w-full h-auto"
-          src="images/illustrations-foreground/open-source-placeholder.svg"
-          alt="Open Source Illustration Placeholder" />
-      </LazyImage>
-    </div>
+    <LazyImage classes="w-full hidden md:block px-12 xl:px-8 mt-12">
+      <img
+        slot="content"
+        class="w-full h-auto"
+        src="images/illustrations-foreground/open-source.svg"
+        alt="Open Source Illustration" />
+      <img
+        slot="placeholder"
+        class="w-full h-auto"
+        src="images/illustrations-foreground/open-source-placeholder.svg"
+        alt="Open Source Illustration Placeholder" />
+    </LazyImage>
     <!-- Mobile Illustration-->
-    <div class="w-full md:hidden mx-auto mt-12 px-6">
-      <LazyImage>
-        <img
-          slot="content"
-          class="w-full h-auto"
-          src="images/illustrations-foreground/open-source-mobile.svg"
-          alt="Open Source Illustration" />
-        <img
-          slot="placeholder"
-          class="w-full h-auto"
-          src="images/illustrations-foreground/open-source-mobile-placeholder.svg"
-          alt="Open Source Illustration Placeholder" />
-      </LazyImage>
-    </div>
+    <LazyImage classes="w-full md:hidden mx-auto mt-12 px-6">
+      <img
+        slot="content"
+        class="w-full h-auto"
+        src="images/illustrations-foreground/open-source-mobile.svg"
+        alt="Open Source Illustration" />
+      <img
+        slot="placeholder"
+        class="w-full h-auto"
+        src="images/illustrations-foreground/open-source-mobile-placeholder.svg"
+        alt="Open Source Illustration Placeholder" />
+    </LazyImage>
   </div>
 </div>

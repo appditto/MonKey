@@ -1,5 +1,5 @@
 <script>
-  import LazyImage from "../components/LazyImage.svelte";
+  import LazyImage from "../LazyImage.svelte";
 </script>
 
 <style>
@@ -54,50 +54,45 @@
         </a>
       </div>
       <div
-        class="w-full flex flex-row flex-wrap justify-center items-center mt-6">
-        <div class="max-w-xs px-2 md:px-4 my-6">
-          <LazyImage>
+        class="w-full flex flex-row flex-wrap justify-center items-center mt-6
+        px-4">
+        <LazyImage classes="w-full max-w-xs px-2 md:px-4 my-6">
+          <img
+            slot="content"
+            class="w-full h-auto"
+            src="images/illustrations-foreground/kalium.svg"
+            alt="Kalium Illustration" />
+          <img
+            slot="placeholder"
+            class="w-full h-auto"
+            src="images/illustrations-foreground/kalium-placeholder.svg"
+            alt="Kalium Illustration Placeholder" />
+        </LazyImage>
+        <div class="flex flex-col items-center md:mt-4">
+          <LazyImage classes="w-full max-w-md mx-auto px-2 my-2">
             <img
               slot="content"
               class="w-full h-auto"
-              src="images/illustrations-foreground/kalium.svg"
-              alt="Kalium Illustration" />
+              src="images/illustrations-foreground/creeper-1.svg"
+              alt="Creeper 1 Illustration" />
             <img
               slot="placeholder"
-              class="w-full h-auto"
-              src="images/illustrations-foreground/kalium-placeholder.svg"
-              alt="Kalium Illustration Placeholder" />
+              class="w-full h-auto "
+              src="images/illustrations-foreground/creeper-1-placeholder.svg"
+              alt="Creeper 1 Illustration Placeholder" />
           </LazyImage>
-        </div>
-        <div class="flex flex-col items-center md:mt-4">
-          <div class="max-w-md mx-auto px-2 my-2">
-            <LazyImage>
-              <img
-                slot="content"
-                class="w-full h-auto"
-                src="images/illustrations-foreground/creeper-1.svg"
-                alt="Creeper 1 Illustration" />
-              <img
-                slot="placeholder"
-                class="w-full h-auto "
-                src="images/illustrations-foreground/creeper-1-placeholder.svg"
-                alt="Creeper 1 Illustration Placeholder" />
-            </LazyImage>
-          </div>
-          <div class="max-w-md mx-auto px-2 md:px-6 my-2">
-            <LazyImage>
-              <img
-                slot="content"
-                class="w-full h-auto"
-                src="images/illustrations-foreground/creeper-2.svg"
-                alt="Creeper 2 Illustration" />
-              <img
-                slot="placeholder"
-                class="w-full h-auto "
-                src="images/illustrations-foreground/creeper-2-placeholder.svg"
-                alt="Creeper 2 Illustration Placeholder" />
-            </LazyImage>
-          </div>
+          <LazyImage classes="w-full max-w-md mx-auto px-6 md:px-6 my-2">
+            <img
+              slot="content"
+              class="w-full h-auto"
+              src="images/illustrations-foreground/creeper-2.svg"
+              alt="Creeper 2 Illustration" />
+            <img
+              slot="placeholder"
+              class="w-full h-auto "
+              src="images/illustrations-foreground/creeper-2-placeholder.svg"
+              alt="Creeper 2 Illustration Placeholder" />
+          </LazyImage>
         </div>
       </div>
     </div>

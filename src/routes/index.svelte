@@ -1,11 +1,11 @@
 <script>
-  import Hero from "../components/Hero.svelte";
-  import How from "../components/How.svelte";
-  import Rigged from "../components/Rigged.svelte";
-  import Available from "../components/Available.svelte";
-  import OpenSource from "../components/OpenSource.svelte";
-  import Integrate from "../components/Integrate.svelte";
-  import Stats from "../components/Stats.svelte";
+  import Hero from "../components/sections/Hero.svelte";
+  import How from "../components/sections/How.svelte";
+  import Rigged from "../components/sections/Rigged.svelte";
+  import Available from "../components/sections/Available.svelte";
+  import OpenSource from "../components/sections/OpenSource.svelte";
+  import Integrate from "../components/sections/Integrate.svelte";
+  import Stats from "../components/sections/stats.svelte";
 </script>
 
 <style global>
