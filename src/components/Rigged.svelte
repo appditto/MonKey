@@ -1,3 +1,7 @@
+<script>
+  import LazyImage from "../components/LazyImage.svelte";
+</script>
+
 <!-- HTML -->
 <div
   class="w-full ex-col justify-center py-12 md:py-20 relative md:my-20
@@ -29,31 +33,63 @@
       md:mt-4">
       <!-- Vader -->
       <div class="w-1/2 md:w-1/4 h-auto -mx-8 md:-mx-16">
-        <img
-          class="w-full h-auto"
-          src="images/illustrations-foreground/vader.svg"
-          alt="Vader Illustration" />
+        <LazyImage>
+          <img
+            slot="content"
+            class="w-full h-auto"
+            src="images/illustrations-foreground/vader.svg"
+            alt="Vader Illustration" />
+          <img
+            slot="placeholder"
+            class="w-full h-auto"
+            src="images/illustrations-foreground/vader-placeholder.svg"
+            alt="Vader Illustration Placeholder" />
+        </LazyImage>
       </div>
       <!-- Iron Man -->
       <div class="w-1/2 md:w-1/4 h-auto -mx-8 md:-mx-16">
-        <img
-          class="w-full h-auto"
-          src="images/illustrations-foreground/ironman.svg"
-          alt="Iron Man Illustration" />
+        <LazyImage>
+          <img
+            slot="content"
+            class="w-full h-auto"
+            src="images/illustrations-foreground/ironman.svg"
+            alt="Iron Man Illustration" />
+          <img
+            slot="placeholder"
+            class="w-full h-auto"
+            src="images/illustrations-foreground/ironman-placeholder.svg"
+            alt="Iron Man Illustration Placeholder" />
+        </LazyImage>
       </div>
       <!-- Arthas -->
       <div class="w-1/2 md:w-1/4 h-auto -mx-8 md:-mx-24">
-        <img
-          class="w-full h-auto"
-          src="images/illustrations-foreground/arthas.svg"
-          alt="Arthas Illustration" />
+        <LazyImage>
+          <img
+            slot="content"
+            class="w-full h-auto"
+            src="images/illustrations-foreground/arthas.svg"
+            alt="Arthas Illustration" />
+          <img
+            slot="placeholder"
+            class="w-full h-auto"
+            src="images/illustrations-foreground/arthas-placeholder.svg"
+            alt="Arthas Illustration Placeholder" />
+        </LazyImage>
       </div>
       <!-- Heisenber -->
       <div class="w-1/2 md:w-1/4 h-auto -mx-8 md:-mx-16">
-        <img
-          class="w-full h-auto"
-          src="images/illustrations-foreground/heisenberg.svg"
-          alt="Heisenberg Illustration" />
+        <LazyImage>
+          <img
+            slot="content"
+            class="w-full h-auto"
+            src="images/illustrations-foreground/heisenberg.svg"
+            alt="Heisenberg Illustration" />
+          <img
+            slot="placeholder"
+            class="w-full h-auto"
+            src="images/illustrations-foreground/heisenberg-placeholder.svg"
+            alt="Heisenberg Illustration Placeholder" />
+        </LazyImage>
       </div>
     </div>
   </div>

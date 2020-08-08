@@ -1,5 +1,5 @@
 <!-- HTML -->
-<div class="w-full px-2 md:px-4 pt-4 pb-12 relative">
+<div class="w-full pt-4 pb-12 relative">
   <!-- Desktop Background Illustration -->
   <img
     class="hidden lg:block w-full h-auto absolute bottom-0"
@@ -11,7 +11,9 @@
     src="images/illustrations-background/bg-footer-mobile.svg"
     alt="Footer Background Illustration" />
   <!-- Foreground -->
-  <div class="y-container flex flex-col justify-between items-center relative">
+  <div
+    class="y-container flex flex-col justify-between items-center relative px-2
+    md:px-4">
     <!-- Social Icons -->
     <div class="flex flex-row flex-wrap justify-center items-center">
       <img
