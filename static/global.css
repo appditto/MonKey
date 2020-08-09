@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @font-face {
     font-family: 'Now Alt';
     src: url('/fonts/now-alt-bold.woff2') format('woff2'),
