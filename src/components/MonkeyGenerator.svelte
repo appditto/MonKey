@@ -47,6 +47,7 @@
     monkeyLoading = false;
     generationStarted = false;
     showAgainButton = false;
+    inputError = false;
   };
 </script>
 
@@ -73,6 +74,8 @@
     .generator {
       width: 50vw;
       height: 50vw;
+      max-width: 50vw;
+      max-height: 50vw;
     }
   }
   @media screen and (min-width: 768px) {
@@ -81,6 +84,8 @@
       min-height: 24rem;
       width: 20vw;
       height: 20vw;
+      max-width: 20vw;
+      max-height: 20vw;
     }
   }
   .cube {
@@ -168,8 +173,8 @@
 
 <!-- HTML -->
 <div
-  class="generator {!generatorVisibility ? 'closed' : ''} flex flex-col bg-white
-  absolute top-0 mt-5 overflow-hidden">
+  class="max-w-md max-h-md generator {!generatorVisibility ? 'closed' : ''} flex
+  flex-col bg-white absolute top-0 mt-5 overflow-hidden">
   <!-- MonKey loading animation -->
   {#if generationStarted}
     <div
