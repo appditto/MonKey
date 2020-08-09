@@ -4,8 +4,10 @@
   export let segment;
 </script>
 
-<Navbar {segment} />
-<main>
-  <slot />
-</main>
-<Footer />
+<div class="min-h-screen flex flex-col justify-between">
+  <Navbar {segment} />
+  <main>
+    <slot />
+  </main>
+  <Footer />
+</div>

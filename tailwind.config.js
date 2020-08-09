@@ -5,7 +5,11 @@ module.exports = {
       colors: {
         primary: "#404040",
         danger: "#BF1323",
-        dangerDark: "#97000E"
+        dangerDark: "#97000E",
+        brown: "#6c4725",
+        brownLight: "#cd9e6c",
+        gray: "#404040",
+        grayLight: "#9b9ba1"
       },
       spacing: {
         '36': '9rem'

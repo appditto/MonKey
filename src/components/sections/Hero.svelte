@@ -1,9 +1,14 @@
 <script>
-  import Generator from "../Generator.svelte";
+  import MonkeyGenerator from "../MonkeyGenerator.svelte";
+  import { onMount } from "svelte";
   let generatorVisibility = false;
   const toggleGenerator = () => {
     generatorVisibility = !generatorVisibility;
   };
+  let showGenerator = false;
+  onMount(async () => {
+    showGenerator = true;
+  });
 </script>
 
 <style>
@@ -36,7 +41,9 @@
       {generatorVisibility ? 'Close' : 'Show My MonKey'}
     </button>
     <div class="w-full flex flex-row justify-center relative z-50">
-      <Generator {generatorVisibility} />
+      {#if showGenerator}
+        <MonkeyGenerator {generatorVisibility} />
+      {/if}
     </div>
   </div>
   <!-- Desktop Illustration -->
