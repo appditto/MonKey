@@ -250,6 +250,7 @@
           w-full text-xl font-bold px-4 py-3 border-3 rounded-xl transition-all
           duration-300 ease-out"
           type="text"
+          autocomplete="off"
           placeholder="Enter your address" />
       </div>
       <button
