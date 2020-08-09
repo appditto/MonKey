@@ -24,16 +24,14 @@
     }, 100);
     let monkeyResult = await getMonkey();
     if (monkeyResult.data) {
+      receivedMonkey = true;
       setTimeout(() => {
-        receivedMonkey = true;
-        setTimeout(() => {
-          monkeyLoading = false;
-        }, 150);
-        setTimeout(() => {
-          monkeyContainer.innerHTML = monkeyResult.data;
-        }, 250);
-        showAgainButton = true;
+        monkeyLoading = false;
+      }, 150);
+      setTimeout(() => {
+        monkeyContainer.innerHTML = monkeyResult.data;
       }, 250);
+      showAgainButton = true;
     }
   };
 </script>
