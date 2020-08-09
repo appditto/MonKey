@@ -28,6 +28,6 @@
     Go Back Home
   </a>
   {#if dev && error.stack}
-    <pre>{error.stack}</pre>
+    <pre class="mt-6">{error.stack}</pre>
   {/if}
 </div>
