@@ -20,9 +20,6 @@
   <p class="text-2xl px-4 text-center -mt-5 md:-mt-10">
     {status == '404' ? "The page you're looking for isn't there." : 'An error occurred.'}
   </p>
-  {#if dev && error.stack}
-    <pre>{error.stack}</pre>
-  {/if}
   <a
     href="/"
     class="{'bg-primary btn-primary border-black'} text-center w-64 max-w-full
@@ -30,4 +27,7 @@
     mt-5 md:mt-8">
     Go Back Home
   </a>
+  {#if dev && error.stack}
+    <pre>{error.stack}</pre>
+  {/if}
 </div>
