@@ -29,6 +29,12 @@ module.exports = {
       scale: {
         '200': '2',
         '300': '3'
+      },
+      inset: {
+        '1/2': '50%'
+      },
+      borderWidth: {
+        '3': '3px'
       }
     },
   },

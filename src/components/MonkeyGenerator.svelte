@@ -1,38 +1,52 @@
 <script>
   import axios from "axios";
+  import { genAddress, validateAddress } from "../plugins/address.js";
   export let generatorVisibility = false;
   let inputValue;
+  let inputError = false;
   let receivedMonkey = false;
   let monkeyLoading = false;
   let generationStarted = false;
   let showAgainButton = false;
   let monkeyContainer;
-  let getMonkey = async () => {
+  let getMonkey = async (address) => {
     try {
       return axios.get(
-        "https://natricon.com/api/v1/nano?svc=natricon.com&address=" +
-          inputValue
+        "https://natricon.com/api/v1/nano?svc=natricon.com&address=" + address
       );
     } catch (e) {
       console.error(e);
     }
   };
-  let generateMonkey = async () => {
-    generationStarted = true;
-    setTimeout(() => {
-      monkeyLoading = true;
-    }, 100);
-    let monkeyResult = await getMonkey();
-    if (monkeyResult.data) {
-      receivedMonkey = true;
+  let generateMonkey = async (address) => {
+    if (validateAddress(address)) {
+      generationStarted = true;
       setTimeout(() => {
-        monkeyLoading = false;
-      }, 150);
-      setTimeout(() => {
-        monkeyContainer.innerHTML = monkeyResult.data;
-      }, 250);
-      showAgainButton = true;
+        monkeyLoading = true;
+      }, 125);
+      let monkeyResult = await getMonkey(address);
+      if (monkeyResult.data) {
+        receivedMonkey = true;
+        setTimeout(() => {
+          monkeyLoading = false;
+        }, 150);
+        setTimeout(() => {
+          monkeyContainer.innerHTML = monkeyResult.data;
+        }, 250);
+        setTimeout(() => {
+          showAgainButton = true;
+        }, 200);
+      }
+    } else {
+      inputError = true;
     }
+  };
+  let resetGeneration = () => {
+    monkeyContainer.innerHTML = "";
+    receivedMonkey = false;
+    monkeyLoading = false;
+    generationStarted = false;
+    showAgainButton = false;
   };
 </script>
 
@@ -42,6 +56,7 @@
     height: calc(100vw - 1rem);
     border-radius: 1rem;
     border-width: 0.25rem;
+    border-color: #404040;
     box-shadow: 0rem 0.6rem 0rem 0rem #404040;
     transition: opacity 0.2s cubic-bezier(0.215, 0.61, 0.355, 1),
       transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -153,8 +168,8 @@
 
 <!-- HTML -->
 <div
-  class="generator {!generatorVisibility ? 'closed' : ''} border-primary flex
-  flex-col bg-white absolute top-0 mt-5 overflow-hidden">
+  class="generator {!generatorVisibility ? 'closed' : ''} flex flex-col bg-white
+  absolute top-0 mt-5 overflow-hidden">
   <!-- MonKey loading animation -->
   {#if generationStarted}
     <div
@@ -174,6 +189,22 @@
     bind:this={monkeyContainer}
     class="{receivedMonkey ? 'translate-y-0' : '-translate-y-20'} transform
     duration-700 ease-out" />
+  {#if receivedMonkey}
+    <!-- Again Button -->
+    <div class="w-full flex flex-row justify-center absolute bottom-0">
+      <button
+        disabled={!showAgainButton}
+        on:click={() => {
+          resetGeneration();
+        }}
+        class="{showAgainButton ? 'scale-100 opacity-100' : 'scale-0 opacity-50'}
+        transform duration-200 ease-out bg-primary btn-primary text-white
+        text-lg font-bold rounded-lg border-2 border-black px-6 md:px-8 py-1
+        mx-4 md:mx-8 my-4 md:my-5">
+        Again!
+      </button>
+    </div>
+  {/if}
   <!-- Curtain -->
   {#if generationStarted}
     <div
@@ -194,25 +225,52 @@
     class="{generationStarted ? 'scale-0 opacity-50' : 'scale-100 opacity-100'}
     transform duration-200 ease-out w-full h-full flex flex-col px-4 md:px-8
     py-4 md:py-5">
-    <div class="flex flex-col items-center my-auto">
-      <input
-        bind:value={inputValue}
-        class="w-full text-xl font-bold px-4 py-2 border-2 border-black
-        rounded-xl"
-        type="text"
-        placeholder="enter your address" />
+    <form
+      on:submit|preventDefault={() => {
+        generateMonkey(inputValue);
+      }}
+      class="flex flex-col items-center my-auto relative">
+      <div class="w-full">
+        <label
+          class="absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2
+          text-xl font-bold"
+          for="bananoAddress">
+          Address
+        </label>
+        <input
+          name="bananoAddress"
+          id="bananoAddress"
+          bind:value={inputValue}
+          on:input={() => {
+            if (inputError) {
+              inputError = false;
+            }
+          }}
+          class="{inputError ? 'border-danger' : 'border-primary focus:border-brownLight hover:border-brownLight'}
+          w-full text-xl font-bold px-4 py-3 border-3 rounded-xl transition-all
+          duration-300 ease-out"
+          type="text"
+          placeholder="Enter your address" />
+      </div>
       <button
         disabled={generationStarted}
         on:click={() => {
-          generateMonkey();
+          generateMonkey(inputValue);
         }}
         class="w-full bg-primary btn-primary text-white text-xl font-bold
         rounded-xl border-2 border-black px-6 py-2 mx-auto mt-3">
         Show Me
       </button>
-    </div>
+    </form>
     <button
       disabled={generationStarted}
+      on:click={() => {
+        let address = genAddress();
+        generateMonkey(address);
+        setTimeout(() => {
+          inputValue = address;
+        }, 200);
+      }}
       class="bg-primary btn-primary text-white text-lg font-bold rounded-lg
       border-2 border-black px-6 md:px-8 py-1 mx-auto">
       Randomize
