@@ -21,7 +21,7 @@
 </style>
 
 <!-- HTML -->
-<div class="w-full px-2 py-2 md:px-4 md:py-3 absolute">
+<div class="w-full px-2 py-2 md:px-4 md:py-3 absolute z-20">
   <div class="y-container flex flex-row justify-between items-center">
     <!-- Logo -->
     <a class="w-32 md:w-36" href="/">

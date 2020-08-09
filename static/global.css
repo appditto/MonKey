@@ -66,3 +66,7 @@ body{
     box-shadow: 0rem 0.5rem 0rem 0rem #97000E;
     transform: translateY(-0.2rem);
 }
+
+input:focus{
+    outline: none!important
+}

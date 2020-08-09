@@ -6,7 +6,7 @@
 
 <div class="min-h-screen flex flex-col justify-between">
   <Navbar {segment} />
-  <main>
+  <main class="my-auto relative z-10">
     <slot />
   </main>
   <Footer />

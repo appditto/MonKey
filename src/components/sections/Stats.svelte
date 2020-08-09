@@ -3,7 +3,7 @@
 </script>
 
 <!-- HTML -->
-<div class="w-full pt-16 pb-24 md:pb-40 relative z-10">
+<div class="w-full pt-16 pb-24 md:pb-40">
   <div class="y-container flex flex-col items-center">
     <h2
       class="font-bold text-5xl mx-4 text-center leading-none tracking-tight

@@ -1,5 +1,5 @@
 <!-- HTML -->
-<div class="w-full pt-4 pb-12 relative">
+<div class="w-full pt-4 pb-12 relative z-0">
   <!-- Desktop Background Illustration -->
   <img
     class="hidden lg:block w-full h-auto absolute bottom-0"

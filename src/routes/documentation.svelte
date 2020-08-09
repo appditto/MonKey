@@ -1,1 +1,1 @@
-<div>This is documentation</div>
+<div class="flex flex-row justify-center">This is documentation</div>
