@@ -228,13 +228,12 @@
   <!-- Input, Show Me & Randomize -->
   <div
     class="{generationStarted ? 'scale-0 opacity-50' : 'scale-100 opacity-100'}
-    transform duration-200 ease-out w-full h-full flex flex-col px-4 md:px-8
-    py-4 md:py-5">
+    transform duration-200 ease-out w-full h-full flex flex-col relative">
     <form
       on:submit|preventDefault={() => {
         generateMonkey(inputValue);
       }}
-      class="flex flex-col items-center my-auto relative">
+      class="flex flex-col items-center my-auto relative mx-4 md:mx-6">
       <div class="w-full">
         <label
           class="absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2
@@ -268,18 +267,20 @@
         Show Me
       </button>
     </form>
-    <button
-      disabled={generationStarted}
-      on:click={() => {
-        let address = genAddress();
-        generateMonkey(address);
-        setTimeout(() => {
-          inputValue = address;
-        }, 200);
-      }}
-      class="bg-primary btn-primary text-white text-lg font-bold rounded-lg
-      border-2 border-black px-6 md:px-8 py-1 mx-auto">
-      Randomize
-    </button>
+    <div class="w-full flex flex-row justify-center absolute bottom-0">
+      <button
+        disabled={generationStarted}
+        on:click={() => {
+          let address = genAddress();
+          generateMonkey(address);
+          setTimeout(() => {
+            inputValue = address;
+          }, 200);
+        }}
+        class="bg-primary btn-primary text-white text-lg font-bold rounded-lg
+        border-2 border-black px-6 md:px-8 py-1 my-4 md:my-5">
+        Randomize
+      </button>
+    </div>
   </div>
 </div>

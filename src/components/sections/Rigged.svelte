@@ -30,7 +30,7 @@
     </p>
     <div
       class="flex flex-row flex-wrap justify-center -mx-16 lg:-mx-64 mt-2
-      md:mt-4">
+      md:mt-4 lg:px-6">
       <!-- Vader -->
       <LazyImage classes="w-1/2 lg:w-1/4 h-auto -mx-8 md:-mx-16">
         <img

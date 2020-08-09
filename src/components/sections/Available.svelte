@@ -26,14 +26,19 @@
         MonKeys are available in lots of places in the Banano ecosystem.
         <br class="hidden lg:block" />
         Most notable two are
-        <a href="https://kalium.banano.cc" target="_blank" class="font-bold">
+        <a
+          href="https://kalium.banano.cc"
+          target="_blank"
+          class="font-bold hover:underline focus:underline">
           Kalium
         </a>
         and
-        <a href="https://creeper.banano.cc" target="_blank" class="font-bold">
-          Creeper
+        <a
+          href="https://creeper.banano.cc"
+          target="_blank"
+          class="font-bold hover:underline focus:underline">
+          Creeper.
         </a>
-        .
       </p>
       <div class="w-full flex flex-row flex-wrap justify-center px-4 mt-2">
         <a

@@ -24,15 +24,16 @@
 <div class="w-full px-2 py-2 md:px-4 md:py-3 absolute z-20">
   <div class="y-container flex flex-row justify-between items-center">
     <!-- Logo -->
-    <a class="w-32 md:w-36" href="/">
+    <a class="w-32 md:w-36 p-1 logo-button m-2" href="/">
       <img
-        class="w-full h-auto m-2"
+        class="w-full h-auto"
         alt="Logo"
         src="images/logos/logo-monkey-horizontal.svg" />
     </a>
     <!-- Menu Options -->
     <div
-      class="flex flex-row flex-wrap justify-end items-center w-2/3 font-medium">
+      class="flex flex-row flex-wrap justify-end items-center w-2/3 font-medium
+      pr-1">
       <a
         href="/documentation"
         class="mx-2 md:ml-4 line {segment === 'documentation' ? 'line-active' : ''}">
