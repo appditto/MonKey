@@ -5,7 +5,6 @@
          url('fonts/now-alt-bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
-    font-display: fallback;
 }
 
 @font-face {
@@ -15,7 +14,6 @@
          url('fonts/now-alt-medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
-    font-display: fallback;
 }
 
 @font-face {
@@ -25,7 +23,6 @@
          url('fonts/now-alt-regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
-    font-display: fallback;
 }
 
 body{
