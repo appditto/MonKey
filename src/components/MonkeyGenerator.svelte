@@ -4,6 +4,8 @@
   export let generatorVisibility = false;
   let inputValue;
   let inputError = false;
+  let inputFocused = false;
+  let inputHovered = false;
   let receivedMonkey = false;
   let monkeyLoading = false;
   let generationStarted = false;
@@ -236,23 +238,36 @@
       class="flex flex-col items-center my-auto relative mx-4 md:mx-6">
       <div class="w-full">
         <label
-          class="absolute bg-white text-gray rounded-lg top-0 left-0 ml-4 -mt-4
-          px-2 text-xl font-bold"
+          class="{inputError ? 'text-danger' : inputFocused || inputHovered ? 'text-brownLight' : 'text-gray'}
+          absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2 text-xl
+          font-bold transition-all duration-200 ease-out"
           for="bananoAddress">
           Address
         </label>
         <input
           name="bananoAddress"
           id="bananoAddress"
+          on:blur={() => {
+            inputFocused = false;
+          }}
+          on:focus={() => {
+            inputFocused = true;
+          }}
+          on:mouseenter={() => {
+            inputHovered = true;
+          }}
+          on:mouseleave={() => {
+            inputHovered = false;
+          }}
           bind:value={inputValue}
           on:input={() => {
             if (inputError) {
               inputError = false;
             }
           }}
-          class="{inputError ? 'border-danger' : 'border-primary focus:border-brownLight hover:border-brownLight'}
+          class="{inputError ? 'border-danger text-danger' : 'text-gray border-primary focus:border-brownLight hover:border-brownLight'}
           w-full text-xl font-bold px-4 py-3 border-3 rounded-xl transition-all
-          duration-300 ease-out"
+          duration-200 ease-out"
           type="text"
           autocomplete="off"
           placeholder="Enter your address" />
