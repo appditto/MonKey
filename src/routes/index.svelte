@@ -5,7 +5,6 @@
   import Available from "../components/sections/Available.svelte";
   import OpenSource from "../components/sections/OpenSource.svelte";
   import Integrate from "../components/sections/Integrate.svelte";
-  import Stats from "../components/sections/stats.svelte";
 </script>
 
 <style global>
