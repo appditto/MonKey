@@ -94,6 +94,7 @@
       <span>©2020,&nbsp;</span>
       <a
         href="https://banano.cc"
+        target="_blank"
         class="font-bold hover:underline focus:underline">
         Banano
       </a>

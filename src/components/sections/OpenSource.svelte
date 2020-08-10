@@ -33,7 +33,8 @@
         Visit the Repo
       </a>
     </div>
-    <LazyImage classes="w-full hidden md:block px-12 xl:px-8 mt-12">
+    <!-- Desktop Illustration -->
+    <LazyImage classes="w-full hidden md:block px-12 lg:px-20 mt-12">
       <img
         slot="content"
         class="w-full h-auto"

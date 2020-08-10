@@ -27,7 +27,7 @@
       advanced science to it, and it turns into MonKey.
     </p>
     <!-- Desktop Illustration -->
-    <LazyImage classes="w-full px-12 xl:px-8 mt-8 hidden md:block">
+    <LazyImage classes="w-full px-12 lg:px-20 mt-8 hidden md:block">
       <img
         slot="content"
         class="w-full h-auto"

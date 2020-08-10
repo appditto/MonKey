@@ -39,15 +39,10 @@
         class="mx-2 md:ml-4 line {segment === 'documentation' ? 'line-active' : ''}">
         API
       </a>
-      <a
-        href="https://github.com/appditto/monkey"
-        target="_blank"
-        class="mx-2 md:ml-4 line">
+      <a href="https://github.com/appditto/monkey" class="mx-2 md:ml-4 line">
         GitHub
       </a>
-      <a href="https://banano.cc" target="_blank" class="mx-2 md:ml-4 line">
-        Banano
-      </a>
+      <a href="https://banano.cc" class="mx-2 md:ml-4 line">Banano</a>
     </div>
   </div>
 </div>
