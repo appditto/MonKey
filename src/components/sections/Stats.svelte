@@ -6,7 +6,7 @@
 <div class="w-full pt-16 pb-24 md:pb-40">
   <div class="y-container flex flex-col items-center">
     <h2
-      class="font-bold text-5xl mx-4 text-center leading-none tracking-tight
+      class="font-bold text-5xl mx-4 text-center leading-tight tracking-tight
       mt-5">
       MonKey Stats
     </h2>

@@ -24,7 +24,7 @@
 <div class="w-full flex flex-col items-center pt-20 bg-hero">
   <div class="w-full flex flex-col items-center px-4">
     <h1
-      class="font-bold text-5xl mx-5 text-center leading-none tracking-tight
+      class="font-bold text-5xl mx-5 text-center leading-tight tracking-tight
       mt-5 md:mt-16">
       Welcome to the jungle.
     </h1>

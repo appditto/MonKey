@@ -18,7 +18,7 @@
     alt="Rigged Left Illustration" />
   <div class="y-container relative">
     <h2
-      class="font-bold text-5xl mx-4 text-center leading-none tracking-tight
+      class="font-bold text-5xl mx-4 text-center leading-tight tracking-tight
       mt-5">
       Masterfully Rigged
     </h2>
