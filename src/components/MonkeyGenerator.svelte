@@ -136,16 +136,16 @@
     transform: translateY(100%);
   }
   .curtain-1 {
-    transition: all 0.5s;
+    transition: all 0.52s;
   }
   .curtain-2 {
-    transition: all 0.6s;
+    transition: all 0.63s;
   }
   .curtain-3 {
-    transition: all 0.7s;
+    transition: all 0.69s;
   }
   .curtain-4 {
-    transition: all 0.8s;
+    transition: all 0.75s;
   }
   @keyframes animation-1 {
     0% {
