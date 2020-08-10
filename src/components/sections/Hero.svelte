@@ -53,7 +53,7 @@
     alt="Hero Illustration" />
   <!-- Mobile Illustration-->
   <img
-    class="w-full h-auto md:hidden"
+    class="w-full h-auto md:hidden mt-4"
     src="images/illustrations-foreground/hero-mobile.svg"
     alt="Hero Illustration" />
 </div>

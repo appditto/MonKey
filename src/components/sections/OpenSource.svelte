@@ -29,7 +29,7 @@
         href="https://github.com/appditto/monkey"
         target="_blank"
         class="bg-primary btn-primary text-white text-xl font-bold rounded-xl
-        border-2 border-black px-6 md:px-12 py-2">
+        border-2 border-black px-8 md:px-12 py-2">
         Visit the Repo
       </a>
     </div>

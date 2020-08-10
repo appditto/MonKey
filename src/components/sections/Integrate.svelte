@@ -17,7 +17,7 @@
       <a
         href="/documentation"
         class="bg-primary btn-primary text-white text-xl font-bold rounded-xl
-        border-2 border-black px-6 md:px-12 py-2">
+        border-2 border-black px-8 md:px-12 py-2">
         Start Integrating
       </a>
     </div>
