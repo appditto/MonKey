@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'Now Alt', sans-serif;
+    font-family: 'Now Alt';
     src: url('/fonts/now-alt-bold.woff2') format('woff2'),
          url('/fonts/now-alt-bold.woff') format('woff'),
          url('/fonts/now-alt-bold.ttf') format('truetype');
@@ -9,7 +9,7 @@
 }
 
 @font-face {
-    font-family: 'Now Alt', sans-serif;
+    font-family: 'Now Alt';
     src: url('/fonts/now-alt-medium.woff2') format('woff2'),
          url('/fonts/now-alt-medium.woff') format('woff'),
          url('/fonts/now-alt-medium.ttf') format('truetype');
@@ -19,7 +19,7 @@
 }
 
 @font-face {
-    font-family: 'Now Alt', sans-serif;
+    font-family: 'Now Alt';
     src: url('/fonts/now-alt-regular.woff2') format('woff2'),
          url('/fonts/now-alt-regular.woff') format('woff'),
          url('/fonts/now-alt-regular.ttf') format('truetype');
@@ -29,7 +29,7 @@
 }
 
 body{
-    font-family: 'Now Alt', sans-serif;
+    font-family: 'Now Alt';
 }
 
 .y-container {
