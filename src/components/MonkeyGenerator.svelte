@@ -236,8 +236,8 @@
       class="flex flex-col items-center my-auto relative mx-4 md:mx-6">
       <div class="w-full">
         <label
-          class="absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2
-          text-xl font-bold"
+          class="absolute bg-white text-gray rounded-lg top-0 left-0 ml-4 -mt-4
+          px-2 text-xl font-bold"
           for="bananoAddress">
           Address
         </label>
