@@ -40,7 +40,7 @@
         alt="Formula Illustration Placeholder" />
     </LazyImage>
     <!-- Mobile Illustration-->
-    <LazyImage classes="w-full max-w-xxs mt-8 md:hidden mx-auto">
+    <LazyImage classes="w-full max-w-xxs mt-8 md:hidden mx-auto px-4">
       <img
         slot="content"
         class="w-full h-auto"
