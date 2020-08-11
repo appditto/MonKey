@@ -1,5 +1,5 @@
 <script>
-  export let offset = 500;
+  export let offset = 0;
   export let onload = null;
   export let classes;
   let loaded = false;
