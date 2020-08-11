@@ -58,15 +58,20 @@
     width: calc(100vw - 1rem);
     height: calc(100vw - 1rem);
     border-radius: 1rem;
-    border-width: 0.25rem;
+    border-width: 0rem;
     border-color: #404040;
-    box-shadow: 0rem 0.6rem 0rem 0rem #404040;
-    transition: opacity 0.2s cubic-bezier(0.215, 0.61, 0.355, 1),
-      transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+    box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
+      0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
+      -0.5rem 0.5rem 0rem 0rem #9b9ba1;
+    transition: opacity 0.2s cubic-bezier(0.215, 0.51, 0.355, 1),
+      transform 0.4s cubic-bezier(0.215, 0.51, 0.355, 1);
     transform-origin: top center;
     overflow: hidden;
     transform: scale(1);
     opacity: 1;
+    animation: generatorAnimation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
   }
   .closed {
     transform: scale(0.5) !important;
@@ -88,6 +93,33 @@
       height: 20vw;
       max-width: 20vw;
       max-height: 20vw;
+    }
+  }
+  @keyframes generatorAnimation {
+    0% {
+      box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
+        0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
+        -0.5rem 0.5rem 0rem 0rem #9b9ba1;
+    }
+    25% {
+      box-shadow: 0.5rem -0.5rem 0rem 0rem #404040,
+        0.5rem 0.5rem 0rem 0rem #7f6145, -0.5rem 0.5rem 0rem 0rem #ffcd98,
+        -0.5rem -0.5rem 0rem 0rem #9b9ba1;
+    }
+    50% {
+      box-shadow: 0.5rem 0.5rem 0rem 0rem #404040,
+        -0.5rem 0.5rem 0rem 0rem #7f6145, -0.5rem -0.5rem 0rem 0rem #ffcd98,
+        0.5rem -0.5rem 0rem 0rem #9b9ba1;
+    }
+    75% {
+      box-shadow: -0.5rem 0.5rem 0rem 0rem #404040,
+        -0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem -0.5rem 0rem 0rem #ffcd98,
+        0.5rem 0.5rem 0rem 0rem #9b9ba1;
+    }
+    100% {
+      box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
+        0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
+        -0.5rem 0.5rem 0rem 0rem #9b9ba1;
     }
   }
   .cube {
@@ -141,10 +173,10 @@
     transition: all 0.52s;
   }
   .curtain-2 {
-    transition: all 0.63s;
+    transition: all 0.53s;
   }
   .curtain-3 {
-    transition: all 0.69s;
+    transition: all 0.59s;
   }
   .curtain-4 {
     transition: all 0.75s;
@@ -176,7 +208,7 @@
 <!-- HTML -->
 <div
   class="max-w-md max-h-md generator {!generatorVisibility ? 'closed' : ''} flex
-  flex-col bg-white absolute top-0 mt-5 overflow-hidden">
+  flex-col bg-white absolute top-0 mt-8 overflow-hidden">
   <!-- MonKey loading animation -->
   {#if generationStarted}
     <div
