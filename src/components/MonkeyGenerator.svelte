@@ -34,7 +34,7 @@
         }, 150);
         setTimeout(() => {
           monkeyContainer.innerHTML = monkeyResult.data;
-        }, 250);
+        }, 200);
         setTimeout(() => {
           showAgainButton = true;
         }, 200);
