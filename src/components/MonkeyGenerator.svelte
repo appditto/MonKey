@@ -170,16 +170,16 @@
     transform: translateY(100%);
   }
   .curtain-1 {
-    transition: all 0.58s;
+    transition: all 0.49s;
   }
   .curtain-2 {
-    transition: all 0.59s;
+    transition: all 0.55s;
   }
   .curtain-3 {
-    transition: all 0.68s;
+    transition: all 0.62s;
   }
   .curtain-4 {
-    transition: all 0.75s;
+    transition: all 0.7s;
   }
   @keyframes animation-1 {
     0% {
