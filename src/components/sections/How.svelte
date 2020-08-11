@@ -17,8 +17,8 @@
     alt="Hats Illustration" />
   <div class="y-container relative">
     <h2
-      class="font-bold text-5xl mx-4 text-center leading-tight tracking-tight
-      mt-5">
+      class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight
+      tracking-tight mt-5">
       How Does It Work?
     </h2>
     <p class="text-center mx-4 md:mx-12 mt-3 text-2xl">

@@ -16,8 +16,8 @@
   <div class="w-full flex flex-col justify-center relative bg-banano">
     <div class="y-container relative">
       <h2
-        class="font-bold text-5xl mx-4 text-center leading-tight tracking-tight
-        mt-5">
+        class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight
+        tracking-tight mt-5">
         Available on Lots of
         <br class="hidden md:block" />
         Banano Services
