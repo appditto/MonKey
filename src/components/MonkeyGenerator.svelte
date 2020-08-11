@@ -55,16 +55,16 @@
 
 <style>
   .generator {
-    width: calc(100vw - 1rem);
-    height: calc(100vw - 1rem);
+    width: calc(100vw - 2.5rem);
+    height: calc(100vw - 2.5rem);
     border-radius: 1rem;
     border-width: 0rem;
     border-color: #404040;
-    box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
-      0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
-      -0.5rem 0.5rem 0rem 0rem #9b9ba1;
-    transition: opacity 0.2s cubic-bezier(0.215, 0.51, 0.355, 1),
-      transform 0.4s cubic-bezier(0.215, 0.51, 0.355, 1);
+    box-shadow: -0.4rem -0.4rem 0rem 0rem #404040,
+      0.4rem -0.4rem 0rem 0rem #7f6145, 0.4rem 0.4rem 0rem 0rem #ffcd98,
+      -0.4rem 0.4rem 0rem 0rem #9b9ba1;
+    transition: opacity 0.2s cubic-bezier(0.215, 0.41, 0.355, 1),
+      transform 0.4s cubic-bezier(0.215, 0.41, 0.355, 1);
     transform-origin: top center;
     overflow: hidden;
     transform: scale(1);
@@ -74,7 +74,7 @@
     animation-iteration-count: infinite;
   }
   .closed {
-    transform: scale(0.5) !important;
+    transform: scale(0.4) !important;
     opacity: 0 !important;
   }
   @media screen and (min-width: 768px) {
@@ -97,29 +97,29 @@
   }
   @keyframes generatorAnimation {
     0% {
-      box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
-        0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
-        -0.5rem 0.5rem 0rem 0rem #9b9ba1;
+      box-shadow: -0.4rem -0.4rem 0rem 0rem #404040,
+        0.4rem -0.4rem 0rem 0rem #7f6145, 0.4rem 0.4rem 0rem 0rem #ffcd98,
+        -0.4rem 0.4rem 0rem 0rem #9b9ba1;
     }
     25% {
-      box-shadow: 0.5rem -0.5rem 0rem 0rem #404040,
-        0.5rem 0.5rem 0rem 0rem #7f6145, -0.5rem 0.5rem 0rem 0rem #ffcd98,
-        -0.5rem -0.5rem 0rem 0rem #9b9ba1;
+      box-shadow: 0.4rem -0.4rem 0rem 0rem #404040,
+        0.4rem 0.4rem 0rem 0rem #7f6145, -0.4rem 0.4rem 0rem 0rem #ffcd98,
+        -0.4rem -0.4rem 0rem 0rem #9b9ba1;
     }
     50% {
-      box-shadow: 0.5rem 0.5rem 0rem 0rem #404040,
-        -0.5rem 0.5rem 0rem 0rem #7f6145, -0.5rem -0.5rem 0rem 0rem #ffcd98,
-        0.5rem -0.5rem 0rem 0rem #9b9ba1;
+      box-shadow: 0.4rem 0.4rem 0rem 0rem #404040,
+        -0.4rem 0.4rem 0rem 0rem #7f6145, -0.4rem -0.4rem 0rem 0rem #ffcd98,
+        0.4rem -0.4rem 0rem 0rem #9b9ba1;
     }
     75% {
-      box-shadow: -0.5rem 0.5rem 0rem 0rem #404040,
-        -0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem -0.5rem 0rem 0rem #ffcd98,
-        0.5rem 0.5rem 0rem 0rem #9b9ba1;
+      box-shadow: -0.4rem 0.4rem 0rem 0rem #404040,
+        -0.4rem -0.4rem 0rem 0rem #7f6145, 0.4rem -0.4rem 0rem 0rem #ffcd98,
+        0.4rem 0.4rem 0rem 0rem #9b9ba1;
     }
     100% {
-      box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
-        0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
-        -0.5rem 0.5rem 0rem 0rem #9b9ba1;
+      box-shadow: -0.4rem -0.4rem 0rem 0rem #404040,
+        0.4rem -0.4rem 0rem 0rem #7f6145, 0.4rem 0.4rem 0rem 0rem #ffcd98,
+        -0.4rem 0.4rem 0rem 0rem #9b9ba1;
     }
   }
   .cube {
@@ -134,7 +134,7 @@
     animation-name: animation-1;
     animation-duration: 1.3s;
     animation-iteration-count: infinite;
-    animation-delay: -0.5s;
+    animation-delay: -0.4s;
   }
   .cube-brown {
     background-color: #7f6145;
@@ -170,13 +170,13 @@
     transform: translateY(100%);
   }
   .curtain-1 {
-    transition: all 0.52s;
+    transition: all 0.42s;
   }
   .curtain-2 {
-    transition: all 0.53s;
+    transition: all 0.43s;
   }
   .curtain-3 {
-    transition: all 0.59s;
+    transition: all 0.49s;
   }
   .curtain-4 {
     transition: all 0.75s;
