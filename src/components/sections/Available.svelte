@@ -59,7 +59,8 @@
         </a>
       </div>
       <div
-        class="w-full flex flex-row flex-wrap justify-center items-center mt-6">
+        class="w-full flex flex-row flex-wrap justify-center items-center mt-6
+        md:px-6">
         <LazyImage classes="w-full max-w-xs px-4 my-6">
           <img
             slot="content"
