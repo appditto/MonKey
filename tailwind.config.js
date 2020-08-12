@@ -44,6 +44,10 @@ module.exports = {
         sm: '24rem',
         md: '28rem',
         lg: '32rem',
+      },
+      transitionDuration: {
+        '350': '350ms',
+        '400': '400ms'
       }
     },
   },

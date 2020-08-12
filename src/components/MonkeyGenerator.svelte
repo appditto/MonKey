@@ -70,8 +70,10 @@
     showCurtain = false;
     showCurtainAnimation = false;
     toHideMonkeyContainer = true;
-    showAgainButton = false;
     showAgainButtonAnimation = false;
+    setTimeout(() => {
+      showAgainButton = false;
+    }, 300);
     hideForm = false;
     inputError = false;
     setTimeout(() => {
@@ -292,8 +294,8 @@
         on:click={() => {
           resetGeneration();
         }}
-        class="{showAgainButtonAnimation ? 'scale-100 opacity-100 translate-y-0' : 'scale-0 opacity-50 translate-y-20'}
-        transform duration-300 ease-out bg-primary btn-primary text-white
+        class="{showAgainButtonAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}
+        transform duration-350 ease-out bg-primary btn-primary text-white
         text-lg font-bold rounded-lg border-2 border-black px-6 md:px-8 py-1
         mx-4 md:mx-8 my-4 md:my-5">
         Again!
@@ -317,14 +319,14 @@
   {/if}
   <!-- Input, Show Me & Randomize -->
   {#if !hideForm}
-    <div
-      class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
-      transform duration-200 ease-out w-full h-full flex flex-col relative">
+    <div class="w-full h-full flex flex-col relative">
       <form
         on:submit|preventDefault={() => {
           generateMonkey(inputValue);
         }}
-        class="flex flex-col items-center my-auto relative mx-4 md:mx-6">
+        class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
+        transform duration-200 ease-out flex flex-col items-center my-auto
+        relative mx-4 md:mx-6">
         <div class="w-full">
           <label
             class="{inputError ? 'text-danger' : inputFocused || inputHovered ? 'text-brownLight' : 'text-gray'}
@@ -368,11 +370,14 @@
             generateMonkey(inputValue);
           }}
           class="w-full bg-primary btn-primary text-white text-xl font-bold
-          rounded-xl border-2 border-black px-6 py-2 mx-auto mt-3">
+          rounded-xl border-black border-2 px-6 py-2 mx-auto mt-3">
           Show Me
         </button>
       </form>
-      <div class="w-full flex flex-row justify-center absolute bottom-0">
+      <div
+        class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
+        transform duration-200 ease-out w-full flex flex-row justify-center
+        absolute bottom-0">
         <button
           disabled={hideFormAnimation}
           on:click={() => {
@@ -383,7 +388,7 @@
             }, 200);
           }}
           class="bg-primary btn-primary text-white text-lg font-bold rounded-lg
-          border-2 border-black px-6 md:px-8 py-1 my-4 md:my-5">
+          border-black border-2 px-6 md:px-8 py-1 my-4 md:my-5">
           Randomize
         </button>
       </div>
