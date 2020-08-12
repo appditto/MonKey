@@ -231,7 +231,7 @@
     opacity: 1;
   }
   .hide-monkey-container {
-    transform: translateY(-100%) scale(0.5);
+    transform: translateY(-100%);
     opacity: 0;
   }
   @keyframes animation-1 {
