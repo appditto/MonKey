@@ -36,13 +36,19 @@
       pr-1">
       <a
         href="/documentation"
-        class="mx-2 md:ml-4 line {segment === 'documentation' ? 'line-active' : ''}">
+        class="menu-button hover:text-brownLight px-2 pt-1 mx-1 md:ml-4 line {segment === 'documentation' ? 'line-active' : ''}">
         API
       </a>
-      <a href="https://github.com/appditto/monkey" class="mx-2 md:ml-4 line">
+      <a
+        href="https://github.com/appditto/monkey"
+        class="menu-button hover:text-brownLight px-2 pt-1 mx-1 md:ml-4 line">
         GitHub
       </a>
-      <a href="https://banano.cc" class="mx-2 md:ml-4 line">Banano</a>
+      <a
+        href="https://banano.cc"
+        class="menu-button hover:text-brownLight px-2 pt-1 mx-1 md:ml-4 line">
+        Banano
+      </a>
     </div>
   </div>
 </div>

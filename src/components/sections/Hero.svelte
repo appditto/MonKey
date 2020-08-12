@@ -2,13 +2,30 @@
   import MonkeyGenerator from "../MonkeyGenerator.svelte";
   import { onMount } from "svelte";
   let generatorVisibility = false;
-  const toggleGenerator = () => {
-    generatorVisibility = !generatorVisibility;
-  };
   let showGenerator = false;
-  onMount(async () => {
-    showGenerator = true;
-  });
+  let timeout1;
+  let timeout2;
+  const toggleGenerator = () => {
+    if (!showGenerator) {
+      showGenerator = true;
+      if (timeout1) {
+        clearTimeout(timeout1);
+      }
+      timeout1 = setTimeout(() => {
+        generatorVisibility = !generatorVisibility;
+      }, 25);
+      timeout1();
+    } else {
+      generatorVisibility = false;
+      if (timeout2) {
+        clearTimeout(timeout2);
+      }
+      timeout2 = setTimeout(() => {
+        showGenerator = false;
+      }, 250);
+      timeout2();
+    }
+  };
 </script>
 
 <style>
