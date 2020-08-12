@@ -82,7 +82,7 @@
       showMonkeyContainerAnimation = false;
       hideMonkeyContainer = false;
       toHideMonkeyContainer = false;
-    }, 300);
+    }, 450);
     setTimeout(() => {
       hideFormAnimation = false;
     }, 125);
@@ -227,7 +227,7 @@
     transform: translateY(0%);
   }
   .to-hide-monkey-container {
-    transition: all 0.35s ease-out;
+    transition: all 0.4s ease-out;
     opacity: 1;
   }
   .hide-monkey-container {
