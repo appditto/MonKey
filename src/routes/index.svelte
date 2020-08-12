@@ -6,6 +6,14 @@
   import OpenSource from "../components/sections/OpenSource.svelte";
   import Integrate from "../components/sections/Integrate.svelte";
   import Stats from "../components/sections/Stats.svelte";
+  import Meta from "../components/Meta.svelte";
+  const metadata = {
+    title: "MonKey",
+    description: "Address visualisation for Banano",
+    image: "https://monkey.banano.cc/preview.png",
+    imageAlt: "Address visualisation for Banano",
+    url: "https://monkey.banano.cc",
+  };
 </script>
 
 <style global>
@@ -17,6 +25,7 @@
 <svelte:head />
 
 <!-- HTML -->
+<Meta {metadata} />
 <Hero />
 <How />
 <Rigged />
