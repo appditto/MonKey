@@ -6,13 +6,19 @@
   let inputError = false;
   let inputFocused = false;
   let inputHovered = false;
-  let receivedMonkey = false;
-  let monkeyLoading = false;
-  let generationStarted = false;
-  let showAgainButton = false;
-  let curtainActive = false;
-  let formActive = true;
   let monkeyContainer;
+  /* Variables for the generation animation */
+  let hideForm = false;
+  let hideFormAnimation = false;
+  let showLoading = false;
+  let showLoadingAnimation = false;
+  let showCurtain = false;
+  let showCurtainAnimation = false;
+  let showMonkeyContainer = false;
+  let showMonkeyContainerAnimation = false;
+  let showAgainButton = false;
+  let showAgainButtonAnimation = false;
+  /* ////////////////////////////////////// */
   let getMonkey = async (address) => {
     try {
       return axios.get(
@@ -24,42 +30,52 @@
   };
   let generateMonkey = async (address) => {
     if (validateAddress(address)) {
-      generationStarted = true;
-      curtainActive = true;
+      hideFormAnimation = true;
       setTimeout(() => {
-        monkeyLoading = true;
-      }, 125);
+        hideForm = true;
+      }, 175);
+      showLoading = true;
+      setTimeout(() => {
+        showLoadingAnimation = true;
+      }, 175);
       let monkeyResult = await getMonkey(address);
       if (monkeyResult.data) {
-        receivedMonkey = true;
-        formActive = false;
+        showMonkeyContainer = true;
+        showCurtain = true;
         setTimeout(() => {
-          monkeyLoading = false;
-        }, 150);
+          showCurtainAnimation = true;
+          showMonkeyContainerAnimation = true;
+        }, 25);
         setTimeout(() => {
           monkeyContainer.innerHTML = monkeyResult.data;
-          setTimeout(() => {
-            curtainActive = false;
-          }, 500);
+          showLoading = false;
         }, 200);
+        showAgainButton = true;
         setTimeout(() => {
-          showAgainButton = true;
-        }, 200);
+          showAgainButtonAnimation = true;
+        }, 450);
+        setTimeout(() => {
+          showCurtain = false;
+        }, 750);
       }
     } else {
       inputError = true;
     }
   };
   let resetGeneration = () => {
-    formActive = true;
-    monkeyContainer.innerHTML = "";
-    receivedMonkey = false;
-    monkeyLoading = false;
+    showLoading = false;
+    showLoadingAnimation = false;
+    showCurtain = false;
+    showCurtainAnimation = false;
+    showMonkeyContainer = false;
+    showMonkeyContainerAnimation = false;
     showAgainButton = false;
-    inputError = false;
+    showAgainButtonAnimation = false;
+    hideForm = false;
     setTimeout(() => {
-      generationStarted = false;
+      hideFormAnimation = false;
     }, 25);
+    inputError = false;
   };
 </script>
 
@@ -191,6 +207,15 @@
   .curtain-4 {
     transition: all 0.7s;
   }
+  .monkey-container {
+    transition: all 0.55s ease-out;
+  }
+  .hide-monkey-container {
+    transform: translateY(-20%);
+  }
+  .show-monkey-container {
+    transform: translateY(0%);
+  }
   @keyframes animation-1 {
     0% {
       transform: translate(-2rem, 2rem);
@@ -220,9 +245,9 @@
   class="max-w-md max-h-md generator {!generatorVisibility ? 'closed' : ''} flex
   flex-col bg-white absolute top-0 mt-8 overflow-hidden">
   <!-- MonKey loading animation -->
-  {#if generationStarted}
+  {#if showLoading}
     <div
-      class="{monkeyLoading ? 'scale-100 opacity-100' : 'scale-0 opacity-50'}
+      class="{showLoadingAnimation ? 'scale-100 opacity-100' : 'scale-0 opacity-50'}
       transform duration-200 ease-out w-full h-full flex flex-row justify-center
       items-center absolute left-0 top-0">
       <div class="w-24 h-24 relative">
@@ -234,19 +259,21 @@
     </div>
   {/if}
   <!-- MonKey container -->
-  <div
-    bind:this={monkeyContainer}
-    class="{receivedMonkey ? 'translate-y-0' : '-translate-y-20'} transform
-    duration-700 ease-out" />
-  {#if receivedMonkey}
+  {#if showMonkeyContainer}
+    <div
+      bind:this={monkeyContainer}
+      class="{showMonkeyContainerAnimation ? 'show-monkey-container' : 'hide-monkey-container'}
+      monkey-container" />
+  {/if}
+  {#if showAgainButton}
     <!-- Again Button -->
     <div class="w-full flex flex-row justify-center absolute bottom-0">
       <button
-        disabled={!showAgainButton}
+        disabled={!showAgainButtonAnimation}
         on:click={() => {
           resetGeneration();
         }}
-        class="{showAgainButton ? 'scale-100 opacity-100' : 'scale-0 opacity-50'}
+        class="{showAgainButtonAnimation ? 'scale-100 opacity-100' : 'scale-0 opacity-50'}
         transform duration-200 ease-out bg-primary btn-primary text-white
         text-lg font-bold rounded-lg border-2 border-black px-6 md:px-8 py-1
         mx-4 md:mx-8 my-4 md:my-5">
@@ -255,24 +282,24 @@
     </div>
   {/if}
   <!-- Curtain -->
-  {#if curtainActive}
+  {#if showCurtain}
     <div
-      class="{receivedMonkey ? 'show-curtain' : 'hide-curtain'} curtain-4 w-full
-      h-full bg-grayLight absolute" />
+      class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'} curtain-4
+      w-full h-full bg-grayLight absolute" />
     <div
-      class="{receivedMonkey ? 'show-curtain' : 'hide-curtain'} curtain-3 w-full
-      h-full bg-brownLight absolute" />
+      class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'} curtain-3
+      w-full h-full bg-brownLight absolute" />
     <div
-      class="{receivedMonkey ? 'show-curtain' : 'hide-curtain'} curtain-2 w-full
-      h-full bg-brown absolute" />
+      class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'} curtain-2
+      w-full h-full bg-brown absolute" />
     <div
-      class="{receivedMonkey ? 'show-curtain' : 'hide-curtain'} curtain-1 w-full
-      h-full bg-gray absolute" />
+      class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'} curtain-1
+      w-full h-full bg-gray absolute" />
   {/if}
   <!-- Input, Show Me & Randomize -->
-  {#if formActive}
+  {#if !hideForm}
     <div
-      class="{generationStarted ? 'scale-0 opacity-50' : 'scale-100 opacity-100'}
+      class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
       transform duration-200 ease-out w-full h-full flex flex-col relative">
       <form
         on:submit|preventDefault={() => {
@@ -288,6 +315,7 @@
             Address
           </label>
           <input
+            disabled={hideFormAnimation}
             name="bananoAddress"
             id="bananoAddress"
             on:blur={() => {
@@ -316,7 +344,7 @@
             placeholder="Enter your address" />
         </div>
         <button
-          disabled={generationStarted}
+          disabled={hideFormAnimation}
           on:click={() => {
             generateMonkey(inputValue);
           }}
@@ -327,7 +355,7 @@
       </form>
       <div class="w-full flex flex-row justify-center absolute bottom-0">
         <button
-          disabled={generationStarted}
+          disabled={hideFormAnimation}
           on:click={() => {
             let address = genAddress();
             generateMonkey(address);
