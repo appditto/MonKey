@@ -10,6 +10,8 @@
   let monkeyLoading = false;
   let generationStarted = false;
   let showAgainButton = false;
+  let curtainActive = false;
+  let formActive = true;
   let monkeyContainer;
   let getMonkey = async (address) => {
     try {
@@ -23,17 +25,22 @@
   let generateMonkey = async (address) => {
     if (validateAddress(address)) {
       generationStarted = true;
+      curtainActive = true;
       setTimeout(() => {
         monkeyLoading = true;
       }, 125);
       let monkeyResult = await getMonkey(address);
       if (monkeyResult.data) {
         receivedMonkey = true;
+        formActive = false;
         setTimeout(() => {
           monkeyLoading = false;
         }, 150);
         setTimeout(() => {
           monkeyContainer.innerHTML = monkeyResult.data;
+          setTimeout(() => {
+            curtainActive = false;
+          }, 500);
         }, 200);
         setTimeout(() => {
           showAgainButton = true;
@@ -44,12 +51,15 @@
     }
   };
   let resetGeneration = () => {
+    formActive = true;
     monkeyContainer.innerHTML = "";
     receivedMonkey = false;
     monkeyLoading = false;
-    generationStarted = false;
     showAgainButton = false;
     inputError = false;
+    setTimeout(() => {
+      generationStarted = false;
+    }, 25);
   };
 </script>
 
@@ -245,7 +255,7 @@
     </div>
   {/if}
   <!-- Curtain -->
-  {#if generationStarted}
+  {#if curtainActive}
     <div
       class="{receivedMonkey ? 'show-curtain' : 'hide-curtain'} curtain-4 w-full
       h-full bg-grayLight absolute" />
@@ -260,74 +270,76 @@
       h-full bg-gray absolute" />
   {/if}
   <!-- Input, Show Me & Randomize -->
-  <div
-    class="{generationStarted ? 'scale-0 opacity-50' : 'scale-100 opacity-100'}
-    transform duration-200 ease-out w-full h-full flex flex-col relative">
-    <form
-      on:submit|preventDefault={() => {
-        generateMonkey(inputValue);
-      }}
-      class="flex flex-col items-center my-auto relative mx-4 md:mx-6">
-      <div class="w-full">
-        <label
-          class="{inputError ? 'text-danger' : inputFocused || inputHovered ? 'text-brownLight' : 'text-gray'}
-          absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2 text-xl
-          font-bold transition-all duration-200 ease-out"
-          for="bananoAddress">
-          Address
-        </label>
-        <input
-          name="bananoAddress"
-          id="bananoAddress"
-          on:blur={() => {
-            inputFocused = false;
-          }}
-          on:focus={() => {
-            inputFocused = true;
-          }}
-          on:mouseenter={() => {
-            inputHovered = true;
-          }}
-          on:mouseleave={() => {
-            inputHovered = false;
-          }}
-          bind:value={inputValue}
-          on:input={() => {
-            if (inputError) {
-              inputError = false;
-            }
-          }}
-          class="{inputError ? 'border-danger text-danger' : 'text-gray border-primary focus:border-brownLight hover:border-brownLight'}
-          w-full text-xl font-bold px-4 py-3 border-3 rounded-xl transition-all
-          duration-200 ease-out"
-          type="text"
-          autocomplete="off"
-          placeholder="Enter your address" />
-      </div>
-      <button
-        disabled={generationStarted}
-        on:click={() => {
+  {#if formActive}
+    <div
+      class="{generationStarted ? 'scale-0 opacity-50' : 'scale-100 opacity-100'}
+      transform duration-200 ease-out w-full h-full flex flex-col relative">
+      <form
+        on:submit|preventDefault={() => {
           generateMonkey(inputValue);
         }}
-        class="w-full bg-primary btn-primary text-white text-xl font-bold
-        rounded-xl border-2 border-black px-6 py-2 mx-auto mt-3">
-        Show Me
-      </button>
-    </form>
-    <div class="w-full flex flex-row justify-center absolute bottom-0">
-      <button
-        disabled={generationStarted}
-        on:click={() => {
-          let address = genAddress();
-          generateMonkey(address);
-          setTimeout(() => {
-            inputValue = address;
-          }, 200);
-        }}
-        class="bg-primary btn-primary text-white text-lg font-bold rounded-lg
-        border-2 border-black px-6 md:px-8 py-1 my-4 md:my-5">
-        Randomize
-      </button>
+        class="flex flex-col items-center my-auto relative mx-4 md:mx-6">
+        <div class="w-full">
+          <label
+            class="{inputError ? 'text-danger' : inputFocused || inputHovered ? 'text-brownLight' : 'text-gray'}
+            absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2 text-xl
+            font-bold transition-all duration-200 ease-out"
+            for="bananoAddress">
+            Address
+          </label>
+          <input
+            name="bananoAddress"
+            id="bananoAddress"
+            on:blur={() => {
+              inputFocused = false;
+            }}
+            on:focus={() => {
+              inputFocused = true;
+            }}
+            on:mouseenter={() => {
+              inputHovered = true;
+            }}
+            on:mouseleave={() => {
+              inputHovered = false;
+            }}
+            bind:value={inputValue}
+            on:input={() => {
+              if (inputError) {
+                inputError = false;
+              }
+            }}
+            class="{inputError ? 'border-danger text-danger' : 'text-gray border-primary focus:border-brownLight hover:border-brownLight'}
+            w-full text-xl font-bold px-4 py-3 border-3 rounded-xl
+            transition-all duration-200 ease-out"
+            type="text"
+            autocomplete="off"
+            placeholder="Enter your address" />
+        </div>
+        <button
+          disabled={generationStarted}
+          on:click={() => {
+            generateMonkey(inputValue);
+          }}
+          class="w-full bg-primary btn-primary text-white text-xl font-bold
+          rounded-xl border-2 border-black px-6 py-2 mx-auto mt-3">
+          Show Me
+        </button>
+      </form>
+      <div class="w-full flex flex-row justify-center absolute bottom-0">
+        <button
+          disabled={generationStarted}
+          on:click={() => {
+            let address = genAddress();
+            generateMonkey(address);
+            setTimeout(() => {
+              inputValue = address;
+            }, 200);
+          }}
+          class="bg-primary btn-primary text-white text-lg font-bold rounded-lg
+          border-2 border-black px-6 md:px-8 py-1 my-4 md:my-5">
+          Randomize
+        </button>
+      </div>
     </div>
-  </div>
+  {/if}
 </div>
