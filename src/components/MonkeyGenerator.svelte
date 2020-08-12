@@ -1,7 +1,7 @@
 <script>
   import axios from "axios";
   import { genAddress, validateAddress } from "../plugins/address.js";
-  export let generatorVisibility = false;
+  export let showGeneratorAnimation = false;
   let inputValue;
   let inputError = false;
   let inputFocused = false;
@@ -242,8 +242,8 @@
 
 <!-- HTML -->
 <div
-  class="max-w-md max-h-md generator {!generatorVisibility ? 'closed' : ''} flex
-  flex-col bg-white absolute top-0 mt-8 overflow-hidden">
+  class="max-w-md max-h-md generator {!showGeneratorAnimation ? 'closed' : ''}
+  flex flex-col bg-white absolute top-0 mt-8 overflow-hidden">
   <!-- MonKey loading animation -->
   {#if showLoading}
     <div

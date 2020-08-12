@@ -1,7 +1,6 @@
 <script>
   import MonkeyGenerator from "../MonkeyGenerator.svelte";
-  import { onMount } from "svelte";
-  let generatorVisibility = false;
+  let showGeneratorAnimation = false;
   let showGenerator = false;
   let timeout1;
   let timeout2;
@@ -12,11 +11,11 @@
         clearTimeout(timeout1);
       }
       timeout1 = setTimeout(() => {
-        generatorVisibility = !generatorVisibility;
+        showGeneratorAnimation = true;
       }, 25);
       timeout1();
     } else {
-      generatorVisibility = false;
+      showGeneratorAnimation = false;
       if (timeout2) {
         clearTimeout(timeout2);
       }
@@ -52,14 +51,14 @@
       on:click={() => {
         toggleGenerator();
       }}
-      class="{generatorVisibility ? 'bg-danger btn-danger border-dangerDark' : 'bg-primary btn-primary border-black'}
+      class="{showGeneratorAnimation ? 'bg-danger btn-danger border-dangerDark' : 'bg-primary btn-primary border-black'}
       w-64 max-w-full text-white text-xl font-bold rounded-xl border-2 px-3
       md:px-6 py-2 mx-auto mt-6">
-      {generatorVisibility ? 'Close' : 'Show My MonKey'}
+      {showGeneratorAnimation ? 'Close' : 'Show My MonKey'}
     </button>
     <div class="w-full flex flex-row justify-center relative z-50">
       {#if showGenerator}
-        <MonkeyGenerator {generatorVisibility} />
+        <MonkeyGenerator {showGeneratorAnimation} />
       {/if}
     </div>
   </div>
