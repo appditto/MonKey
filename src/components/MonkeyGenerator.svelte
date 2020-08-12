@@ -18,6 +18,8 @@
   let showMonkeyContainerAnimation = false;
   let showAgainButton = false;
   let showAgainButtonAnimation = false;
+  let hideMonkeyContainer = false;
+  let toHideMonkeyContainer = false;
   /* ////////////////////////////////////// */
   let getMonkey = async (address) => {
     try {
@@ -53,10 +55,10 @@
         showAgainButton = true;
         setTimeout(() => {
           showAgainButtonAnimation = true;
-        }, 450);
+        }, 400);
         setTimeout(() => {
           showCurtain = false;
-        }, 750);
+        }, 725);
       }
     } else {
       inputError = true;
@@ -67,15 +69,23 @@
     showLoadingAnimation = false;
     showCurtain = false;
     showCurtainAnimation = false;
-    showMonkeyContainer = false;
-    showMonkeyContainerAnimation = false;
+    toHideMonkeyContainer = true;
     showAgainButton = false;
     showAgainButtonAnimation = false;
     hideForm = false;
+    inputError = false;
+    setTimeout(() => {
+      hideMonkeyContainer = true;
+    }, 25);
+    setTimeout(() => {
+      showMonkeyContainer = false;
+      showMonkeyContainerAnimation = false;
+      hideMonkeyContainer = false;
+      toHideMonkeyContainer = false;
+    }, 300);
     setTimeout(() => {
       hideFormAnimation = false;
-    }, 25);
-    inputError = false;
+    }, 125);
   };
 </script>
 
@@ -210,11 +220,19 @@
   .monkey-container {
     transition: all 0.55s ease-out;
   }
-  .hide-monkey-container {
+  .hidden-monkey-container {
     transform: translateY(-20%);
   }
   .show-monkey-container {
     transform: translateY(0%);
+  }
+  .to-hide-monkey-container {
+    transition: all 0.35s ease-out;
+    opacity: 1;
+  }
+  .hide-monkey-container {
+    transform: translateY(-100%) scale(0.5);
+    opacity: 0;
   }
   @keyframes animation-1 {
     0% {
@@ -262,8 +280,9 @@
   {#if showMonkeyContainer}
     <div
       bind:this={monkeyContainer}
-      class="{showMonkeyContainerAnimation ? 'show-monkey-container' : 'hide-monkey-container'}
-      monkey-container" />
+      class="{showMonkeyContainerAnimation ? (hideMonkeyContainer ? 'hide-monkey-container' : 'show-monkey-container') : 'hidden-monkey-container'}
+      {toHideMonkeyContainer ? 'to-hide-monkey-container' : 'monkey-container'}
+      w-full h-auto absolute left-0 top-0" />
   {/if}
   {#if showAgainButton}
     <!-- Again Button -->
@@ -273,8 +292,8 @@
         on:click={() => {
           resetGeneration();
         }}
-        class="{showAgainButtonAnimation ? 'scale-100 opacity-100' : 'scale-0 opacity-50'}
-        transform duration-200 ease-out bg-primary btn-primary text-white
+        class="{showAgainButtonAnimation ? 'scale-100 opacity-100 translate-y-0' : 'scale-0 opacity-50 translate-y-20'}
+        transform duration-300 ease-out bg-primary btn-primary text-white
         text-lg font-bold rounded-lg border-2 border-black px-6 md:px-8 py-1
         mx-4 md:mx-8 my-4 md:my-5">
         Again!
