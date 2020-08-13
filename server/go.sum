@@ -22,6 +22,7 @@ github.com/appditto/monKey v0.0.0-20200812215557-b236a41541e4 h1:EBtii4CRzFo1Ye5
 github.com/appditto/monKey v0.0.0-20200813143855-916145b59180 h1:vYbf2Hp6OQXjZAxBdd3Ojfwd378iGL68HjXU9tpTSjY=
 github.com/appditto/monKey v0.0.0-20200813153859-d6b6810b2880 h1:fXPDAedgQbZSvisoLhW92k50K5DyFCO+YYcsjnKJUOA=
 github.com/appditto/monKey v0.0.0-20200813182052-c74e9c90c929 h1:zgOvKqxdX44fzi5LZTITMbmna89eZLmhJ6UaSNEVYUo=
+github.com/appditto/monKey v0.0.0-20200813195736-b49591c7a9d2 h1:j0yi8yKq/uiuGsachAUl9gZzZhSJjGMe1FIjofmc64Q=
 github.com/appditto/natricon v0.0.0-20200731121247-bf8d6d5feefe h1:wjbxXuVpnkSpw6gVsjb/m2LFvLIKREaXd14ZkNYUUEM=
 github.com/appditto/natricon/server v0.0.0-20200731121247-bf8d6d5feefe h1:Ba67NJOT6peMe23ZW6Qupzb2c3rx0z0GseKsy9DbrfA=
 github.com/appditto/natricon/server v0.0.0-20200731121247-bf8d6d5feefe/go.mod h1:WDnvuy+VpwpiZ1UK4NJmpmQ+RfFenybk6OT6V4Jql7E=

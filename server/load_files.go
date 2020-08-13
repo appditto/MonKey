@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/appditto/monKey/server/image"
+	"github.com/appditto/monKey/server/utils"
 	"github.com/golang/glog"
 )
 
@@ -42,6 +43,14 @@ func getAccessoryAsset(fname string, path string) string {
 		glog.Fatalf("Couldn't load file %s", path)
 		panic(err.Error())
 	}
+	asString := string(asset.SVGContents)
+	hashedB := utils.Sha256(asset.FileName)[:10]
+	hashedC := utils.Sha256(asset.FileName)[10:20]
+	asString = strings.ReplaceAll(asString, "id=\"B\"", fmt.Sprintf("id=\"%s\"", hashedB))
+	asString = strings.ReplaceAll(asString, "id=\"C\"", fmt.Sprintf("id=\"%s\"", hashedC))
+	asString = strings.ReplaceAll(asString, "href=\"#B\"", fmt.Sprintf("href=\"#%s\"", hashedB))
+	asString = strings.ReplaceAll(asString, "href=\"#C\"", fmt.Sprintf("href=\"#%s\"", hashedC))
+	asset.SVGContents = []byte(asString)
 	asset.FurColored = false
 	asset.EyeColored = false
 	asset.ShadowFur = false
@@ -80,6 +89,14 @@ func LoadAssetsToArray() {
 				glog.Fatalf("Couldn't load file %s", path)
 				panic(err.Error())
 			}
+			asString := string(bodyAsset.SVGContents)
+			hashedB := utils.Sha256(bodyAsset.FileName)[:10]
+			hashedC := utils.Sha256(bodyAsset.FileName)[10:20]
+			asString = strings.ReplaceAll(asString, "id=\"B\"", fmt.Sprintf("id=\"%s\"", hashedB))
+			asString = strings.ReplaceAll(asString, "id=\"C\"", fmt.Sprintf("id=\"%s\"", hashedC))
+			asString = strings.ReplaceAll(asString, "href=\"#B\"", fmt.Sprintf("href=\"#%s\"", hashedB))
+			asString = strings.ReplaceAll(asString, "href=\"#C\"", fmt.Sprintf("href=\"#%s\"", hashedC))
+			bodyAsset.SVGContents = []byte(asString)
 			bodyAsset.FurColored = hasTag(bodyAsset.FileName, "[fur-color]")
 			bodyAsset.EyeColored = hasTag(bodyAsset.FileName, "[eye-color]")
 			bodyAsset.ShadowFur = hasTag(bodyAsset.FileName, "[shadow-fur]")
