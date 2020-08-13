@@ -54,7 +54,7 @@ func LoadAssetsToArray() {
 	ret := "package image\n\n"
 
 	var bodyAsset image.Asset
-	ret += "var BodyParts = [][]byte{\n"
+	ret += "var BodyPartsIllustrations = [][]byte{\n"
 	fPath := path.Join(wd, "assets", "illustrations", string(image.BodyPart))
 	err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
 		if strings.Contains(info.Name(), ".svg") {
@@ -87,7 +87,7 @@ func LoadAssetsToArray() {
 	})
 	ret += "}\n"
 
-	ret += "var Hats = [][]byte{\n"
+	ret += "var HatIllustrations = [][]byte{\n"
 	fPath = path.Join(wd, "assets", "illustrations", "accessories", string(image.Hats))
 	err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
 		if strings.Contains(info.Name(), ".svg") {
@@ -97,7 +97,7 @@ func LoadAssetsToArray() {
 	})
 	ret += "}\n"
 
-	ret += "var Glasses = [][]byte{\n"
+	ret += "var GlassesIllustrations = [][]byte{\n"
 	fPath = path.Join(wd, "assets", "illustrations", "accessories", string(image.Glasses))
 	err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
 		if strings.Contains(info.Name(), ".svg") {
@@ -107,7 +107,7 @@ func LoadAssetsToArray() {
 	})
 	ret += "}\n"
 
-	ret += "var Misc = [][]byte{\n"
+	ret += "var MiscIllustrations = [][]byte{\n"
 	fPath = path.Join(wd, "assets", "illustrations", "accessories", string(image.Misc))
 	err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
 		if strings.Contains(info.Name(), ".svg") {
@@ -117,7 +117,7 @@ func LoadAssetsToArray() {
 	})
 	ret += "}\n"
 
-	ret += "var Mouths = [][]byte{\n"
+	ret += "var MouthsIllustrations = [][]byte{\n"
 	fPath = path.Join(wd, "assets", "illustrations", "accessories", string(image.Mouths))
 	err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
 		if strings.Contains(info.Name(), ".svg") {
@@ -127,7 +127,7 @@ func LoadAssetsToArray() {
 	})
 	ret += "}\n"
 
-	ret += "var ShirtPants = [][]byte{\n"
+	ret += "var ShirtPantsIllustrations = [][]byte{\n"
 	fPath = path.Join(wd, "assets", "illustrations", "accessories", string(image.ShirtPants))
 	err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
 		if strings.Contains(info.Name(), ".svg") {
@@ -137,7 +137,7 @@ func LoadAssetsToArray() {
 	})
 	ret += "}\n"
 
-	ret += "var Shoes = [][]byte{\n"
+	ret += "var ShoesIllustrations = [][]byte{\n"
 	fPath = path.Join(wd, "assets", "illustrations", "accessories", string(image.Shoes))
 	err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
 		if strings.Contains(info.Name(), ".svg") {
@@ -147,7 +147,7 @@ func LoadAssetsToArray() {
 	})
 	ret += "}\n"
 
-	ret += "var Tails = [][]byte{\n"
+	ret += "var TailsIllustrations = [][]byte{\n"
 	fPath = path.Join(wd, "assets", "illustrations", "accessories", string(image.Tails))
 	err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
 		if strings.Contains(info.Name(), ".svg") {
