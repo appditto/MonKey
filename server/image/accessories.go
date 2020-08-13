@@ -8,7 +8,7 @@ import (
 )
 
 // Chance an accessory category has of occuring
-const accessoryChance = 0.2
+const accessoryChance = 1.0
 
 // Accessories - represents accessories for monKey
 type Accessories struct {
