@@ -8,7 +8,7 @@ import (
 )
 
 // Chance an accessory category has of occuring
-const accessoryChance = 1.0
+const accessoryChance = 0.2
 
 // Accessories - represents accessories for monKey
 type Accessories struct {
@@ -92,13 +92,6 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	}
 	workingIdx += 2
 
-	hasMouth := false
-	hasMouthWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
-	if hasMouthWorkingVal <= maxHasAccessoryValue {
-		hasMouth = true
-	}
-	workingIdx += 2
-
 	hasShirtPants := false
 	hasShirtPantsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasShirtPantsWorkingVal <= maxHasAccessoryValue {
@@ -118,7 +111,7 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	if hasTailsWorkingVal <= maxHasAccessoryValue {
 		hasTails = true
 	}
-	workingIdx += 2 // 14
+	workingIdx += 2 // 12
 
 	// Pick accessories if we have them
 	if hasGlasses {
@@ -133,11 +126,6 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 
 	if hasMisc {
 		accessories.MiscAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetMisc())
-		workingIdx += 2
-	}
-
-	if hasMouth {
-		accessories.MouthAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetMouthAssets())
 		workingIdx += 2
 	}
 
@@ -156,7 +144,11 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 		workingIdx += 2
 	}
 
-	// Working idx could be up to 28 here, if we dont have enough left for color we can either re-use parts of the hash or re-hash
+	// Mouth always exists
+	accessories.MouthAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetMouthAssets())
+	workingIdx += 2
+
+	// Working idx could be up to 26 here, if we dont have enough left for color we can either re-use parts of the hash or re-hash
 	// TODO - color
 
 	return accessories, nil
