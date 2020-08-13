@@ -152,7 +152,7 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	}
 
 	if hasTails {
-		accessories.TailAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetTailAssets())
+		accessories.TailAccessory = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetTailAssets())
 		workingIdx += 2
 	}
 
