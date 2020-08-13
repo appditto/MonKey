@@ -143,122 +143,122 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	canvas.Startraw(fmt.Sprintf("viewBox=\"0 0 %d %d\"", DefaultSize, DefaultSize))
 
 	// Add tail
-	canvas.Gid("tail")
+	canvas.Group(fmt.Sprintf("id=\"%s\"", "tail"), "fill=\"none\"")
 	io.WriteString(canvas.Writer, tail.Doc)
 	canvas.Gend()
 
 	// Add tail accessory if present
 	if tailAccessory.Doc != "" {
-		canvas.Gid("tailAcc")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "tailAcc"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, tailAccessory.Doc)
 		canvas.Gend()
 	}
 
 	// Add legs if not removed
 	if legs.Doc != "" {
-		canvas.Gid("legs")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "legs"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, legs.Doc)
 		canvas.Gend()
 	}
 
 	// Add arms always
-	canvas.Gid("arms")
+	canvas.Group(fmt.Sprintf("id=\"%s\"", "arms"), "fill=\"none\"")
 	io.WriteString(canvas.Writer, arms.Doc)
 	canvas.Gend()
 
 	// Add bodyUpper always
-	canvas.Gid("bodyUpper")
+	canvas.Group(fmt.Sprintf("id=\"%s\"", "bodyUpper"), "fill=\"none\"")
 	io.WriteString(canvas.Writer, bodyUpper.Doc)
 	canvas.Gend()
 
 	// Add shirt pants
 	if shirtPants.Doc != "" {
-		canvas.Gid("shirtPants")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "shirtPants"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, shirtPants.Doc)
 		canvas.Gend()
 	}
 
 	// Add misc [above-shirt-pants]
 	if misc.Doc != "" && accessories.MiscAsset.AboveShirtPants {
-		canvas.Gid("misc")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "misc"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, misc.Doc)
 		canvas.Gend()
 	}
 
 	// Add Ears always
-	canvas.Gid("ears")
+	canvas.Group(fmt.Sprintf("id=\"%s\"", "ears"), "fill=\"none\"")
 	io.WriteString(canvas.Writer, ears.Doc)
 	canvas.Gend()
 
 	// Add face always
-	canvas.Gid("face")
+	canvas.Group(fmt.Sprintf("id=\"%s\"", "face"), "fill=\"none\"")
 	io.WriteString(canvas.Writer, face.Doc)
 	canvas.Gend()
 
 	// Add Eyes if not removed
 	if eyes.Doc != "" {
-		canvas.Gid("eyes")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "eyes"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, eyes.Doc)
 		canvas.Gend()
 	}
 
 	// Glasses
 	if glasses.Doc != "" {
-		canvas.Gid("glasses")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "glasses"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, glasses.Doc)
 		canvas.Gend()
 	}
 
 	// Nose
-	canvas.Gid("nose")
+	canvas.Group(fmt.Sprintf("id=\"%s\"", "nose"), "fill=\"none\"")
 	io.WriteString(canvas.Writer, nose.Doc)
 	canvas.Gend()
 
 	// Mouth
 	if mouth.Doc != "" {
-		canvas.Gid("mouth")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "mouth"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, mouth.Doc)
 		canvas.Gend()
 	}
 
 	// Hat
 	if hat.Doc != "" {
-		canvas.Gid("hat")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "hat"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, hat.Doc)
 		canvas.Gend()
 	}
 
 	// Foot left
 	if footLeft.Doc != "" {
-		canvas.Gid("footLeft")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "footLeft"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, footLeft.Doc)
 		canvas.Gend()
 	}
 
 	// Foot right
 	if footRight.Doc != "" {
-		canvas.Gid("footRight")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "footRight"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, footRight.Doc)
 		canvas.Gend()
 	}
 
 	// Hand left
 	if handLeft.Doc != "" {
-		canvas.Gid("handLeft")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "handLeft"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, handLeft.Doc)
 		canvas.Gend()
 	}
 
 	// Hand right
 	if handRight.Doc != "" {
-		canvas.Gid("handRight")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "handRight"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, handRight.Doc)
 		canvas.Gend()
 	}
 
 	// Add misc [above-hands]
 	if misc.Doc != "" && accessories.MiscAsset.AboveHands {
-		canvas.Gid("misc")
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "misc"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, misc.Doc)
 		canvas.Gend()
 	}
