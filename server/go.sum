@@ -18,6 +18,8 @@ github.com/ajstarks/svgo v0.0.0-20200725142600-7a3c8b57fecb/go.mod h1:K08gAheRH3
 github.com/anmitsu/go-shlex v0.0.0-20161002113705-648efa622239/go.mod h1:2FmKhYUyUczH0OGQWaF5ceTx0UBShxjsH6f8oGKYe2c=
 github.com/appditto/monKey v0.0.0-20200805125948-38966c1dfaae h1:tQ/eYO5xV8PbZr99u+xpBLJ7mDb3LvPe1EvIuxbN7RM=
 github.com/appditto/monKey v0.0.0-20200812215557-b236a41541e4 h1:EBtii4CRzFo1Ye5Y9MXckGGLXNtP2buF6xMsuoqw62k=
+github.com/appditto/monKey v0.0.0-20200813143855-916145b59180 h1:vYbf2Hp6OQXjZAxBdd3Ojfwd378iGL68HjXU9tpTSjY=
+github.com/appditto/monKey v0.0.0-20200813153859-d6b6810b2880 h1:fXPDAedgQbZSvisoLhW92k50K5DyFCO+YYcsjnKJUOA=
 github.com/appditto/natricon v0.0.0-20200731121247-bf8d6d5feefe h1:wjbxXuVpnkSpw6gVsjb/m2LFvLIKREaXd14ZkNYUUEM=
 github.com/appditto/natricon/server v0.0.0-20200731121247-bf8d6d5feefe h1:Ba67NJOT6peMe23ZW6Qupzb2c3rx0z0GseKsy9DbrfA=
 github.com/appditto/natricon/server v0.0.0-20200731121247-bf8d6d5feefe/go.mod h1:WDnvuy+VpwpiZ1UK4NJmpmQ+RfFenybk6OT6V4Jql7E=

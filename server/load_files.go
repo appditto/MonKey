@@ -7,6 +7,8 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/appditto/monKey/server/image"
@@ -15,6 +17,19 @@ import (
 
 func hasTag(fname string, tag string) bool {
 	return strings.Contains(fname, tag)
+}
+
+func getWeight(fname string) float64 {
+	reWeightSubstr := regexp.MustCompile(`\[w-(.*)`)
+	weightStr := reWeightSubstr.FindString(fname)
+	reWeightFloat := regexp.MustCompile(`[0-9]?([0-9]*[.])?[0-9]+`)
+	weightNumStr := reWeightFloat.FindString(weightStr)
+
+	asF, err := strconv.ParseFloat(weightNumStr, 64)
+	if err != nil {
+		return -1
+	}
+	return asF
 }
 
 func getAccessoryAsset(fname string, path string) string {
@@ -40,7 +55,7 @@ func getAccessoryAsset(fname string, path string) string {
 	asset.RemovesHandsRight = hasTag(asset.FileName, "[removes-hands-right]")
 	asset.AboveShirtPants = hasTag(asset.FileName, "[above-shirts-pants]")
 	asset.AboveHands = hasTag(asset.FileName, "[above-hands]")
-	asset.Weight = -1 // TODO - implement weight
+	asset.Weight = getWeight(asset.FileName)
 	encoded, _ := json.Marshal(asset)
 	return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(fmt.Sprint(encoded), "[", "{"), "]", "}"), " ", ", ") + ","
 }
@@ -79,7 +94,7 @@ func LoadAssetsToArray() {
 			bodyAsset.RemovesHandsRight = false
 			bodyAsset.AboveShirtPants = false
 			bodyAsset.AboveHands = false
-			bodyAsset.Weight = -1
+			bodyAsset.Weight = getWeight(bodyAsset.FileName)
 			encoded, _ := json.Marshal(bodyAsset)
 			ret += strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(fmt.Sprint(encoded), "[", "{"), "]", "}"), " ", ", ") + ","
 		}

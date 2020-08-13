@@ -128,3 +128,38 @@ func GetAssets() *assetManager {
 func (sm *assetManager) GetBodyParts() []Asset {
 	return sm.bodyPartAssets
 }
+
+// GetGlasses - get complete list of glasses parts assets
+func (sm *assetManager) GetGlasses() []Asset {
+	return sm.glassesAssets
+}
+
+// GetHats - get complete list of hat parts assets
+func (sm *assetManager) GetHats() []Asset {
+	return sm.hatsAssets
+}
+
+// GetMisc - get complete list of misc assets
+func (sm *assetManager) GetMisc() []Asset {
+	return sm.miscAssets
+}
+
+// GetMouthAssets - get complete list of mouth assets
+func (sm *assetManager) GetMouthAssets() []Asset {
+	return sm.mouthsAssets
+}
+
+// GetShirtPantsAssets - get complete list of shirt pants assets
+func (sm *assetManager) GetShirtPantsAssets() []Asset {
+	return sm.shirtPantsAssets
+}
+
+// GetShoeAssets - get complete list of shoe assets
+func (sm *assetManager) GetShoeAssets() []Asset {
+	return sm.shoesAssets
+}
+
+// GetTailAssets - get complete list of tail assets
+func (sm *assetManager) GetTailAssets() []Asset {
+	return sm.tailsAssets
+}
