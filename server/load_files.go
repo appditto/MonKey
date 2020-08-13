@@ -49,10 +49,9 @@ func getAccessoryAsset(fname string, path string) string {
 	asset.ShadowEye = false
 	asset.ColorableRandom = hasTag(asset.FileName, "[colorable-random]")
 	asset.RemovesEyes = hasTag(asset.FileName, "[removes-eyes]")
-	asset.RemovesFeet = hasTag(asset.FileName, "[removes-legs]")
-	asset.RemovesHands = hasTag(asset.FileName, "[removes-hands]")
-	asset.RemovesHandsLeft = hasTag(asset.FileName, "[removes-hands-left]")
-	asset.RemovesHandsRight = hasTag(asset.FileName, "[removes-hands-right]")
+	asset.RemovesLegs = hasTag(asset.FileName, "[removes-legs]")
+	asset.RemovesHandsLeft = hasTag(asset.FileName, "[removes-hands-left]") || hasTag(asset.FileName, "[removes-hands]")
+	asset.RemovesHandsRight = hasTag(asset.FileName, "[removes-hands-right]") || hasTag(asset.FileName, "[removes-hands]")
 	asset.AboveShirtPants = hasTag(asset.FileName, "[above-shirts-pants]")
 	asset.AboveHands = hasTag(asset.FileName, "[above-hands]")
 	asset.Weight = getWeight(asset.FileName)
@@ -88,8 +87,7 @@ func LoadAssetsToArray() {
 			bodyAsset.ShadowEye = hasTag(bodyAsset.FileName, "[shadow-eye]")
 			bodyAsset.ColorableRandom = false
 			bodyAsset.RemovesEyes = false
-			bodyAsset.RemovesFeet = false
-			bodyAsset.RemovesHands = false
+			bodyAsset.RemovesLegs = false
 			bodyAsset.RemovesHandsLeft = false
 			bodyAsset.RemovesHandsRight = false
 			bodyAsset.AboveShirtPants = false

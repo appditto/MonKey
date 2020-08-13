@@ -30,10 +30,9 @@ type Asset struct {
 	ShadowEye         bool             // Replace shadow with calculated shadow
 	ColorableRandom   bool             // Replace with random color
 	RemovesEyes       bool             // Replaces eyes
-	RemovesHands      bool             // Replaces hands
 	RemovesHandsLeft  bool             // Replaces hands left
 	RemovesHandsRight bool             // Replaces hands right
-	RemovesFeet       bool             // Replaces feet
+	RemovesLegs       bool             // Replaces feet
 	AboveShirtPants   bool             // Should be assembled above SHirtPants
 	AboveHands        bool             // Should be assembled above hands
 	Weight            float64          // The weight of this accessory, determines how often it appears

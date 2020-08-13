@@ -38,30 +38,31 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 
 	// Get base body parts
 	for _, bodyPart := range GetAssets().GetBodyParts() {
+		localPart := bodyPart
 		if strings.Contains(bodyPart.FileName, "arms") {
-			accessories.ArmsAsset = &bodyPart
+			accessories.ArmsAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "body-upper") {
-			accessories.BodyUpperAsset = &bodyPart
+			accessories.BodyUpperAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "ears") {
-			accessories.EarAsset = &bodyPart
+			accessories.EarAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "eyes") {
-			accessories.EyeAsset = &bodyPart
+			accessories.EyeAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "face") {
-			accessories.FaceAsset = &bodyPart
+			accessories.FaceAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "foot-left") {
-			accessories.FootLeftAsset = &bodyPart
+			accessories.FootLeftAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "foot-right") {
-			accessories.FootRightAsset = &bodyPart
+			accessories.FootRightAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "hand-left") {
-			accessories.HandLeftAsset = &bodyPart
+			accessories.HandLeftAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "hand-right") {
-			accessories.HandRightAsset = &bodyPart
+			accessories.HandRightAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "legs") {
-			accessories.LegAsset = &bodyPart
+			accessories.LegAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "nose") {
-			accessories.NoseAsset = &bodyPart
+			accessories.NoseAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "tail") {
-			accessories.TailAsset = &bodyPart
+			accessories.TailAsset = &localPart
 		}
 	}
 

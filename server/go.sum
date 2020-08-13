@@ -12,6 +12,7 @@ github.com/AndreasBriese/bbloom v0.0.0-20190825152654-46b345b51c96 h1:cTp8I5+VIo
 github.com/AndreasBriese/bbloom v0.0.0-20190825152654-46b345b51c96/go.mod h1:bOvUY6CB00SOBii9/FifXqc0awNKxLFCL/+pkDPuyl8=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
+github.com/ajstarks/svgo v0.0.0-20200320125537-f189e35d30ca h1:kWzLcty5V2rzOqJM7Tp/MfSX0RMSI1x4IOLApEefYxA=
 github.com/ajstarks/svgo v0.0.0-20200320125537-f189e35d30ca/go.mod h1:K08gAheRH3/J6wwsYMMT4xOr94bZjxIelGM0+d/wbFw=
 github.com/ajstarks/svgo v0.0.0-20200725142600-7a3c8b57fecb h1:EVl3FJLQCzSbgBezKo/1A4ADnJ4mtJZ0RvnNzDJ44nY=
 github.com/ajstarks/svgo v0.0.0-20200725142600-7a3c8b57fecb/go.mod h1:K08gAheRH3/J6wwsYMMT4xOr94bZjxIelGM0+d/wbFw=
@@ -20,6 +21,7 @@ github.com/appditto/monKey v0.0.0-20200805125948-38966c1dfaae h1:tQ/eYO5xV8PbZr9
 github.com/appditto/monKey v0.0.0-20200812215557-b236a41541e4 h1:EBtii4CRzFo1Ye5Y9MXckGGLXNtP2buF6xMsuoqw62k=
 github.com/appditto/monKey v0.0.0-20200813143855-916145b59180 h1:vYbf2Hp6OQXjZAxBdd3Ojfwd378iGL68HjXU9tpTSjY=
 github.com/appditto/monKey v0.0.0-20200813153859-d6b6810b2880 h1:fXPDAedgQbZSvisoLhW92k50K5DyFCO+YYcsjnKJUOA=
+github.com/appditto/monKey v0.0.0-20200813182052-c74e9c90c929 h1:zgOvKqxdX44fzi5LZTITMbmna89eZLmhJ6UaSNEVYUo=
 github.com/appditto/natricon v0.0.0-20200731121247-bf8d6d5feefe h1:wjbxXuVpnkSpw6gVsjb/m2LFvLIKREaXd14ZkNYUUEM=
 github.com/appditto/natricon/server v0.0.0-20200731121247-bf8d6d5feefe h1:Ba67NJOT6peMe23ZW6Qupzb2c3rx0z0GseKsy9DbrfA=
 github.com/appditto/natricon/server v0.0.0-20200731121247-bf8d6d5feefe/go.mod h1:WDnvuy+VpwpiZ1UK4NJmpmQ+RfFenybk6OT6V4Jql7E=
@@ -201,7 +203,9 @@ github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXf
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 github.com/tarm/serial v0.0.0-20180830185346-98f6abe2eb07/go.mod h1:kDXzergiv9cbyO7IOYJZWg1U88JhDg3PB6klq9Hg2pA=
+github.com/tdewolff/minify/v2 v2.7.4 h1:r0OZQ3QzWeDS5cXq53Bk4IFIBDZ7fiXIkw1a4bHONsw=
 github.com/tdewolff/minify/v2 v2.7.4/go.mod h1:BkDSm8aMMT0ALGmpt7j3Ra7nLUgZL0qhyrAHXwxcy5w=
+github.com/tdewolff/parse/v2 v2.4.2 h1:Bu2Qv6wepkc+Ou7iB/qHjAhEImlAP5vedzlQRUdj3BI=
 github.com/tdewolff/parse/v2 v2.4.2/go.mod h1:WzaJpRSbwq++EIQHYIRTpbYKNA3gn9it1Ik++q4zyho=
 github.com/tdewolff/test v1.0.6/go.mod h1:6DAvZliBAAnD7rhVgwaM7DE5/d9NMOAJ09SqYqeK4QE=
 github.com/ugorji/go v1.1.7/go.mod h1:kZn38zHttfInRq0xu/PH0az30d+z6vm202qpg1oXVMw=
