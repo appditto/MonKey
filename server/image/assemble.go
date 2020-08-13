@@ -131,7 +131,7 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 		}
 	}
 	if accessories.MiscAsset == nil || !accessories.MiscAsset.RemovesHandsRight {
-		if err := xml.Unmarshal(accessories.HandLeftAsset.SVGContents, &handRight); err != nil {
+		if err := xml.Unmarshal(accessories.HandRightAsset.SVGContents, &handRight); err != nil {
 			glog.Fatalf("Unable to parse hand right SVG %v", err)
 			return nil, err
 		}
