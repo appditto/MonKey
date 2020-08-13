@@ -16,6 +16,8 @@ import (
 	"github.com/golang/glog"
 )
 
+var alphabet = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
+
 func hasTag(fname string, tag string) bool {
 	return strings.Contains(fname, tag)
 }
@@ -44,12 +46,11 @@ func getAccessoryAsset(fname string, path string) string {
 		panic(err.Error())
 	}
 	asString := string(asset.SVGContents)
-	hashedB := utils.Sha256(asset.FileName)[:10]
-	hashedC := utils.Sha256(asset.FileName)[10:20]
-	asString = strings.ReplaceAll(asString, "id=\"B\"", fmt.Sprintf("id=\"%s\"", hashedB))
-	asString = strings.ReplaceAll(asString, "id=\"C\"", fmt.Sprintf("id=\"%s\"", hashedC))
-	asString = strings.ReplaceAll(asString, "href=\"#B\"", fmt.Sprintf("href=\"#%s\"", hashedB))
-	asString = strings.ReplaceAll(asString, "href=\"#C\"", fmt.Sprintf("href=\"#%s\"", hashedC))
+	prefix := utils.Sha256(asset.FileName)[:10]
+	for _, char := range alphabet {
+		asString = strings.ReplaceAll(asString, fmt.Sprintf("id=\"%s\"", char), fmt.Sprintf("id=\"%s%s\"", prefix, char))
+		asString = strings.ReplaceAll(asString, fmt.Sprintf("href=\"#%s\"", char), fmt.Sprintf("href=\"#%s%s\"", prefix, char))
+	}
 	asset.SVGContents = []byte(asString)
 	asset.FurColored = false
 	asset.EyeColored = false
@@ -90,12 +91,11 @@ func LoadAssetsToArray() {
 				panic(err.Error())
 			}
 			asString := string(bodyAsset.SVGContents)
-			hashedB := utils.Sha256(bodyAsset.FileName)[:10]
-			hashedC := utils.Sha256(bodyAsset.FileName)[10:20]
-			asString = strings.ReplaceAll(asString, "id=\"B\"", fmt.Sprintf("id=\"%s\"", hashedB))
-			asString = strings.ReplaceAll(asString, "id=\"C\"", fmt.Sprintf("id=\"%s\"", hashedC))
-			asString = strings.ReplaceAll(asString, "href=\"#B\"", fmt.Sprintf("href=\"#%s\"", hashedB))
-			asString = strings.ReplaceAll(asString, "href=\"#C\"", fmt.Sprintf("href=\"#%s\"", hashedC))
+			prefix := utils.Sha256(bodyAsset.FileName)[:10]
+			for _, char := range alphabet {
+				asString = strings.ReplaceAll(asString, fmt.Sprintf("id=\"%s\"", char), fmt.Sprintf("id=\"%s%s\"", prefix, char))
+				asString = strings.ReplaceAll(asString, fmt.Sprintf("href=\"#%s\"", char), fmt.Sprintf("href=\"#%s%s\"", prefix, char))
+			}
 			bodyAsset.SVGContents = []byte(asString)
 			bodyAsset.FurColored = hasTag(bodyAsset.FileName, "[fur-color]")
 			bodyAsset.EyeColored = hasTag(bodyAsset.FileName, "[eye-color]")
