@@ -1,5 +1,10 @@
 package image
 
+import (
+	"encoding/json"
+	"sync"
+)
+
 type IllustrationType string
 
 const (
@@ -32,4 +37,94 @@ type Asset struct {
 	AboveShirtPants   bool             // Should be assembled above SHirtPants
 	AboveHands        bool             // Should be assembled above hands
 	Weight            float64          // The weight of this accessory, determines how often it appears
+}
+
+// Singleton to keep assets loaded in memory
+type assetManager struct {
+	bodyPartAssets   []Asset
+	glassesAssets    []Asset
+	hatsAssets       []Asset
+	miscAssets       []Asset
+	mouthsAssets     []Asset
+	shirtPantsAssets []Asset
+	shoesAssets      []Asset
+	tailsAssets      []Asset
+}
+
+var singleton *assetManager
+var once sync.Once
+
+func GetAssets() *assetManager {
+	once.Do(func() {
+		var err error
+		// Deserialize all assets and keep in-mem
+		var bodyPartAssets []Asset
+		for _, ba := range BodyPartsIllustrations {
+			var a Asset
+			err = json.Unmarshal(ba, &a)
+			bodyPartAssets = append(bodyPartAssets, a)
+		}
+		var glassesAssets []Asset
+		for _, ga := range GlassesIllustrations {
+			var a Asset
+			err = json.Unmarshal(ga, &a)
+			glassesAssets = append(glassesAssets, a)
+		}
+		var hatsAssets []Asset
+		for _, ha := range HatIllustrations {
+			var a Asset
+			err = json.Unmarshal(ha, &a)
+			hatsAssets = append(hatsAssets, a)
+		}
+		var miscAssets []Asset
+		for _, ma := range MiscIllustrations {
+			var a Asset
+			err = json.Unmarshal(ma, &a)
+			miscAssets = append(miscAssets, a)
+		}
+		var mouthsAssets []Asset
+		for _, ma := range MouthsIllustrations {
+			var a Asset
+			err = json.Unmarshal(ma, &a)
+			mouthsAssets = append(mouthsAssets, a)
+		}
+		var shirtPantsAssets []Asset
+		for _, sa := range ShirtPantsIllustrations {
+			var a Asset
+			err = json.Unmarshal(sa, &a)
+			shirtPantsAssets = append(shirtPantsAssets, a)
+		}
+		var shoesAssets []Asset
+		for _, sa := range ShoesIllustrations {
+			var a Asset
+			err = json.Unmarshal(sa, &a)
+			shoesAssets = append(shoesAssets, a)
+		}
+		var tailsAssets []Asset
+		for _, ta := range TailsIllustrations {
+			var a Asset
+			err = json.Unmarshal(ta, &a)
+			tailsAssets = append(tailsAssets, a)
+		}
+		if err != nil {
+			panic("Failed to decode assets")
+		}
+		// Create object
+		singleton = &assetManager{
+			bodyPartAssets:   bodyPartAssets,
+			glassesAssets:    glassesAssets,
+			hatsAssets:       hatsAssets,
+			miscAssets:       miscAssets,
+			mouthsAssets:     mouthsAssets,
+			shirtPantsAssets: shirtPantsAssets,
+			shoesAssets:      shoesAssets,
+			tailsAssets:      tailsAssets,
+		}
+	})
+	return singleton
+}
+
+// GetBodyParts - get complete list of body parts assets
+func (sm *assetManager) GetBodyParts() []Asset {
+	return sm.bodyPartAssets
 }
