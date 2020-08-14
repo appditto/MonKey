@@ -40,6 +40,7 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 		hat           SVG
 		footLeft      SVG
 		footRight     SVG
+		shoes         SVG
 		handLeft      SVG
 		handRight     SVG
 	)
@@ -116,13 +117,23 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 			return nil, err
 		}
 	}
-	if err := xml.Unmarshal(accessories.FootLeftAsset.SVGContents, &footLeft); err != nil {
-		glog.Fatalf("Unable to parse foot left SVG %v", err)
-		return nil, err
+	if accessories.ShoeAsset == nil || !accessories.MiscAsset.RemovesFeet {
+		if err := xml.Unmarshal(accessories.FootLeftAsset.SVGContents, &footLeft); err != nil {
+			glog.Fatalf("Unable to parse foot left SVG %v", err)
+			return nil, err
+		}
 	}
-	if err := xml.Unmarshal(accessories.FootRightAsset.SVGContents, &footRight); err != nil {
-		glog.Fatalf("Unable to parse foot right SVG %v", err)
-		return nil, err
+	if accessories.ShoeAsset == nil || !accessories.MiscAsset.RemovesFeet {
+		if err := xml.Unmarshal(accessories.FootRightAsset.SVGContents, &footRight); err != nil {
+			glog.Fatalf("Unable to parse foot right SVG %v", err)
+			return nil, err
+		}
+	}
+	if accessories.ShoeAsset != nil {
+		if err := xml.Unmarshal(accessories.ShoeAsset.SVGContents, &shoes); err != nil {
+			glog.Fatalf("Unable to parse shoes SVG %v", err)
+			return nil, err
+		}
 	}
 	if accessories.MiscAsset == nil || !accessories.MiscAsset.RemovesHandsLeft {
 		if err := xml.Unmarshal(accessories.HandLeftAsset.SVGContents, &handLeft); err != nil {
@@ -239,6 +250,13 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	if footRight.Doc != "" {
 		canvas.Group(fmt.Sprintf("id=\"%s\"", "footRight"), "fill=\"none\"")
 		io.WriteString(canvas.Writer, footRight.Doc)
+		canvas.Gend()
+	}
+
+	// Shoes
+	if shoes.Doc != "" {
+		canvas.Group(fmt.Sprintf("id=\"%s\"", "shoes"), "fill=\"none\"")
+		io.WriteString(canvas.Writer, shoes.Doc)
 		canvas.Gend()
 	}
 

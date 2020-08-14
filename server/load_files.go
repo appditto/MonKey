@@ -50,6 +50,7 @@ func getAccessoryAsset(fname string, path string) string {
 	asset.ColorableRandom = hasTag(asset.FileName, "[colorable-random]")
 	asset.RemovesEyes = hasTag(asset.FileName, "[removes-eyes]")
 	asset.RemovesLegs = hasTag(asset.FileName, "[removes-legs]")
+	asset.RemovesFeet = hasTag(asset.FileName, "[removes-feet]")
 	asset.RemovesHandsLeft = hasTag(asset.FileName, "[removes-hands-left]") || hasTag(asset.FileName, "[removes-hands]")
 	asset.RemovesHandsRight = hasTag(asset.FileName, "[removes-hands-right]") || hasTag(asset.FileName, "[removes-hands]")
 	asset.AboveShirtPants = hasTag(asset.FileName, "[above-shirts-pants]")

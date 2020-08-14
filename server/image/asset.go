@@ -32,7 +32,8 @@ type Asset struct {
 	RemovesEyes       bool             // Replaces eyes
 	RemovesHandsLeft  bool             // Replaces hands left
 	RemovesHandsRight bool             // Replaces hands right
-	RemovesLegs       bool             // Replaces feet
+	RemovesLegs       bool             // Replaces legs
+	RemovesFeet       bool             // Replaces feet
 	AboveShirtPants   bool             // Should be assembled above SHirtPants
 	AboveHands        bool             // Should be assembled above hands
 	Weight            float64          // The weight of this accessory, determines how often it appears

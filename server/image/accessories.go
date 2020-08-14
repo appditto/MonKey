@@ -115,38 +115,38 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 
 	// Pick accessories if we have them
 	if hasGlasses {
-		accessories.GlassesAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetGlasses())
-		workingIdx += 2
+		accessories.GlassesAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetGlasses())
+		workingIdx += 3
 	}
 
 	if hasHats {
-		accessories.HatAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetHats())
-		workingIdx += 2
+		accessories.HatAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetHats())
+		workingIdx += 3
 	}
 
 	if hasMisc {
-		accessories.MiscAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetMisc())
-		workingIdx += 2
+		accessories.MiscAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetMisc())
+		workingIdx += 3
 	}
 
 	if hasShirtPants {
-		accessories.ShirtPantsAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetShirtPantsAssets())
-		workingIdx += 2
+		accessories.ShirtPantsAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetShirtPantsAssets())
+		workingIdx += 3
 	}
 
 	if hasShoes {
-		accessories.ShoeAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetShoeAssets())
-		workingIdx += 2
+		accessories.ShoeAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetShoeAssets())
+		workingIdx += 3
 	}
 
 	if hasTails {
-		accessories.TailAccessory = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetTailAssets())
-		workingIdx += 2
+		accessories.TailAccessory = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetTailAssets())
+		workingIdx += 3
 	}
 
 	// Mouth always exists
-	accessories.MouthAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:2+workingIdx], GetAssets().GetMouthAssets())
-	workingIdx += 2
+	accessories.MouthAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetMouthAssets())
+	workingIdx += 3
 
 	// Working idx could be up to 26 here, if we dont have enough left for color we can either re-use parts of the hash or re-hash
 	// TODO - color
@@ -156,12 +156,10 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 
 // Get weighted accessory given 2-digit hex string
 func GetAccessoryFromHexWithWeight(hexStr string, assets []Asset) *Asset {
-	maxPossible := 255.0
-	asInt, _ := strconv.ParseInt(hexStr, 16, 64)
+	maxPossible := 4095.0
+	target, _ := strconv.ParseInt(hexStr, 16, 64)
 
-	// Map start/end value for each asset
-	// Represents an inclusive start, exclusive end
-	assetValueMap := make(map[string][]int)
+	// Interval starting point
 	curStart := 0
 
 	// Find combined weight of each asset
@@ -170,49 +168,20 @@ func GetAccessoryFromHexWithWeight(hexStr string, assets []Asset) *Asset {
 		combinedWeight += asset.Weight
 	}
 
-	// Average size of each
-	averageSize := maxPossible / combinedWeight
-
-	// Find range of assets < 1 weight
-	for _, asset := range assets {
-		if asset.Weight < 1 {
-			endVal := int(averageSize * asset.Weight)
-			if endVal <= 0 {
-				endVal = 1
-			}
-			assetValueMap[asset.FileName] = []int{curStart, curStart + endVal}
-			curStart = curStart + endVal
+	// Find target of each asset
+	for idx, asset := range assets {
+		targetVal := int((asset.Weight / combinedWeight) * maxPossible)
+		if targetVal < 1 {
+			targetVal = 1
 		}
-	}
-
-	// Re-calculate average given new weights
-	maxPossible -= float64(curStart)
-	combinedWeight = 0
-	if maxPossible != 255.0 {
-		for _, asset := range assets {
-			if asset.Weight >= 1 {
-				combinedWeight += 1
-			}
+		curEnd := curStart + targetVal
+		if idx == len(assets)-1 {
+			curEnd = int(maxPossible)
 		}
-		averageSize = maxPossible / combinedWeight
-		for _, asset := range assets {
-			if asset.Weight >= 1 {
-				endVal := int(averageSize)
-				assetValueMap[asset.FileName] = []int{curStart, curStart + endVal}
-				curStart = curStart + endVal
-			}
+		if int(target) >= curStart && int(target) < curEnd {
+			return &asset
 		}
-	}
-
-	// Pick asset
-	for fname, interval := range assetValueMap {
-		if interval[0] <= int(asInt) && interval[1] > int(asInt) {
-			for _, asset := range assets {
-				if asset.FileName == fname {
-					return &asset
-				}
-			}
-		}
+		curStart += targetVal
 	}
 
 	// Fallback in case nothing happened
