@@ -56,7 +56,13 @@ func GetColor(redSeed string, greenSeed string, blueSeed string) (color.RGB, err
 		255.0,
 	)
 
-	outRGB.B = lowerBound + (1.0-float64(blueAsInt)/255.0)*(upperBound-lowerBound)
+	maxBlueStr := ""
+	for i := 0; i < len(blueSeed); i++ {
+		maxBlueStr += "f"
+	}
+	maxBlue, _ := strconv.ParseInt(redSeed, 16, 64)
+
+	outRGB.B = lowerBound + (1.0-float64(blueAsInt)/float64(maxBlue))*(upperBound-lowerBound)
 
 	return outRGB, nil
 }
