@@ -27,7 +27,7 @@ type Asset struct {
 	EyeColored        bool             // whether this asset should be eye colored
 	ShadowFur         bool             // Replace shadow with calculated shadow
 	ShadowFurDark     bool             // Replace shadow with calculated shadow
-	ShadowEye         bool             // Replace shadow with calculated shadow
+	ShadowIris        bool             // Replace shadow with calculated shadow
 	ColorableRandom   bool             // Replace with random color
 	RemovesEyes       bool             // Replaces eyes
 	RemovesHandsLeft  bool             // Replaces hands left

@@ -46,7 +46,7 @@ func getAccessoryAsset(fname string, path string) string {
 	asset.EyeColored = false
 	asset.ShadowFur = false
 	asset.ShadowFurDark = false
-	asset.ShadowEye = false
+	asset.ShadowIris = false
 	asset.ColorableRandom = hasTag(asset.FileName, "[colorable-random]")
 	asset.RemovesEyes = hasTag(asset.FileName, "[removes-eyes]")
 	asset.RemovesLegs = hasTag(asset.FileName, "[removes-legs]")
@@ -85,7 +85,7 @@ func LoadAssetsToArray() {
 			bodyAsset.EyeColored = hasTag(bodyAsset.FileName, "[eye-color]")
 			bodyAsset.ShadowFur = hasTag(bodyAsset.FileName, "[shadow-fur]")
 			bodyAsset.ShadowFurDark = hasTag(bodyAsset.FileName, "[shadow-fur-dark]")
-			bodyAsset.ShadowEye = hasTag(bodyAsset.FileName, "[shadow-eye]")
+			bodyAsset.ShadowIris = hasTag(bodyAsset.FileName, "[shadow-iris]")
 			bodyAsset.ColorableRandom = false
 			bodyAsset.RemovesEyes = false
 			bodyAsset.RemovesLegs = false

@@ -159,6 +159,10 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	if clr, ok := accessories.AccessoryColors[accessories.TailAsset.FileName]; ok {
 		furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
 		tail.Doc = furReplacer.Replace(tail.Doc)
+		// Shadow
+		shadowOpacity := GetShadowOpacityFur(clr)
+		shadowReplacer := strings.NewReplacer("fill-opacity=\".24\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity), "fill-opacity=\"0.24\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity))
+		tail.Doc = shadowReplacer.Replace(tail.Doc)
 	}
 	io.WriteString(canvas.Writer, tail.Doc)
 	canvas.Gend()
@@ -180,6 +184,10 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 		if clr, ok := accessories.AccessoryColors[accessories.LegAsset.FileName]; ok {
 			furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
 			legs.Doc = furReplacer.Replace(legs.Doc)
+			// Shadow
+			shadowOpacity := GetShadowOpacityFur(clr)
+			shadowReplacer := strings.NewReplacer("fill-opacity=\".14\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity), "fill-opacity=\"0.14\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity))
+			legs.Doc = shadowReplacer.Replace(legs.Doc)
 		}
 		io.WriteString(canvas.Writer, legs.Doc)
 		canvas.Gend()
@@ -190,6 +198,11 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	if clr, ok := accessories.AccessoryColors[accessories.ArmsAsset.FileName]; ok {
 		furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
 		arms.Doc = furReplacer.Replace(arms.Doc)
+		// Shadow
+		shadowOpacity := GetShadowOpacityFur(clr)
+		shadowReplacer := strings.NewReplacer("fill-opacity=\".14\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity), "fill-opacity=\"0.14\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity))
+		arms.Doc = shadowReplacer.Replace(arms.Doc)
+
 	}
 	io.WriteString(canvas.Writer, arms.Doc)
 	canvas.Gend()
@@ -199,6 +212,10 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	if clr, ok := accessories.AccessoryColors[accessories.BodyUpperAsset.FileName]; ok {
 		furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
 		bodyUpper.Doc = furReplacer.Replace(bodyUpper.Doc)
+		// Shadow
+		shadowOpacity := GetShadowOpacityFur(clr)
+		shadowReplacer := strings.NewReplacer("fill-opacity=\".14\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity), "fill-opacity=\"0.14\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity))
+		bodyUpper.Doc = shadowReplacer.Replace(bodyUpper.Doc)
 	}
 	io.WriteString(canvas.Writer, bodyUpper.Doc)
 	canvas.Gend()
@@ -231,6 +248,10 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	if clr, ok := accessories.AccessoryColors[accessories.FaceAsset.FileName]; ok {
 		furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
 		face.Doc = furReplacer.Replace(face.Doc)
+		// Shadow
+		shadowOpacity := GetShadowOpacityFur(clr)
+		shadowReplacer := strings.NewReplacer("fill-opacity=\".14\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity), "fill-opacity=\"0.14\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity))
+		face.Doc = shadowReplacer.Replace(face.Doc)
 	}
 	io.WriteString(canvas.Writer, face.Doc)
 	canvas.Gend()
@@ -241,6 +262,10 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 		if clr, ok := accessories.AccessoryColors[accessories.EyeAsset.FileName]; ok {
 			eyeReplacer := strings.NewReplacer("#313cc4", clr.ToHTML(true), "#313CC4", clr.ToHTML(true))
 			eyes.Doc = eyeReplacer.Replace(eyes.Doc)
+			// Shadow
+			shadowOpacity := GetShadowOpacityIris(clr)
+			shadowReplacer := strings.NewReplacer("fill-opacity=\".13\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity), "fill-opacity=\"0.13\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity))
+			eyes.Doc = shadowReplacer.Replace(eyes.Doc)
 		}
 		io.WriteString(canvas.Writer, eyes.Doc)
 		canvas.Gend()

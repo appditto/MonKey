@@ -1,11 +1,24 @@
 package image
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 
 	"github.com/appditto/monKey/server/color"
 )
+
+// Min and max shadow opacity for fur
+const MinShadowOpacityFur = 0.075
+const MaxShadowOpacityFur = 0.4
+
+// Min and max shadow opacity for fur (dark)
+const MinShadowOpacityFurDark = 0.1
+const MaxShadowOpacityFurDark = 0.5
+
+// Min and max shadow opacity for eyes
+const MinShadowOpacityIris = 0.065
+const MaxShadowOpacityIris = 0.35
 
 // Min and max perceivedBrightness values (between 0 and 100)
 const MinPerceivedBrightness = 18.0
@@ -60,9 +73,24 @@ func GetColor(redSeed string, greenSeed string, blueSeed string) (color.RGB, err
 	for i := 0; i < len(blueSeed); i++ {
 		maxBlueStr += "f"
 	}
-	maxBlue, _ := strconv.ParseInt(redSeed, 16, 64)
+	maxBlue, _ := strconv.ParseInt(maxBlueStr, 16, 64)
 
 	outRGB.B = lowerBound + (1.0-float64(blueAsInt)/float64(maxBlue))*(upperBound-lowerBound)
+	if outRGB.B < lowerBound || outRGB.B > upperBound {
+		fmt.Printf("\n\nBLUE OUT OF RANGE\nLOWER BOUND %f\bUPPER BOUND %f\nACTUA BOUNDD %f\nINPUTS: %d %f %f", lowerBound, upperBound, outRGB.B, blueAsInt, outRGB.R, outRGB.G)
+	}
 
 	return outRGB, nil
+}
+
+func GetShadowOpacityFur(clr color.RGB) float64 {
+	return math.Round(MinShadowOpacityFur+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityFur-MinShadowOpacityFur)*100) / 100
+}
+
+func GetShadowOpacityFurDark(clr color.RGB) float64 {
+	return math.Round(MinShadowOpacityFurDark+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityFurDark-MinShadowOpacityFurDark)*100) / 100
+}
+
+func GetShadowOpacityIris(clr color.RGB) float64 {
+	return math.Round(MinShadowOpacityIris+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityIris-MinShadowOpacityIris)*100) / 100
 }
