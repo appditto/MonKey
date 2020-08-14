@@ -24,9 +24,7 @@
   /* ////////////////////////////////////// */
   let getMonkey = async (address) => {
     try {
-      return axios.get(
-        "https://natricon.com/api/v1/nano?svc=natricon.com&address=" + address
-      );
+      return axios.get("https://natricon.com/api/v1/nano?address=" + address);
     } catch (e) {
       console.error(e);
     }
@@ -74,7 +72,7 @@
     showAgainButtonAnimation = false;
     setTimeout(() => {
       showAgainButton = false;
-    }, 300);
+    }, 250);
     hideForm = false;
     inputError = false;
     setTimeout(() => {
@@ -85,10 +83,10 @@
       showMonkeyContainerAnimation = false;
       hideMonkeyContainer = false;
       toHideMonkeyContainer = false;
-    }, 450);
+    }, 300);
     setTimeout(() => {
       hideFormAnimation = false;
-    }, 125);
+    }, 175);
   };
 </script>
 
@@ -298,21 +296,6 @@
         </button>
       </div>
     {/if}
-    <!-- Curtain -->
-    {#if showCurtain}
-      <div
-        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
-        curtain-4 w-full h-full bg-grayLight absolute" />
-      <div
-        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
-        curtain-3 w-full h-full bg-brownLight absolute" />
-      <div
-        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
-        curtain-2 w-full h-full bg-brown absolute" />
-      <div
-        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
-        curtain-1 w-full h-full bg-gray absolute" />
-    {/if}
     <!-- Input, Show Me & Randomize -->
     {#if !hideForm}
       <div class="w-full h-full flex flex-col relative">
@@ -389,6 +372,21 @@
           </button>
         </div>
       </div>
+    {/if}
+    <!-- Curtain -->
+    {#if showCurtain}
+      <div
+        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
+        curtain-4 w-full h-full bg-grayLight absolute" />
+      <div
+        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
+        curtain-3 w-full h-full bg-brownLight absolute" />
+      <div
+        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
+        curtain-2 w-full h-full bg-brown absolute" />
+      <div
+        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
+        curtain-1 w-full h-full bg-gray absolute" />
     {/if}
   </div>
 {/if}
