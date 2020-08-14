@@ -24,6 +24,8 @@ github.com/appditto/monKey v0.0.0-20200813153859-d6b6810b2880 h1:fXPDAedgQbZSvis
 github.com/appditto/monKey v0.0.0-20200813182052-c74e9c90c929 h1:zgOvKqxdX44fzi5LZTITMbmna89eZLmhJ6UaSNEVYUo=
 github.com/appditto/monKey v0.0.0-20200813195736-b49591c7a9d2 h1:j0yi8yKq/uiuGsachAUl9gZzZhSJjGMe1FIjofmc64Q=
 github.com/appditto/monKey v0.0.0-20200814091302-2e10c498de17 h1:B1AyoJcH33oDtlevRTeADsvqXqzALZ1pQ4zjoRD8zDQ=
+github.com/appditto/monKey v0.0.0-20200814133005-905ad124e48e h1:/RZe/gfsDMFpqoTfV8Si2PVCGNX+oH35dJ9xGj30lP0=
+github.com/appditto/monKey v0.0.0-20200814143207-8c7a02cb1d2e h1:keUT7/5+qOnOVbvdZfjKDVgkSU6R4FVl34JVi7j2evk=
 github.com/appditto/natricon v0.0.0-20200731121247-bf8d6d5feefe h1:wjbxXuVpnkSpw6gVsjb/m2LFvLIKREaXd14ZkNYUUEM=
 github.com/appditto/natricon/server v0.0.0-20200731121247-bf8d6d5feefe h1:Ba67NJOT6peMe23ZW6Qupzb2c3rx0z0GseKsy9DbrfA=
 github.com/appditto/natricon/server v0.0.0-20200731121247-bf8d6d5feefe/go.mod h1:WDnvuy+VpwpiZ1UK4NJmpmQ+RfFenybk6OT6V4Jql7E=

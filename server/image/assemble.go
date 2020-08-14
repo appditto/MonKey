@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"strings"
 	"sync"
 
 	svg "github.com/ajstarks/svgo"
@@ -155,12 +156,20 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 
 	// Add tail
 	canvas.Group(fmt.Sprintf("id=\"%s\"", "tail"), "fill=\"none\"")
+	if clr, ok := accessories.AccessoryColors[accessories.TailAsset.FileName]; ok {
+		furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
+		tail.Doc = furReplacer.Replace(tail.Doc)
+	}
 	io.WriteString(canvas.Writer, tail.Doc)
 	canvas.Gend()
 
 	// Add tail accessory if present
 	if tailAccessory.Doc != "" {
 		canvas.Group(fmt.Sprintf("id=\"%s\"", "tailAcc"), "fill=\"none\"")
+		if clr, ok := accessories.AccessoryColors[accessories.TailAccessory.FileName]; ok {
+			randReplacer := strings.NewReplacer("#62ffaa", clr.ToHTML(true), "#62FFAA", clr.ToHTML(true))
+			tailAccessory.Doc = randReplacer.Replace(tailAccessory.Doc)
+		}
 		io.WriteString(canvas.Writer, tailAccessory.Doc)
 		canvas.Gend()
 	}
@@ -168,23 +177,39 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	// Add legs if not removed
 	if legs.Doc != "" {
 		canvas.Group(fmt.Sprintf("id=\"%s\"", "legs"), "fill=\"none\"")
+		if clr, ok := accessories.AccessoryColors[accessories.LegAsset.FileName]; ok {
+			furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
+			legs.Doc = furReplacer.Replace(legs.Doc)
+		}
 		io.WriteString(canvas.Writer, legs.Doc)
 		canvas.Gend()
 	}
 
 	// Add arms always
 	canvas.Group(fmt.Sprintf("id=\"%s\"", "arms"), "fill=\"none\"")
+	if clr, ok := accessories.AccessoryColors[accessories.ArmsAsset.FileName]; ok {
+		furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
+		arms.Doc = furReplacer.Replace(arms.Doc)
+	}
 	io.WriteString(canvas.Writer, arms.Doc)
 	canvas.Gend()
 
 	// Add bodyUpper always
 	canvas.Group(fmt.Sprintf("id=\"%s\"", "bodyUpper"), "fill=\"none\"")
+	if clr, ok := accessories.AccessoryColors[accessories.BodyUpperAsset.FileName]; ok {
+		furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
+		bodyUpper.Doc = furReplacer.Replace(bodyUpper.Doc)
+	}
 	io.WriteString(canvas.Writer, bodyUpper.Doc)
 	canvas.Gend()
 
 	// Add shirt pants
 	if shirtPants.Doc != "" {
 		canvas.Group(fmt.Sprintf("id=\"%s\"", "shirtPants"), "fill=\"none\"")
+		if clr, ok := accessories.AccessoryColors[accessories.ShirtPantsAsset.FileName]; ok {
+			randReplacer := strings.NewReplacer("#62ffaa", clr.ToHTML(true), "#62FFAA", clr.ToHTML(true))
+			shirtPants.Doc = randReplacer.Replace(shirtPants.Doc)
+		}
 		io.WriteString(canvas.Writer, shirtPants.Doc)
 		canvas.Gend()
 	}
@@ -203,12 +228,20 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 
 	// Add face always
 	canvas.Group(fmt.Sprintf("id=\"%s\"", "face"), "fill=\"none\"")
+	if clr, ok := accessories.AccessoryColors[accessories.FaceAsset.FileName]; ok {
+		furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
+		face.Doc = furReplacer.Replace(face.Doc)
+	}
 	io.WriteString(canvas.Writer, face.Doc)
 	canvas.Gend()
 
 	// Add Eyes if not removed
 	if eyes.Doc != "" {
 		canvas.Group(fmt.Sprintf("id=\"%s\"", "eyes"), "fill=\"none\"")
+		if clr, ok := accessories.AccessoryColors[accessories.EyeAsset.FileName]; ok {
+			eyeReplacer := strings.NewReplacer("#313cc4", clr.ToHTML(true), "#313CC4", clr.ToHTML(true))
+			eyes.Doc = eyeReplacer.Replace(eyes.Doc)
+		}
 		io.WriteString(canvas.Writer, eyes.Doc)
 		canvas.Gend()
 	}
@@ -235,6 +268,10 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	// Hat
 	if hat.Doc != "" {
 		canvas.Group(fmt.Sprintf("id=\"%s\"", "hat"), "fill=\"none\"")
+		if clr, ok := accessories.AccessoryColors[accessories.HatAsset.FileName]; ok {
+			randReplacer := strings.NewReplacer("#62ffaa", clr.ToHTML(true), "#62FFAA", clr.ToHTML(true))
+			hat.Doc = randReplacer.Replace(hat.Doc)
+		}
 		io.WriteString(canvas.Writer, hat.Doc)
 		canvas.Gend()
 	}
@@ -256,6 +293,10 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	// Shoes
 	if shoes.Doc != "" {
 		canvas.Group(fmt.Sprintf("id=\"%s\"", "shoes"), "fill=\"none\"")
+		if clr, ok := accessories.AccessoryColors[accessories.ShoeAsset.FileName]; ok {
+			randReplacer := strings.NewReplacer("#62ffaa", clr.ToHTML(true), "#62FFAA", clr.ToHTML(true))
+			shoes.Doc = randReplacer.Replace(shoes.Doc)
+		}
 		io.WriteString(canvas.Writer, shoes.Doc)
 		canvas.Gend()
 	}

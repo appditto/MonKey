@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/appditto/monKey/server/color"
 	"github.com/golang/glog"
 )
 
@@ -36,37 +37,114 @@ type Accessories struct {
 	ShoeAsset       *Asset
 	HandLeftAsset   *Asset
 	HandRightAsset  *Asset
+	AccessoryColors map[string]color.RGB
 }
 
 func GetAccessoriesForHash(hash string) (Accessories, error) {
 	var accessories = Accessories{}
+	accessories.AccessoryColors = make(map[string]color.RGB)
+
+	// A monKey can use at most 69 characters of a hex string, worst case
+	// Assuming it has every type of accessory and every colorable-random accessory
+	// We need to add 5 characters to the end of our hash, we'll just take a random sample
+	// And add it to the end
+	hash = hash + string(hash[4]) + string(hash[2]) + string(hash[0]) + string(hash[19]) + string(hash[23])
+
+	// Keep track of our index on the hash (cannot exceed 69)
+	workingIdx := 0
+
+	// Pick fur-color and eye-color
+	furColor, _ := GetColor(hash[workingIdx:workingIdx+2], hash[workingIdx+2:workingIdx+4], hash[workingIdx+4:workingIdx+6])
+	workingIdx += 6
+	eyeColor, _ := GetColor(hash[workingIdx:workingIdx+2], hash[workingIdx+2:workingIdx+4], hash[workingIdx+4:workingIdx+6])
+	workingIdx += 6
 
 	// Get base body parts
 	for _, bodyPart := range GetAssets().GetBodyParts() {
 		localPart := bodyPart
 		if strings.Contains(bodyPart.FileName, "arms") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.ArmsAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "body-upper") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.BodyUpperAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "ears") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.EarAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "eyes") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.EyeAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "face") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.FaceAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "foot-left") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.FootLeftAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "foot-right") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.FootRightAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "hand-left") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.HandLeftAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "hand-right") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.HandRightAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "legs") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.LegAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "nose") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.NoseAsset = &localPart
 		} else if strings.Contains(bodyPart.FileName, "tail") {
+			if bodyPart.FurColored {
+				accessories.AccessoryColors[bodyPart.FileName] = furColor
+			} else if bodyPart.EyeColored {
+				accessories.AccessoryColors[bodyPart.FileName] = eyeColor
+			}
 			accessories.TailAsset = &localPart
 		}
 	}
@@ -74,54 +152,53 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	// Pick accessories based on accessoryChance
 
 	// Get threshold for existing
-	maxHasAccessoryValue := int64(4095 * glassesChance)
-	workingIdx := 0
+	maxHasAccessoryValue := int64(255 * glassesChance)
 	hasGlasses := false
-	hasGlassesWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
+	hasGlassesWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasGlassesWorkingVal <= maxHasAccessoryValue {
 		hasGlasses = true
 	}
-	workingIdx += 3
+	workingIdx += 2
 
-	maxHasAccessoryValue = int64(4095 * hatChance)
+	maxHasAccessoryValue = int64(255 * hatChance)
 	hasHats := false
-	hasHatsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
+	hasHatsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasHatsWorkingVal <= maxHasAccessoryValue {
 		hasHats = true
 	}
-	workingIdx += 3
+	workingIdx += 2
 
-	maxHasAccessoryValue = int64(4095 * miscChance)
+	maxHasAccessoryValue = int64(255 * miscChance)
 	hasMisc := false
-	hasMiscWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
+	hasMiscWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasMiscWorkingVal <= maxHasAccessoryValue {
 		hasMisc = true
 	}
-	workingIdx += 3
+	workingIdx += 2
 
-	maxHasAccessoryValue = int64(4095 * shirtPantChance)
+	maxHasAccessoryValue = int64(255 * shirtPantChance)
 	hasShirtPants := false
-	hasShirtPantsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
+	hasShirtPantsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasShirtPantsWorkingVal <= maxHasAccessoryValue {
 		hasShirtPants = true
 	}
-	workingIdx += 3
+	workingIdx += 2
 
-	maxHasAccessoryValue = int64(4095 * shoeChance)
+	maxHasAccessoryValue = int64(255 * shoeChance)
 	hasShoes := false
-	hasShoesWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
+	hasShoesWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasShoesWorkingVal <= maxHasAccessoryValue {
 		hasShoes = true
 	}
-	workingIdx += 3
+	workingIdx += 2
 
-	maxHasAccessoryValue = int64(4095 * tailChance)
+	maxHasAccessoryValue = int64(255 * tailChance)
 	hasTails := false
-	hasTailsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
+	hasTailsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasTailsWorkingVal <= maxHasAccessoryValue {
 		hasTails = true
 	}
-	workingIdx += 3 // 18
+	workingIdx += 2 // Up to 24 at this point
 
 	// Pick accessories if we have them
 	if hasGlasses {
@@ -131,6 +208,11 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 
 	if hasHats {
 		accessories.HatAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetHats())
+		if accessories.HatAsset.ColorableRandom {
+			randColor, _ := GetColor(hash[workingIdx:workingIdx+2], hash[workingIdx+2:workingIdx+4], hash[workingIdx+4:workingIdx+6])
+			workingIdx += 6
+			accessories.AccessoryColors[accessories.HatAsset.FileName] = randColor
+		}
 		workingIdx += 3
 	}
 
@@ -141,25 +223,37 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 
 	if hasShirtPants {
 		accessories.ShirtPantsAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetShirtPantsAssets())
+		if accessories.ShirtPantsAsset.ColorableRandom {
+			randColor, _ := GetColor(hash[workingIdx:workingIdx+2], hash[workingIdx+2:workingIdx+4], hash[workingIdx+4:workingIdx+6])
+			workingIdx += 6
+			accessories.AccessoryColors[accessories.ShirtPantsAsset.FileName] = randColor
+		}
 		workingIdx += 3
 	}
 
 	if hasShoes {
 		accessories.ShoeAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetShoeAssets())
+		if accessories.ShoeAsset.ColorableRandom {
+			randColor, _ := GetColor(hash[workingIdx:workingIdx+2], hash[workingIdx+2:workingIdx+4], hash[workingIdx+4:workingIdx+6])
+			workingIdx += 6
+			accessories.AccessoryColors[accessories.ShoeAsset.FileName] = randColor
+		}
 		workingIdx += 3
 	}
 
 	if hasTails {
 		accessories.TailAccessory = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetTailAssets())
+		if accessories.TailAccessory.ColorableRandom {
+			randColor, _ := GetColor(hash[workingIdx:workingIdx+2], hash[workingIdx+2:workingIdx+4], hash[workingIdx+4:workingIdx+6])
+			workingIdx += 6
+			accessories.AccessoryColors[accessories.TailAccessory.FileName] = randColor
+		}
 		workingIdx += 3
 	}
 
 	// Mouth always exists
 	accessories.MouthAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetMouthAssets())
-	workingIdx += 3
-
-	// Working idx could be up to 39 here, if we dont have enough left for color we can either re-use parts of the hash or re-hash
-	// TODO - color
+	workingIdx += 3 // Up to 69 at this point
 
 	return accessories, nil
 }
