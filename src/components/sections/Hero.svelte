@@ -1,29 +1,8 @@
 <script>
   import MonkeyGenerator from "../MonkeyGenerator.svelte";
-  let showGeneratorAnimation = false;
   let showGenerator = false;
-  let timeout1;
-  let timeout2;
   const toggleGenerator = () => {
-    if (!showGenerator) {
-      showGenerator = true;
-      if (timeout1) {
-        clearTimeout(timeout1);
-      }
-      timeout1 = setTimeout(() => {
-        showGeneratorAnimation = true;
-      }, 25);
-      timeout1();
-    } else {
-      showGeneratorAnimation = false;
-      if (timeout2) {
-        clearTimeout(timeout2);
-      }
-      timeout2 = setTimeout(() => {
-        showGenerator = false;
-      }, 250);
-      timeout2();
-    }
+    showGenerator = !showGenerator;
   };
 </script>
 
@@ -51,15 +30,13 @@
       on:click={() => {
         toggleGenerator();
       }}
-      class="{showGeneratorAnimation ? 'bg-danger btn-danger border-dangerDark' : 'bg-primary btn-primary border-black'}
+      class="{showGenerator ? 'bg-danger btn-danger border-dangerDark' : 'bg-primary btn-primary border-black'}
       w-64 max-w-full text-white text-xl font-bold rounded-xl border-2 px-3
       md:px-6 py-2 mx-auto mt-6">
-      {showGeneratorAnimation ? 'Close' : 'Show My MonKey'}
+      {showGenerator ? 'Close' : 'Show My MonKey'}
     </button>
     <div class="w-full flex flex-row justify-center relative z-50">
-      {#if showGenerator}
-        <MonkeyGenerator {showGeneratorAnimation} />
-      {/if}
+      <MonkeyGenerator {showGenerator} />
     </div>
   </div>
   <!-- Desktop Illustration -->

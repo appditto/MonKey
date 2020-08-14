@@ -1,7 +1,8 @@
 <script>
   import axios from "axios";
   import { genAddress, validateAddress } from "../plugins/address.js";
-  export let showGeneratorAnimation = false;
+  import { fadeAndScaleIn, fadeAndScaleOut } from "../plugins/transitions.js";
+  export let showGenerator = false;
   let inputValue;
   let inputError = false;
   let inputFocused = false;
@@ -101,19 +102,11 @@
     box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
       0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
       -0.5rem 0.5rem 0rem 0rem #9b9ba1;
-    transition: opacity 0.2s cubic-bezier(0.215, 0.51, 0.355, 1),
-      transform 0.5s cubic-bezier(0.215, 0.51, 0.355, 1);
     transform-origin: top center;
     overflow: hidden;
-    transform: scale(1);
-    opacity: 1;
     animation: generatorAnimation;
     animation-duration: 2s;
     animation-iteration-count: infinite;
-  }
-  .closed {
-    transform: scale(0.5) !important;
-    opacity: 0 !important;
   }
   @media screen and (min-width: 768px) {
     .generator {
@@ -261,137 +254,141 @@
 </style>
 
 <!-- HTML -->
-<div
-  class="max-w-md max-h-md generator {!showGeneratorAnimation ? 'closed' : ''}
-  flex flex-col bg-white absolute top-0 mt-8 overflow-hidden">
-  <!-- MonKey loading animation -->
-  {#if showLoading}
-    <div
-      class="{showLoadingAnimation ? 'scale-100 opacity-100' : 'scale-0 opacity-50'}
-      transform duration-200 ease-out w-full h-full flex flex-row justify-center
-      items-center absolute left-0 top-0">
-      <div class="w-24 h-24 relative">
-        <div class="w-full h-full absolute cube cube-grayLight" />
-        <div class="w-full h-full absolute cube cube-brown" />
-        <div class="w-full h-full absolute cube cube-brownLight" />
-        <div class="w-full h-full absolute cube cube-gray" />
-      </div>
-    </div>
-  {/if}
-  <!-- MonKey container -->
-  {#if showMonkeyContainer}
-    <div
-      bind:this={monkeyContainer}
-      class="{showMonkeyContainerAnimation ? (hideMonkeyContainer ? 'hide-monkey-container' : 'show-monkey-container') : 'hidden-monkey-container'}
-      {toHideMonkeyContainer ? 'to-hide-monkey-container' : 'monkey-container'}
-      w-full h-auto absolute left-0 top-0" />
-  {/if}
-  {#if showAgainButton}
-    <!-- Again Button -->
-    <div class="w-full flex flex-row justify-center absolute bottom-0">
-      <button
-        disabled={!showAgainButtonAnimation}
-        on:click={() => {
-          resetGeneration();
-        }}
-        class="{showAgainButtonAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}
-        transform duration-350 ease-out bg-primary btn-primary text-white
-        text-lg font-bold rounded-lg border-2 border-black px-6 md:px-8 py-1
-        mx-4 md:mx-8 my-4 md:my-5">
-        Again!
-      </button>
-    </div>
-  {/if}
-  <!-- Curtain -->
-  {#if showCurtain}
-    <div
-      class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'} curtain-4
-      w-full h-full bg-grayLight absolute" />
-    <div
-      class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'} curtain-3
-      w-full h-full bg-brownLight absolute" />
-    <div
-      class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'} curtain-2
-      w-full h-full bg-brown absolute" />
-    <div
-      class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'} curtain-1
-      w-full h-full bg-gray absolute" />
-  {/if}
-  <!-- Input, Show Me & Randomize -->
-  {#if !hideForm}
-    <div class="w-full h-full flex flex-col relative">
-      <form
-        on:submit|preventDefault={() => {
-          generateMonkey(inputValue);
-        }}
-        class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
-        transform duration-200 ease-out flex flex-col items-center my-auto
-        relative mx-4 md:mx-6">
-        <div class="w-full">
-          <label
-            class="{inputError ? 'text-danger' : inputFocused || inputHovered ? 'text-brownLight' : 'text-gray'}
-            absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2 text-xl
-            font-bold transition-all duration-200 ease-out"
-            for="bananoAddress">
-            Address
-          </label>
-          <input
-            disabled={hideFormAnimation}
-            name="bananoAddress"
-            id="bananoAddress"
-            on:blur={() => {
-              inputFocused = false;
-            }}
-            on:focus={() => {
-              inputFocused = true;
-            }}
-            on:mouseenter={() => {
-              inputHovered = true;
-            }}
-            on:mouseleave={() => {
-              inputHovered = false;
-            }}
-            bind:value={inputValue}
-            on:input={() => {
-              if (inputError) {
-                inputError = false;
-              }
-            }}
-            class="{inputError ? 'border-danger text-danger' : 'text-gray border-primary focus:border-brownLight hover:border-brownLight'}
-            w-full text-xl font-bold px-4 py-3 border-3 rounded-xl
-            transition-all duration-200 ease-out"
-            type="text"
-            autocomplete="off"
-            placeholder="Enter your address" />
+{#if showGenerator}
+  <div
+    in:fadeAndScaleIn
+    out:fadeAndScaleOut
+    class="max-w-md max-h-md generator flex flex-col bg-white absolute top-0
+    mt-8 overflow-hidden">
+    <!-- MonKey loading animation -->
+    {#if showLoading}
+      <div
+        class="{showLoadingAnimation ? 'scale-100 opacity-100' : 'scale-0 opacity-50'}
+        transform duration-200 ease-out w-full h-full flex flex-row
+        justify-center items-center absolute left-0 top-0">
+        <div class="w-24 h-24 relative">
+          <div class="w-full h-full absolute cube cube-grayLight" />
+          <div class="w-full h-full absolute cube cube-brown" />
+          <div class="w-full h-full absolute cube cube-brownLight" />
+          <div class="w-full h-full absolute cube cube-gray" />
         </div>
+      </div>
+    {/if}
+    <!-- MonKey container -->
+    {#if showMonkeyContainer}
+      <div
+        bind:this={monkeyContainer}
+        class="{showMonkeyContainerAnimation ? (hideMonkeyContainer ? 'hide-monkey-container' : 'show-monkey-container') : 'hidden-monkey-container'}
+        {toHideMonkeyContainer ? 'to-hide-monkey-container' : 'monkey-container'}
+        w-full h-auto absolute left-0 top-0" />
+    {/if}
+    {#if showAgainButton}
+      <!-- Again Button -->
+      <div class="w-full flex flex-row justify-center absolute bottom-0">
         <button
-          disabled={hideFormAnimation}
+          disabled={!showAgainButtonAnimation}
           on:click={() => {
+            resetGeneration();
+          }}
+          class="{showAgainButtonAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}
+          transform duration-350 ease-out bg-primary btn-primary text-white
+          text-lg font-bold rounded-lg border-2 border-black px-6 md:px-8 py-1
+          mx-4 md:mx-8 my-4 md:my-5">
+          Again!
+        </button>
+      </div>
+    {/if}
+    <!-- Curtain -->
+    {#if showCurtain}
+      <div
+        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
+        curtain-4 w-full h-full bg-grayLight absolute" />
+      <div
+        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
+        curtain-3 w-full h-full bg-brownLight absolute" />
+      <div
+        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
+        curtain-2 w-full h-full bg-brown absolute" />
+      <div
+        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
+        curtain-1 w-full h-full bg-gray absolute" />
+    {/if}
+    <!-- Input, Show Me & Randomize -->
+    {#if !hideForm}
+      <div class="w-full h-full flex flex-col relative">
+        <form
+          on:submit|preventDefault={() => {
             generateMonkey(inputValue);
           }}
-          class="w-full bg-primary btn-primary text-white text-xl font-bold
-          rounded-xl border-black border-2 px-6 py-2 mx-auto mt-3">
-          Show Me
-        </button>
-      </form>
-      <div
-        class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
-        transform duration-200 ease-out w-full flex flex-row justify-center
-        absolute bottom-0">
-        <button
-          disabled={hideFormAnimation}
-          on:click={() => {
-            let address = genAddress();
-            generateMonkey(address);
-            setTimeout(() => {
-              inputValue = address;
-            }, 200);
-          }}
-          class="bg-primary btn-primary text-white text-lg font-bold rounded-lg
-          border-black border-2 px-6 md:px-8 py-1 my-4 md:my-5">
-          Randomize
-        </button>
+          class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
+          transform duration-200 ease-out flex flex-col items-center my-auto
+          relative mx-4 md:mx-6">
+          <div class="w-full">
+            <label
+              class="{inputError ? 'text-danger' : inputFocused || inputHovered ? 'text-brownLight' : 'text-gray'}
+              absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2 text-xl
+              font-bold transition-all duration-200 ease-out"
+              for="bananoAddress">
+              Address
+            </label>
+            <input
+              disabled={hideFormAnimation}
+              name="bananoAddress"
+              id="bananoAddress"
+              on:blur={() => {
+                inputFocused = false;
+              }}
+              on:focus={() => {
+                inputFocused = true;
+              }}
+              on:mouseenter={() => {
+                inputHovered = true;
+              }}
+              on:mouseleave={() => {
+                inputHovered = false;
+              }}
+              bind:value={inputValue}
+              on:input={() => {
+                if (inputError) {
+                  inputError = false;
+                }
+              }}
+              class="{inputError ? 'border-danger text-danger' : 'text-gray border-primary focus:border-brownLight hover:border-brownLight'}
+              w-full text-xl font-bold px-4 py-3 border-3 rounded-xl
+              transition-all duration-200 ease-out"
+              type="text"
+              autocomplete="off"
+              placeholder="Enter your address" />
+          </div>
+          <button
+            disabled={hideFormAnimation}
+            on:click={() => {
+              generateMonkey(inputValue);
+            }}
+            class="w-full bg-primary btn-primary text-white text-xl font-bold
+            rounded-xl border-black border-2 px-6 py-2 mx-auto mt-3">
+            Show Me
+          </button>
+        </form>
+        <div
+          class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
+          transform duration-200 ease-out w-full flex flex-row justify-center
+          absolute bottom-0">
+          <button
+            disabled={hideFormAnimation}
+            on:click={() => {
+              let address = genAddress();
+              generateMonkey(address);
+              setTimeout(() => {
+                inputValue = address;
+              }, 200);
+            }}
+            class="bg-primary btn-primary text-white text-lg font-bold
+            rounded-lg border-black border-2 px-6 md:px-8 py-1 my-4 md:my-5">
+            Randomize
+          </button>
+        </div>
       </div>
-    </div>
-  {/if}
-</div>
+    {/if}
+  </div>
+{/if}
