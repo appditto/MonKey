@@ -2,12 +2,13 @@
   import axios from "axios";
   import { genAddress, validateAddress } from "../plugins/address.js";
   import { fadeAndScaleIn, fadeAndScaleOut } from "../plugins/transitions.js";
+  import MonkeySvg from "./MonkeySvg.svelte";
   export let showGenerator = false;
   let inputValue;
   let inputError = false;
   let inputFocused = false;
   let inputHovered = false;
-  let monkeyContainer;
+  let monkeySvg;
   /* Variables for the generation animation */
   let hideForm = false;
   let hideFormAnimation = false;
@@ -22,14 +23,14 @@
   let hideMonkeyContainer = false;
   let toHideMonkeyContainer = false;
   /* ////////////////////////////////////// */
-  let getMonkey = async (address) => {
+  async function getMonkey(address) {
     try {
       return axios.get("https://natricon.com/api/v1/nano?address=" + address);
     } catch (e) {
       console.error(e);
     }
-  };
-  let generateMonkey = async (address) => {
+  }
+  async function generateMonkey(address) {
     if (validateAddress(address)) {
       hideFormAnimation = true;
       setTimeout(() => {
@@ -48,7 +49,7 @@
           showMonkeyContainerAnimation = true;
         }, 25);
         setTimeout(() => {
-          monkeyContainer.innerHTML = monkeyResult.data;
+          monkeySvg = monkeyResult.data;
           showLoading = false;
         }, 200);
         showAgainButton = true;
@@ -62,8 +63,15 @@
     } else {
       inputError = true;
     }
-  };
-  let resetGeneration = () => {
+  }
+  function generateRandomMonkey() {
+    let address = genAddress();
+    generateMonkey(address);
+    setTimeout(() => {
+      inputValue = address;
+    }, 200);
+  }
+  function resetGeneration() {
     showLoading = false;
     showLoadingAnimation = false;
     showCurtain = false;
@@ -83,11 +91,12 @@
       showMonkeyContainerAnimation = false;
       hideMonkeyContainer = false;
       toHideMonkeyContainer = false;
+      monkeySvg = null;
     }, 300);
     setTimeout(() => {
       hideFormAnimation = false;
     }, 175);
-  };
+  }
 </script>
 
 <style>
@@ -275,19 +284,18 @@
     <!-- MonKey container -->
     {#if showMonkeyContainer}
       <div
-        bind:this={monkeyContainer}
         class="{showMonkeyContainerAnimation ? (hideMonkeyContainer ? 'hide-monkey-container' : 'show-monkey-container') : 'hidden-monkey-container'}
         {toHideMonkeyContainer ? 'to-hide-monkey-container' : 'monkey-container'}
-        w-full h-auto absolute left-0 top-0" />
+        w-full h-auto absolute left-0 top-0">
+        <MonkeySvg {monkeySvg} />
+      </div>
     {/if}
     {#if showAgainButton}
       <!-- Again Button -->
       <div class="w-full flex flex-row justify-center absolute bottom-0">
         <button
           disabled={!showAgainButtonAnimation}
-          on:click={() => {
-            resetGeneration();
-          }}
+          on:click={resetGeneration}
           class="{showAgainButtonAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}
           transform duration-350 ease-out bg-primary btn-primary text-white
           text-lg font-bold rounded-lg border-2 border-black px-6 md:px-8 py-1
@@ -300,9 +308,7 @@
     {#if !hideForm}
       <div class="w-full h-full flex flex-col relative">
         <form
-          on:submit|preventDefault={() => {
-            generateMonkey(inputValue);
-          }}
+          on:submit|preventDefault={generateMonkey(inputValue)}
           class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
           transform duration-200 ease-out flex flex-col items-center my-auto
           relative mx-4 md:mx-6">
@@ -345,9 +351,7 @@
           </div>
           <button
             disabled={hideFormAnimation}
-            on:click={() => {
-              generateMonkey(inputValue);
-            }}
+            on:click={generateMonkey(inputValue)}
             class="w-full bg-primary btn-primary text-white text-xl font-bold
             rounded-xl border-black border-2 px-6 py-2 mx-auto mt-3">
             Show Me
@@ -359,13 +363,7 @@
           absolute bottom-0">
           <button
             disabled={hideFormAnimation}
-            on:click={() => {
-              let address = genAddress();
-              generateMonkey(address);
-              setTimeout(() => {
-                inputValue = address;
-              }, 200);
-            }}
+            on:click={generateRandomMonkey}
             class="bg-primary btn-primary text-white text-lg font-bold
             rounded-lg border-black border-2 px-6 md:px-8 py-1 my-4 md:my-5">
             Randomize

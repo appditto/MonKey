@@ -1,9 +1,9 @@
 <script>
   import MonkeyGenerator from "../MonkeyGenerator.svelte";
   let showGenerator = false;
-  const toggleGenerator = () => {
+  function toggleGenerator() {
     showGenerator = !showGenerator;
-  };
+  }
 </script>
 
 <style>
@@ -27,9 +27,7 @@
       In here, Banano addresses are MonKeys.
     </p>
     <button
-      on:click={() => {
-        toggleGenerator();
-      }}
+      on:click={toggleGenerator}
       class="{showGenerator ? 'bg-danger btn-danger border-dangerDark' : 'bg-primary btn-primary border-black'}
       w-64 max-w-full text-white text-xl font-bold rounded-xl border-2 px-3
       md:px-6 py-2 mx-auto mt-6">
