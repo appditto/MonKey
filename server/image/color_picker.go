@@ -45,7 +45,7 @@ func GetColor(redSeed string, greenSeed string, blueSeed string) (color.RGB, err
 			),
 		),
 		0.0,
-	) * 1000
+	)
 	upperBound := math.Min(
 		math.Sqrt(
 			math.Max(
@@ -54,11 +54,9 @@ func GetColor(redSeed string, greenSeed string, blueSeed string) (color.RGB, err
 			),
 		),
 		255.0,
-	) * 1000
+	)
 
-	delta := upperBound - lowerBound
-
-	outRGB.B = float64(math.Mod(float64(blueAsInt), delta)) + lowerBound
+	outRGB.B = lowerBound + (1.0-float64(blueAsInt)/255.0)*(upperBound-lowerBound)
 
 	return outRGB, nil
 }
