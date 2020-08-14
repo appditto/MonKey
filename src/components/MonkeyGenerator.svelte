@@ -102,8 +102,6 @@
     box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
       0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
       -0.5rem 0.5rem 0rem 0rem #9b9ba1;
-    transition: opacity 0.2s cubic-bezier(0.215, 0.51, 0.355, 1),
-      transform 0.5s cubic-bezier(0.215, 0.51, 0.355, 1);
     transform-origin: top center;
     overflow: hidden;
     animation: generatorAnimation;
