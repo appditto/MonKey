@@ -8,7 +8,12 @@ import (
 )
 
 // Chance an accessory category has of occuring
-const accessoryChance = 1.0
+const glassesChance = 0.2
+const hatChance = 0.2
+const miscChance = 0.2
+const shirtPantChance = 0.2
+const shoeChance = 0.2
+const tailChance = 0.2
 
 // Accessories - represents accessories for monKey
 type Accessories struct {
@@ -67,51 +72,56 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	}
 
 	// Pick accessories based on accessoryChance
-	// Get threshold for existing
-	maxHasAccessoryValue := int64(255 * accessoryChance)
 
+	// Get threshold for existing
+	maxHasAccessoryValue := int64(4095 * glassesChance)
 	workingIdx := 0
 	hasGlasses := false
-	hasGlassesWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
+	hasGlassesWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
 	if hasGlassesWorkingVal <= maxHasAccessoryValue {
 		hasGlasses = true
 	}
-	workingIdx += 2
+	workingIdx += 3
 
+	maxHasAccessoryValue = int64(4095 * hatChance)
 	hasHats := false
-	hasHatsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
+	hasHatsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
 	if hasHatsWorkingVal <= maxHasAccessoryValue {
 		hasHats = true
 	}
-	workingIdx += 2
+	workingIdx += 3
 
+	maxHasAccessoryValue = int64(4095 * miscChance)
 	hasMisc := false
-	hasMiscWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
+	hasMiscWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
 	if hasMiscWorkingVal <= maxHasAccessoryValue {
 		hasMisc = true
 	}
-	workingIdx += 2
+	workingIdx += 3
 
+	maxHasAccessoryValue = int64(4095 * shirtPantChance)
 	hasShirtPants := false
-	hasShirtPantsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
+	hasShirtPantsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
 	if hasShirtPantsWorkingVal <= maxHasAccessoryValue {
 		hasShirtPants = true
 	}
-	workingIdx += 2
+	workingIdx += 3
 
+	maxHasAccessoryValue = int64(4095 * shoeChance)
 	hasShoes := false
-	hasShoesWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
+	hasShoesWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
 	if hasShoesWorkingVal <= maxHasAccessoryValue {
 		hasShoes = true
 	}
-	workingIdx += 2
+	workingIdx += 3
 
+	maxHasAccessoryValue = int64(4095 * tailChance)
 	hasTails := false
-	hasTailsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
+	hasTailsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:3+workingIdx], 16, 64)
 	if hasTailsWorkingVal <= maxHasAccessoryValue {
 		hasTails = true
 	}
-	workingIdx += 2 // 12
+	workingIdx += 3 // 18
 
 	// Pick accessories if we have them
 	if hasGlasses {
@@ -148,7 +158,7 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	accessories.MouthAsset = GetAccessoryFromHexWithWeight(hash[workingIdx:3+workingIdx], GetAssets().GetMouthAssets())
 	workingIdx += 3
 
-	// Working idx could be up to 26 here, if we dont have enough left for color we can either re-use parts of the hash or re-hash
+	// Working idx could be up to 39 here, if we dont have enough left for color we can either re-use parts of the hash or re-hash
 	// TODO - color
 
 	return accessories, nil

@@ -117,13 +117,13 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 			return nil, err
 		}
 	}
-	if accessories.ShoeAsset == nil || !accessories.MiscAsset.RemovesFeet {
+	if accessories.ShoeAsset == nil || !accessories.ShoeAsset.RemovesFeet {
 		if err := xml.Unmarshal(accessories.FootLeftAsset.SVGContents, &footLeft); err != nil {
 			glog.Fatalf("Unable to parse foot left SVG %v", err)
 			return nil, err
 		}
 	}
-	if accessories.ShoeAsset == nil || !accessories.MiscAsset.RemovesFeet {
+	if accessories.ShoeAsset == nil || !accessories.ShoeAsset.RemovesFeet {
 		if err := xml.Unmarshal(accessories.FootRightAsset.SVGContents, &footRight); err != nil {
 			glog.Fatalf("Unable to parse foot right SVG %v", err)
 			return nil, err
