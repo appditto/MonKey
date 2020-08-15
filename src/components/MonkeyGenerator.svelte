@@ -2,7 +2,6 @@
   import axios from "axios";
   import { genAddress, validateAddress } from "../plugins/address.js";
   import { fadeAndScaleIn, fadeAndScaleOut } from "../plugins/transitions.js";
-  import MonkeySvg from "./MonkeySvg.svelte";
   export let showGenerator = false;
   let inputValue;
   let inputError = false;
@@ -129,7 +128,9 @@
         {toHideMonkeyContainer ? 'to-hide-monkey-container' : 'monkey-container'}
         w-full h-auto absolute left-0 top-0"
       >
-        <MonkeySvg {monkeySvg} />
+        {#if monkeySvg}
+          {@html monkeySvg}
+        {/if}
       </div>
     {/if}
     {#if showAgainButton}
