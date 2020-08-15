@@ -25,7 +25,7 @@
 <svelte:head />
 
 <!-- HTML -->
-<Meta {metadata} />
+<Meta metadata="metadata" />
 <Hero />
 <How />
 <Rigged />

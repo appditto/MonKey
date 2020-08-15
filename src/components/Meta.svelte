@@ -38,5 +38,6 @@
 
   <meta
     property="twitter:card"
-    content={metadata.twitterCard || 'summary_large_image'} />
+    content={metadata.twitterCard || 'summary_large_image'}
+  />
 </svelte:head>

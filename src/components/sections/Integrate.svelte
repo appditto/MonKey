@@ -7,7 +7,8 @@
   <div class="y-container flex flex-col items-center">
     <h2
       class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight
-      tracking-tight mt-5">
+      tracking-tight mt-5"
+    >
       Wanna Integrate MonKey?
     </h2>
     <p class="w-full max-w-2xl text-center md:mx-12 mt-3 text-2xl px-4">
@@ -17,7 +18,8 @@
       <a
         href="/documentation"
         class="bg-primary btn-primary text-white text-xl font-bold rounded-xl
-        border-2 border-black px-8 md:px-12 py-2">
+        border-2 border-black px-8 md:px-12 py-2"
+      >
         Start Integrating
       </a>
     </div>
@@ -27,12 +29,14 @@
         slot="content"
         class="w-full h-auto"
         src="images/illustrations-foreground/integrate.svg"
-        alt="Integrate Illustration" />
+        alt="Integrate Illustration"
+      />
       <img
         slot="placeholder"
         class="w-full h-auto"
         src="images/illustrations-foreground/integrate-placeholder.svg"
-        alt="Integrate Illustration Placeholder" />
+        alt="Integrate Illustration Placeholder"
+      />
     </LazyImage>
     <!-- Mobile Illustration-->
     <LazyImage classes="w-full max-w-sm md:hidden mx-auto mt-12 px-6">
@@ -40,12 +44,14 @@
         slot="content"
         class="w-full h-auto"
         src="images/illustrations-foreground/integrate-mobile.svg"
-        alt="Integrate Illustration" />
+        alt="Integrate Illustration"
+      />
       <img
         slot="placeholder"
         class="w-full h-auto"
         src="images/illustrations-foreground/integrate-mobile-placeholder.svg"
-        alt="Integrate Illustration Placeholder" />
+        alt="Integrate Illustration Placeholder"
+      />
     </LazyImage>
   </div>
 </div>

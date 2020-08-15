@@ -78,12 +78,14 @@
   <div use:load class="w-full relative">
     <div
       class="{loaded ? 'opacity-0' : 'opacity-100'} w-full transition-opacity
-      duration-500">
+      duration-500"
+    >
       <slot name="placeholder" />
     </div>
     <div
       class="{loaded ? 'opacity-100' : 'opacity-0'} w-full transition-opacity
-      duration-300 ease-out absolute top-0 left-0">
+      duration-300 ease-out absolute top-0 left-0"
+    >
       <slot name="content" />
     </div>
   </div>
