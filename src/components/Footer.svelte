@@ -18,6 +18,7 @@
     <div class="flex flex-row flex-wrap justify-center items-center">
       <a
         class="m-2 icon-button p-1"
+        rel="noopener"
         target="_blank"
         href="https://chat.banano.cc">
         <img
@@ -27,6 +28,7 @@
       </a>
       <a
         class="m-2 icon-button p-1"
+        rel="noopener"
         target="_blank"
         href="https://www.reddit.com/r/banano">
         <img
@@ -36,6 +38,7 @@
       </a>
       <a
         class="m-2 icon-button p-1"
+        rel="noopener"
         target="_blank"
         href="https://twitter.com/bananocoin">
         <img
@@ -45,6 +48,7 @@
       </a>
       <a
         class="m-2 icon-button p-1"
+        rel="noopener"
         target="_blank"
         href="https://medium.com/banano">
         <img
@@ -54,6 +58,7 @@
       </a>
       <a
         class="m-2 icon-button p-1"
+        rel="noopener"
         target="_blank"
         href="https://t.me/banano_official">
         <img
@@ -63,6 +68,7 @@
       </a>
       <a
         class="m-2 icon-button p-1"
+        rel="noopener"
         target="_blank"
         href="https://www.facebook.com/bananocurrency/">
         <img
@@ -72,6 +78,7 @@
       </a>
       <a
         class="m-2 icon-button p-1"
+        rel="noopener"
         target="_blank"
         href="https://www.instagram.com/bananocurrency/">
         <img
@@ -81,6 +88,7 @@
       </a>
       <a
         class="m-2 icon-button p-1"
+        rel="noopener"
         target="_blank"
         href="https://github.com/bananocoin">
         <img
@@ -94,6 +102,7 @@
       <span>©2020,&nbsp;</span>
       <a
         href="https://banano.cc"
+        rel="noopener"
         target="_blank"
         class="font-bold hover:underline focus:underline">
         Banano
@@ -105,6 +114,7 @@
       <p>made by</p>
       <a
         class="logo-button p-1 ml-1"
+        rel="noopener"
         target="_blank"
         href="https://appditto.com">
         <div class="w-28 h-auto">

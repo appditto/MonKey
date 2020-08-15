@@ -28,6 +28,7 @@
         Most notable two are
         <a
           href="https://kalium.banano.cc"
+          rel="noopener"
           target="_blank"
           class="font-bold hover:underline focus:underline">
           Kalium
@@ -35,6 +36,7 @@
         and
         <a
           href="https://creeper.banano.cc"
+          rel="noopener"
           target="_blank"
           class="font-bold hover:underline focus:underline">
           Creeper.
@@ -43,6 +45,7 @@
       <div class="w-full flex flex-row flex-wrap justify-center px-4 mt-2">
         <a
           href="https://kalium.banano.cc"
+          rel="noopener"
           target="_blank"
           class="w-full md:w-64 bg-primary btn-primary text-white text-xl
           font-bold rounded-xl border-2 border-black px-6 py-2 mx-2 mt-6
@@ -51,6 +54,7 @@
         </a>
         <a
           href="https://creeper.banano.cc"
+          rel="noopener"
           target="_blank"
           class="w-full md:w-64 bg-primary btn-primary text-white text-xl
           font-bold rounded-xl border-2 border-black px-6 py-2 mx-2 mt-6

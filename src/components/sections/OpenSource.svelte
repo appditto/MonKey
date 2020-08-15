@@ -27,6 +27,7 @@
     <div class="flex flex-row justify-center mt-6">
       <a
         href="https://github.com/appditto/monkey"
+        rel="noopener"
         target="_blank"
         class="bg-primary btn-primary text-white text-xl font-bold rounded-xl
         border-2 border-black px-8 md:px-12 py-2">

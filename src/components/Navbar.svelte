@@ -41,11 +41,13 @@
       </a>
       <a
         href="https://github.com/appditto/monkey"
+        rel="noopener"
         class="menu-button hover:text-brownLight px-2 pt-1 mx-1 md:ml-4 line">
         GitHub
       </a>
       <a
         href="https://banano.cc"
+        rel="noopener"
         class="menu-button hover:text-brownLight px-2 pt-1 mx-1 md:ml-4 line">
         Banano
       </a>
