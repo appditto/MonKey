@@ -16,14 +16,6 @@ RUN apt-get update && apt-get install -y \
 && go build -o monkey-server \
 && rm -rf /var/lib/apt/lists/*
 
-# Copy binary to imagemagick image
-FROM appditto/imagemagick:latest
-
-USER root
-WORKDIR /root
-
-COPY --from=builder /root/monkey-server /usr/bin/monkey-server
-
 ENV GIN_MODE="release"
 
 # run main.go
