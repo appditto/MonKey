@@ -1,0 +1,126 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    container: 
+      image: appditto/imagemagick_go:latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@master
+
+    - name: Run Tests
+      run: |
+        cd server
+        apt-get update && apt-get install -y gcc pkg-config
+        go test ./...
+
+  build_and_publish_nuxt:
+    name: Build and Publish Nuxt Image
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_RUN_ID: ${{ github.run_id }}    
+    steps:
+      - uses: nelonoel/branch-name@v1
+      - uses: actions/checkout@master   
+      - name: Login to registry
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REPO }}
+
+      - name: Build and tag
+        if: success()
+        run: docker build -t ${{ secrets.DOCKER_REPO }}/nuxt-monkey:${BRANCH_NAME}-${{ env.GITHUB_RUN_ID }} .
+
+      - name: Push image   
+        if: success()
+        uses: actions-hub/docker@master
+        with:
+          args: push ${{ secrets.DOCKER_REPO }}/nuxt-monkey:${BRANCH_NAME}-${{ env.GITHUB_RUN_ID }}
+
+
+  build_and_publish_go:
+    name: Build and Publish GO Image
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_RUN_ID: ${{ github.run_id }}    
+    steps:
+      - uses: nelonoel/branch-name@v1
+      - uses: actions/checkout@master   
+      - name: Login to registry
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REPO }}
+
+      - name: Build and tag
+        if: success()
+        run: docker build -t ${{ secrets.DOCKER_REPO }}/go-monkey:${BRANCH_NAME}-${{ env.GITHUB_RUN_ID }} server
+
+      - name: Push image   
+        if: success()
+        uses: actions-hub/docker@master
+        with:
+          args: push ${{ secrets.DOCKER_REPO }}/go-monkey:${BRANCH_NAME}-${{ env.GITHUB_RUN_ID }}
+
+  deploy_nuxt:
+    name: Deploy nuxt app
+    needs: build_and_publish_nuxt
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_RUN_ID: ${{ github.run_id }}
+    steps:
+      - uses: nelonoel/branch-name@v1
+      - uses: actions/checkout@master   
+      - uses: imranismail/setup-kustomize@v1
+        with:
+          kustomize-version: "3.5.4"
+
+      - name: Set image
+        working-directory: ./kubernetes/frontend
+        run: |
+          kustomize edit set image replaceme=${{ secrets.DOCKER_REPO }}/nuxt-monkey:${BRANCH_NAME}-${{ env.GITHUB_RUN_ID }}
+          kustomize build . > nuxt-deployment-k.yaml
+
+      - name: Deploy image to k8s cluster
+        uses: bbedward/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f ./kubernetes/frontend/nuxt-deployment-k.yaml
+
+  deploy_go:
+    name: Deploy GO app
+    needs: build_and_publish_go
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_RUN_ID: ${{ github.run_id }}
+    steps:
+      - uses: nelonoel/branch-name@v1
+      - uses: actions/checkout@master   
+      - uses: imranismail/setup-kustomize@v1
+        with:
+          kustomize-version: "3.5.4"
+
+      - name: Set image
+        working-directory: ./kubernetes/server
+        run: |
+          kustomize edit set image replaceme=${{ secrets.DOCKER_REPO }}/go-monkey:${BRANCH_NAME}-${{ env.GITHUB_RUN_ID }}
+          kustomize build . > go-deployment-k.yaml
+
+      - name: Deploy image to k8s cluster
+        uses: bbedward/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f ./kubernetes/server/go-deployment-k.yaml
+      
