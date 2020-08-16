@@ -19,4 +19,4 @@ RUN apt-get update && apt-get install -y \
 ENV GIN_MODE="release"
 
 # run main.go
-CMD ["monkey-server", "-host=0.0.0.0", "-port=5555", "-logtostderr"]
+CMD ["./monkey-server", "-host=0.0.0.0", "-port=5555", "-logtostderr"]
