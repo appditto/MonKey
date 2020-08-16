@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: monkey-ingress
+  namespace: monkey
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+        real_ip_header CF-Connecting-IP;
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/websocket-services: "go-monkey-service"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
+    nginx.ingress.kubernetes.io/upstream-hash-by: $remote_addr
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "monkey_socket"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+spec:
+  tls:
+  - hosts:
+    - testmonkey.appditto.com
+    secretName: testmonkey-appditto-com-server-secret
+  rules:
+  - host: testmonkey.appditto.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: nuxt-monkey-service
+          servicePort: 3000
+      - path: /api
+        backend:
+          serviceName: go-monkey-service
+          servicePort: 5555

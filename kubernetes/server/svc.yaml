@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: go-monkey-service
+  namespace: monkey
+spec:
+  selector:
+      app: go-monkey
+  type: ClusterIP
+  ports:
+    - port: 5555
+      targetPort: 5555

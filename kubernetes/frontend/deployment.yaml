@@ -1,0 +1,25 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nuxt-monkey-deployment
+  namespace: monkey
+  labels:
+    app: nuxt-monkey
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nuxt-monkey
+  template:
+    metadata:
+      labels:
+        app: nuxt-monkey
+    spec:
+      containers:
+      - name: nuxt-monkey
+        image: replaceme
+        ports:
+          - containerPort: 3000
+        imagePullPolicy: "Always"
+      imagePullSecrets:
+          - name: regcred
