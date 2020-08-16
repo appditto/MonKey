@@ -215,7 +215,7 @@ func GetAssets() *assetManager {
 
 		var vanityAsset Asset
 		vanityAssets := make(map[string]Asset)
-		fPath = path.Join(wd, "assets", "illustrations", "accessories", string(Tails))
+		fPath = path.Join(wd, "assets", "illustrations", string(Vanity))
 		err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
 			if strings.Contains(info.Name(), ".svg") {
 				vanityAsset = Asset{}
