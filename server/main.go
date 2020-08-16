@@ -7,13 +7,14 @@ import (
 	"github.com/appditto/monKey/server/controller"
 	"github.com/appditto/monKey/server/utils"
 	"github.com/gin-gonic/gin"
+	"gopkg.in/gographics/imagick.v3/imagick"
 )
 
 func CorsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		origin := c.Request.Header.Get("Origin")
 		if origin == "" {
-			origin = "https://natricon.com"
+			origin = "https://testmonkey.appditto.com"
 		}
 		c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -46,6 +47,11 @@ func main() {
 		return
 	}
 
+	// Setup imagemagick
+	// Setup magickwand
+	imagick.Initialize()
+	defer imagick.Terminate()
+
 	// Setup router
 	router := gin.Default()
 	router.Use(CorsMiddleware())
@@ -56,6 +62,7 @@ func main() {
 	}
 
 	// V1 API
+	router.GET("/api/v1/banano", monkeyController.GetBanano)
 	router.GET("/api/v1/random", monkeyController.GetRandomSvg)
 
 	// Run on 8080
