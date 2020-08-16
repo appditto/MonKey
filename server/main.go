@@ -35,17 +35,11 @@ func CorsMiddleware() gin.HandlerFunc {
 func main() {
 	// Get seed from env
 	seed := utils.GetEnv("MONKEY_SEED", "1234567890")
-	// Parse server options
-	loadFiles := flag.Bool("load-files", false, "Print assets as GO arrays")
 
+	// Server options
 	serverHost := flag.String("host", "127.0.0.1", "Host to listen on")
 	serverPort := flag.Int("port", 8080, "Port to listen on")
 	flag.Parse()
-
-	if *loadFiles {
-		LoadAssetsToArray()
-		return
-	}
 
 	// Setup imagemagick
 	// Setup magickwand

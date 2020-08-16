@@ -1,9 +1,16 @@
 package image
 
 import (
-	"encoding/json"
+	"io/ioutil"
+	"os"
+	"path"
+	"path/filepath"
+	"regexp"
+	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/golang/glog"
 )
 
 type IllustrationType string
@@ -55,67 +62,176 @@ type assetManager struct {
 	vanityAssets     map[string]Asset
 }
 
+// Helpers for loading assets
+func hasTag(fname string, tag string) bool {
+	return strings.Contains(fname, tag)
+}
+
+func getWeight(fname string) float64 {
+	reWeightSubstr := regexp.MustCompile(`\[w-(.*)`)
+	weightStr := reWeightSubstr.FindString(fname)
+	reWeightFloat := regexp.MustCompile(`[0-9]?([0-9]*[.])?[0-9]+`)
+	weightNumStr := reWeightFloat.FindString(weightStr)
+
+	asF, err := strconv.ParseFloat(weightNumStr, 64)
+	if err != nil {
+		return -1
+	}
+	return asF
+}
+
+func getAccessoryAsset(fname string, path string) Asset {
+	var err error
+	asset := Asset{}
+	asset.FileName = fname
+	asset.IllustrationPath = path
+	asset.SVGContents, err = ioutil.ReadFile(path)
+	if err != nil {
+		glog.Fatalf("Couldn't load file %s", path)
+		panic(err.Error())
+	}
+	asset.FurColored = false
+	asset.EyeColored = false
+	asset.ShadowFur = false
+	asset.ShadowFurDark = false
+	asset.ShadowIris = false
+	asset.ColorableRandom = hasTag(asset.FileName, "[colorable-random]")
+	asset.RemovesEyes = hasTag(asset.FileName, "[removes-eyes]")
+	asset.RemovesLegs = hasTag(asset.FileName, "[removes-legs]")
+	asset.RemovesFeet = hasTag(asset.FileName, "[removes-feet]")
+	asset.RemovesHandsLeft = hasTag(asset.FileName, "[removes-hands-left]") || hasTag(asset.FileName, "[removes-hands]")
+	asset.RemovesHandsRight = hasTag(asset.FileName, "[removes-hands-right]") || hasTag(asset.FileName, "[removes-hands]")
+	asset.AboveShirtPants = hasTag(asset.FileName, "[above-shirts-pants]")
+	asset.AboveHands = hasTag(asset.FileName, "[above-hands]")
+	asset.Weight = getWeight(asset.FileName)
+	return asset
+}
+
 var singleton *assetManager
 var once sync.Once
 
 func GetAssets() *assetManager {
 	once.Do(func() {
 		var err error
-		// Deserialize all assets and keep in-mem
+
+		wd, err := os.Getwd()
+		if err != nil {
+			panic(err)
+		}
+
 		var bodyPartAssets []Asset
-		for _, ba := range BodyPartsIllustrations {
-			var a Asset
-			err = json.Unmarshal(ba, &a)
-			bodyPartAssets = append(bodyPartAssets, a)
-		}
+		var bodyAsset Asset
+		fPath := path.Join(wd, "assets", "illustrations", string(BodyPart))
+		err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
+			if strings.Contains(info.Name(), ".svg") {
+				bodyAsset = Asset{}
+				bodyAsset.FileName = info.Name()
+				bodyAsset.IllustrationPath = path
+				bodyAsset.SVGContents, err = ioutil.ReadFile(path)
+				if err != nil {
+					glog.Fatalf("Couldn't load file %s", path)
+					panic(err.Error())
+				}
+				bodyAsset.FurColored = hasTag(bodyAsset.FileName, "[fur-color]")
+				bodyAsset.EyeColored = hasTag(bodyAsset.FileName, "[eye-color]")
+				bodyAsset.ShadowFur = hasTag(bodyAsset.FileName, "[shadow-fur]")
+				bodyAsset.ShadowFurDark = hasTag(bodyAsset.FileName, "[shadow-fur-dark]")
+				bodyAsset.ShadowIris = hasTag(bodyAsset.FileName, "[shadow-iris]")
+				bodyAsset.ColorableRandom = false
+				bodyAsset.RemovesEyes = false
+				bodyAsset.RemovesLegs = false
+				bodyAsset.RemovesHandsLeft = false
+				bodyAsset.RemovesHandsRight = false
+				bodyAsset.AboveShirtPants = false
+				bodyAsset.AboveHands = false
+				bodyAsset.Weight = getWeight(bodyAsset.FileName)
+				bodyPartAssets = append(bodyPartAssets, bodyAsset)
+			}
+			return nil
+		})
+
+		var hatAssets []Asset
+		fPath = path.Join(wd, "assets", "illustrations", "accessories", string(Hats))
+		err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
+			if strings.Contains(info.Name(), ".svg") {
+				hatAssets = append(hatAssets, getAccessoryAsset(info.Name(), path))
+			}
+			return nil
+		})
+
 		var glassesAssets []Asset
-		for _, ga := range GlassesIllustrations {
-			var a Asset
-			err = json.Unmarshal(ga, &a)
-			glassesAssets = append(glassesAssets, a)
-		}
-		var hatsAssets []Asset
-		for _, ha := range HatIllustrations {
-			var a Asset
-			err = json.Unmarshal(ha, &a)
-			hatsAssets = append(hatsAssets, a)
-		}
+		fPath = path.Join(wd, "assets", "illustrations", "accessories", string(Glasses))
+		err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
+			if strings.Contains(info.Name(), ".svg") {
+				glassesAssets = append(glassesAssets, getAccessoryAsset(info.Name(), path))
+			}
+			return nil
+		})
+
 		var miscAssets []Asset
-		for _, ma := range MiscIllustrations {
-			var a Asset
-			err = json.Unmarshal(ma, &a)
-			miscAssets = append(miscAssets, a)
-		}
-		var mouthsAssets []Asset
-		for _, ma := range MouthsIllustrations {
-			var a Asset
-			err = json.Unmarshal(ma, &a)
-			mouthsAssets = append(mouthsAssets, a)
-		}
+		fPath = path.Join(wd, "assets", "illustrations", "accessories", string(Misc))
+		err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
+			if strings.Contains(info.Name(), ".svg") {
+				miscAssets = append(miscAssets, getAccessoryAsset(info.Name(), path))
+			}
+			return nil
+		})
+
+		var mouthAssets []Asset
+		fPath = path.Join(wd, "assets", "illustrations", "accessories", string(Mouths))
+		err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
+			if strings.Contains(info.Name(), ".svg") {
+				mouthAssets = append(mouthAssets, getAccessoryAsset(info.Name(), path))
+			}
+			return nil
+		})
+
 		var shirtPantsAssets []Asset
-		for _, sa := range ShirtPantsIllustrations {
-			var a Asset
-			err = json.Unmarshal(sa, &a)
-			shirtPantsAssets = append(shirtPantsAssets, a)
-		}
-		var shoesAssets []Asset
-		for _, sa := range ShoesIllustrations {
-			var a Asset
-			err = json.Unmarshal(sa, &a)
-			shoesAssets = append(shoesAssets, a)
-		}
-		var tailsAssets []Asset
-		for _, ta := range TailsIllustrations {
-			var a Asset
-			err = json.Unmarshal(ta, &a)
-			tailsAssets = append(tailsAssets, a)
-		}
+		fPath = path.Join(wd, "assets", "illustrations", "accessories", string(ShirtPants))
+		err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
+			if strings.Contains(info.Name(), ".svg") {
+				shirtPantsAssets = append(shirtPantsAssets, getAccessoryAsset(info.Name(), path))
+			}
+			return nil
+		})
+
+		var shoeAssets []Asset
+		fPath = path.Join(wd, "assets", "illustrations", "accessories", string(Shoes))
+		err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
+			if strings.Contains(info.Name(), ".svg") {
+				shoeAssets = append(shoeAssets, getAccessoryAsset(info.Name(), path))
+			}
+			return nil
+		})
+
+		var tailAssets []Asset
+		fPath = path.Join(wd, "assets", "illustrations", "accessories", string(Tails))
+		err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
+			if strings.Contains(info.Name(), ".svg") {
+				tailAssets = append(tailAssets, getAccessoryAsset(info.Name(), path))
+			}
+			return nil
+		})
+
+		var vanityAsset Asset
 		vanityAssets := make(map[string]Asset)
-		for _, va := range VanityIllustrations {
-			var a Asset
-			err = json.Unmarshal(va, &a)
-			vanityAssets[a.Address] = a
-		}
+		fPath = path.Join(wd, "assets", "illustrations", "accessories", string(Tails))
+		err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
+			if strings.Contains(info.Name(), ".svg") {
+				vanityAsset = Asset{}
+				vanityAsset.FileName = info.Name()
+				vanityAsset.IllustrationPath = path
+				vanityAsset.SVGContents, err = ioutil.ReadFile(path)
+				if err != nil {
+					glog.Fatalf("Couldn't load file %s", path)
+					panic(err.Error())
+				}
+				vanityAsset.Address = strings.Split(vanityAsset.FileName, ".svg")[0]
+				vanityAssets[vanityAsset.Address] = vanityAsset
+			}
+			return nil
+		})
+
 		if err != nil {
 			panic("Failed to decode assets")
 		}
@@ -123,12 +239,12 @@ func GetAssets() *assetManager {
 		singleton = &assetManager{
 			bodyPartAssets:   bodyPartAssets,
 			glassesAssets:    glassesAssets,
-			hatsAssets:       hatsAssets,
+			hatsAssets:       hatAssets,
 			miscAssets:       miscAssets,
-			mouthsAssets:     mouthsAssets,
+			mouthsAssets:     mouthAssets,
 			shirtPantsAssets: shirtPantsAssets,
-			shoesAssets:      shoesAssets,
-			tailsAssets:      tailsAssets,
+			shoesAssets:      shoeAssets,
+			tailsAssets:      tailAssets,
 			vanityAssets:     vanityAssets,
 		}
 	})
