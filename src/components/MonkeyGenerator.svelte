@@ -68,8 +68,7 @@
   <div
     in:generatorIn
     out:generatorOut
-    class="max-w-md max-h-md generator flex flex-col bg-white absolute top-0
-    mt-8 overflow-hidden"
+    class="generator flex flex-col bg-white absolute top-0 mt-8 overflow-hidden"
   >
     <!-- MonKey loading animation -->
     {#if monkeyLoading}
@@ -89,7 +88,7 @@
     <!-- MonKey container -->
     {#if monkeyLoaded}
       <div
-        in:monkeyContainerIn
+        in:monkeyContainerIn={{ delay: 100 }}
         out:monkeyContainerOut
         class="w-full h-auto absolute left-0 top-0"
       >
@@ -207,7 +206,9 @@
 <style>
   .generator {
     width: calc(100vw - 2.5rem);
-    height: calc(100vw - 2.5rem);
+    height: calc(100vw - 0.5rem);
+    max-width: 28rem;
+    max-height: 30rem;
     border-radius: 1rem;
     border-width: 0rem;
     border-color: #404040;
@@ -223,19 +224,19 @@
   @media screen and (min-width: 768px) {
     .generator {
       width: 50vw;
-      height: 50vw;
+      height: calc(50vw + 2rem);
       max-width: 50vw;
-      max-height: 50vw;
+      max-height: calc(50vw + 2rem);
     }
   }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 1024px) {
     .generator {
       min-width: 24rem;
-      min-height: 24rem;
+      min-height: 26rem;
       width: 20vw;
-      height: 20vw;
+      height: calc(20vw + 2rem);
       max-width: 20vw;
-      max-height: 20vw;
+      max-height: calc(20vw + 2rem);
     }
   }
   @keyframes generatorAnimation {

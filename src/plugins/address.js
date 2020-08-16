@@ -4,7 +4,7 @@ import { nacl } from "./nacl.js"
 
 const ALPHABET = '13456789abcdefghijkmnopqrstuwxyz'
 
-function getAddressFromPublic(accountPublicKeyBytes, prefix = "nano") {
+function getAddressFromPublic(accountPublicKeyBytes, prefix = "ban") {
     const accountHex = uint8ToHex(accountPublicKeyBytes)
     const keyBytes = uint4ToUint8(hexToUint4(accountHex)) // For some reason here we go from u, to hex, to 4, to 8??
     const context = blake2bInit(5)
@@ -83,9 +83,9 @@ function uint5ToString(uint5) {
     return string
 }
 
-// Extract nano address candidate from string, return null if not found
+// Extract banano address candidate from string, return null if not found
 function extractAddress(rawString) {
-    let pattern = new RegExp("(xrb|nano)(_)(1|3)[13456789abcdefghijkmnopqrstuwxyz]{59}", "g");
+    let pattern = new RegExp("(ban)(_)(1|3)[13456789abcdefghijkmnopqrstuwxyz]{59}", "g");
     rawString = rawString.toLowerCase();
     let matches = rawString.match(pattern)
     if (matches == null) {
@@ -158,10 +158,9 @@ export function validateAddress(address) {
         return false
     } else if (address.length != 64 && address.length != 65) {
         return false
-    } else if (!address.startsWith("nano_") && !address.startsWith("xrb_")) {
+    } else if (!address.startsWith("ban_")) {
         return false
     }
-    address = address.replace("nano_", "xrb_")
     const publicKeyBytes = decodeNanoBase32(address.substr(4, 52))
     const checksumBytes = decodeNanoBase32(address.substr(4 + 52))
 
