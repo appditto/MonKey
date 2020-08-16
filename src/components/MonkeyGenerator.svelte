@@ -73,11 +73,11 @@
     <!-- MonKey loading animation -->
     {#if monkeyLoading}
       <div
-        in:monkeyLoadingIn={{ delay: 200 }}
+        in:monkeyLoadingIn={{ delay: 150 }}
         class="w-full h-full flex flex-row justify-center items-center absolute
         left-0 top-0"
       >
-        <div class="w-24 h-24 relative">
+        <div class="w-20 h-20 md:w-24 md:h-24 relative">
           <div class="w-full h-full absolute cube cube-grayLight" />
           <div class="w-full h-full absolute cube cube-brown" />
           <div class="w-full h-full absolute cube cube-brownLight" />
