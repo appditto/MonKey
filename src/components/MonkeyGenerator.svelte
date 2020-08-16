@@ -25,7 +25,9 @@
   ///////////////////////////////////////////
   async function getMonkey(address) {
     try {
-      return axios.get("https://natricon.com/api/v1/nano?address=" + address);
+      return axios.get(
+        "https://testmonkey.appditto.com/api/v1/banano?address=" + address
+      );
     } catch (e) {
       console.error(e);
     }

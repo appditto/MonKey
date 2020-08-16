@@ -49,7 +49,7 @@ export const formOut = (node, { delay = 0, duration = 300 }) => {
     duration,
     css: (t) => {
       const eased = cubicIn(t);
-      return `transform: scale(${eased})`
+      return `transform: scale(${eased}); opacity: ${eased}`
     },
   };
 };
