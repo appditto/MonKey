@@ -24,7 +24,6 @@
   let monkeyLoaded = false;
   ///////////////////////////////////////////
   async function getMonkey(address) {
-    await new Promise((r) => setTimeout(r, 2000));
     try {
       return axios.get(
         "https://testmonkey.appditto.com/api/v1/banano?address=" + address
