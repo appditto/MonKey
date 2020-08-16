@@ -5,9 +5,13 @@
     generatorIn,
     generatorOut,
     monkeyLoadingIn,
+    monkeyContainerIn,
+    monkeyContainerOut,
+    formIn,
     formOut,
     curtainIn,
     againIn,
+    againOut,
   } from "../plugins/transitions.js";
   export let showGenerator = false;
   let inputValue;
@@ -36,7 +40,7 @@
         setTimeout(() => {
           monkeySvg = monkeyResult.data;
           monkeyLoading = false;
-        }, 200);
+        }, 150);
       }
     } else {
       inputError = true;
@@ -68,7 +72,7 @@
     <!-- MonKey loading animation -->
     {#if monkeyLoading}
       <div
-        in:monkeyLoadingIn={{ delay: 150 }}
+        in:monkeyLoadingIn={{ delay: 200 }}
         class="w-full h-full flex flex-row justify-center items-center absolute
         left-0 top-0"
       >
@@ -82,7 +86,11 @@
     {/if}
     <!-- MonKey container -->
     {#if monkeyLoaded}
-      <div class="w-full h-auto absolute left-0 top-0">
+      <div
+        in:monkeyContainerIn
+        out:monkeyContainerOut
+        class="w-full h-auto absolute left-0 top-0"
+      >
         {#if monkeySvg}
           {@html monkeySvg}
         {/if}
@@ -92,6 +100,7 @@
       <!-- Again Button -->
       <div
         in:againIn={{ delay: 400 }}
+        out:againOut
         class="w-full flex flex-row justify-center absolute bottom-0"
       >
         <button
@@ -109,6 +118,7 @@
         {#if !monkeyLoading && !monkeyLoaded}
           <form
             out:formOut
+            in:formIn={{ delay: 100 }}
             on:submit|preventDefault={generateMonkey(inputValue)}
             class="flex flex-col items-center my-auto relative mx-4 md:mx-6"
           >
@@ -162,6 +172,7 @@
         {#if !monkeyLoading && !monkeyLoaded}
           <div
             out:formOut
+            in:formIn={{ delay: 100 }}
             class="w-full flex flex-row justify-center absolute bottom-0"
           >
             <button

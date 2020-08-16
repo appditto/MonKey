@@ -32,7 +32,18 @@ export const monkeyLoadingIn = (node, { delay = 0, duration = 200 }) => {
   };
 };
 
-export const formOut = (node, { delay = 0, duration = 200 }) => {
+export const formIn = (node, { delay = 0, duration = 300 }) => {
+  return {
+    delay,
+    duration,
+    css: (t) => {
+      const eased = cubicOut(t);
+      return `transform: scale(${eased}); opacity: ${eased}`
+    },
+  };
+};
+
+export const formOut = (node, { delay = 0, duration = 300 }) => {
   return {
     delay,
     duration,
@@ -43,7 +54,7 @@ export const formOut = (node, { delay = 0, duration = 200 }) => {
   };
 };
 
-export const curtainIn = (node, { delay = 0, duration = 800 }) => {
+export const curtainIn = (node, { delay = 0, duration = 750 }) => {
   return {
     delay,
     duration,
@@ -61,6 +72,39 @@ export const againIn = (node, { delay = 0, duration = 400 }) => {
     css: (t) => {
       const eased = cubicOut(t);
       return `transform: translateY(${6 - 6 * eased}rem);`
+    },
+  };
+};
+
+export const againOut = (node, { delay = 0, duration = 400 }) => {
+  return {
+    delay,
+    duration,
+    css: (t) => {
+      const eased = cubicIn(t);
+      return `transform: translateY(${5 - 5 * eased}rem);`
+    },
+  };
+};
+
+export const monkeyContainerIn = (node, { delay = 0, duration = 700 }) => {
+  return {
+    delay,
+    duration,
+    css: (t) => {
+      const eased = cubicOut(t);
+      return `transform: translateY(${20 * eased - 20}%);`
+    },
+  };
+};
+
+export const monkeyContainerOut = (node, { delay = 0, duration = 700 }) => {
+  return {
+    delay,
+    duration,
+    css: (t) => {
+      const eased = cubicIn(t);
+      return `transform: translateY(${100 * eased - 100}%); opacity: ${eased}`
     },
   };
 };
