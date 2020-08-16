@@ -2,6 +2,7 @@ package image
 
 import (
 	"encoding/json"
+	"strings"
 	"sync"
 )
 
@@ -16,6 +17,7 @@ const (
 	ShirtPants IllustrationType = "shirt-pants"
 	Shoes      IllustrationType = "shoes"
 	Tails      IllustrationType = "tails"
+	Vanity     IllustrationType = "vanities"
 )
 
 type Asset struct {
@@ -37,6 +39,7 @@ type Asset struct {
 	AboveShirtPants   bool             // Should be assembled above SHirtPants
 	AboveHands        bool             // Should be assembled above hands
 	Weight            float64          // The weight of this accessory, determines how often it appears
+	Address           string           // Fixed address this vanity belongs to
 }
 
 // Singleton to keep assets loaded in memory
@@ -49,6 +52,7 @@ type assetManager struct {
 	shirtPantsAssets []Asset
 	shoesAssets      []Asset
 	tailsAssets      []Asset
+	vanityAssets     map[string]Asset
 }
 
 var singleton *assetManager
@@ -106,6 +110,12 @@ func GetAssets() *assetManager {
 			err = json.Unmarshal(ta, &a)
 			tailsAssets = append(tailsAssets, a)
 		}
+		vanityAssets := make(map[string]Asset)
+		for _, va := range VanityIllustrations {
+			var a Asset
+			err = json.Unmarshal(va, &a)
+			vanityAssets[a.Address] = a
+		}
 		if err != nil {
 			panic("Failed to decode assets")
 		}
@@ -119,6 +129,7 @@ func GetAssets() *assetManager {
 			shirtPantsAssets: shirtPantsAssets,
 			shoesAssets:      shoesAssets,
 			tailsAssets:      tailsAssets,
+			vanityAssets:     vanityAssets,
 		}
 	})
 	return singleton
@@ -162,4 +173,12 @@ func (sm *assetManager) GetShoeAssets() []Asset {
 // GetTailAssets - get complete list of tail assets
 func (sm *assetManager) GetTailAssets() []Asset {
 	return sm.tailsAssets
+}
+
+// GetVanityAsset - get vanity asset
+func (sm *assetManager) GetVanityAsset(address string) []byte {
+	if asset, ok := sm.vanityAssets[strings.ToLower(address)]; ok {
+		return asset.SVGContents
+	}
+	return nil
 }

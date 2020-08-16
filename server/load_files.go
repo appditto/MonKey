@@ -169,6 +169,27 @@ func LoadAssetsToArray() {
 		}
 		return nil
 	})
+	ret += "}\n"
+
+	var vanityAsset image.Asset
+	ret += "var VanityIllustrations = [][]byte{\n"
+	fPath = path.Join(wd, "assets", "illustrations", string(image.Vanity))
+	err = filepath.Walk(fPath, func(path string, info os.FileInfo, err error) error {
+		if strings.Contains(info.Name(), ".svg") {
+			vanityAsset = image.Asset{}
+			vanityAsset.FileName = info.Name()
+			vanityAsset.IllustrationPath = path
+			vanityAsset.SVGContents, err = ioutil.ReadFile(path)
+			if err != nil {
+				glog.Fatalf("Couldn't load file %s", path)
+				panic(err.Error())
+			}
+			vanityAsset.Address = strings.Split(vanityAsset.FileName, ".svg")[0]
+			encoded, _ := json.Marshal(vanityAsset)
+			ret += strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(fmt.Sprint(encoded), "[", "{"), "]", "}"), " ", ", ") + ","
+		}
+		return nil
+	})
 	ret += "}"
 
 	output := path.Join(wd, "image", "illustrations.go")

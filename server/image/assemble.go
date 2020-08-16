@@ -23,6 +23,26 @@ type SVG struct {
 	Doc    string `xml:",innerxml"`
 }
 
+// Return SVG minified, minus width/height/etc attributes
+func PureSVG(svgData []byte) ([]byte, error) {
+	var pureSVG SVG
+	if err := xml.Unmarshal(svgData, &pureSVG); err != nil {
+		glog.Fatal("Unable to parse SVG")
+		return nil, err
+	}
+	var b bytes.Buffer
+	canvas := svg.New(&b)
+	canvas.Startraw(fmt.Sprintf("viewBox=\"0 0 %d %d\"", DefaultSize, DefaultSize), "fill=\"none\"")
+	io.WriteString(canvas.Writer, pureSVG.Doc)
+	// End document
+	canvas.End()
+
+	// Minify
+	var ret []byte
+	ret, _ = getMinifier().minifier.Bytes("image/svg+xml", b.Bytes())
+	return ret, nil
+}
+
 func CombineSVG(accessories Accessories) ([]byte, error) {
 	var (
 		tail          SVG
@@ -351,12 +371,9 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	canvas.End()
 
 	// Minify
-	/*
-		var ret []byte
-		ret, _ = getMinifier().minifier.Bytes("image/svg+xml", b.Bytes())
-	*/
-	// TODO - return minified version
-	return b.Bytes(), nil
+	var ret []byte
+	ret, _ = getMinifier().minifier.Bytes("image/svg+xml", b.Bytes())
+	return ret, nil
 }
 
 // Singleton to get minifier

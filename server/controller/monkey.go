@@ -29,6 +29,13 @@ func (mc MonkeyController) GetBanano(c *gin.Context) {
 		return
 	}
 
+	// See if this is a vanity
+	vanity := image.GetAssets().GetVanityAsset(address)
+	if vanity != nil {
+		generateVanityAsset(vanity, c)
+		return
+	}
+
 	pubKey := utils.AddressToPub(address)
 	sha256 := utils.Sha256(pubKey, mc.Seed)
 
@@ -89,6 +96,46 @@ func generateIcon(hash *string, c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Error occured")
 		return
 	}
+	if format != "svg" {
+		// Convert
+		var converted []byte
+		converted, err = image.ConvertSvgToBinary(svg, image.ImageFormat(format), uint(size))
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error occured")
+			return
+		}
+		c.Data(200, fmt.Sprintf("image/%s", format), converted)
+		return
+	}
+	c.Data(200, "image/svg+xml; charset=utf-8", svg)
+}
+
+// Return vanity with given options
+func generateVanityAsset(vanity []byte, c *gin.Context) {
+	var err error
+
+	format := strings.ToLower(c.Query("format"))
+	size := 0
+	if format == "" || format == "svg" {
+		format = "svg"
+	} else if format != "png" && format != "webp" {
+		c.String(http.StatusBadRequest, "%s", "Valid formats are 'svg', 'png', or 'webp'")
+		return
+	} else {
+		sizeStr := c.Query("size")
+		if sizeStr == "" {
+			size = defaultRasterSize
+		} else {
+			size, err = strconv.Atoi(c.Query("size"))
+			if err != nil || size < minConvertedSize || size > maxConvertedSize {
+				c.String(http.StatusBadRequest, "%s", fmt.Sprintf("size must be an integer between %d and %d", minConvertedSize, maxConvertedSize))
+				return
+			}
+		}
+	}
+
+	svg, err := image.PureSVG(vanity)
+
 	if format != "svg" {
 		// Convert
 		var converted []byte
