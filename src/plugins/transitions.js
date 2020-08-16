@@ -87,7 +87,7 @@ export const againOut = (node, { delay = 0, duration = 400 }) => {
   };
 };
 
-export const monkeyContainerIn = (node, { delay = 0, duration = 750 }) => {
+export const monkeyContainerIn = (node, { delay = 0, duration = 700 }) => {
   return {
     delay,
     duration,
