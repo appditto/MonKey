@@ -16,16 +16,10 @@
   };
 </script>
 
-<style global>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-</style>
-
 <svelte:head />
 
 <!-- HTML -->
-<Meta metadata="metadata" />
+<Meta {metadata} />
 <Hero />
 <How />
 <Rigged />
@@ -33,3 +27,9 @@
 <OpenSource />
 <Integrate />
 <Stats />
+
+<style global>
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+</style>
