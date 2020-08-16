@@ -1,27 +1,24 @@
 <script>
   import axios from "axios";
   import { genAddress, validateAddress } from "../plugins/address.js";
-  import { fadeAndScaleIn, fadeAndScaleOut } from "../plugins/transitions.js";
+  import {
+    generatorIn,
+    generatorOut,
+    monkeyLoadingIn,
+    formOut,
+    curtainIn,
+    againIn,
+  } from "../plugins/transitions.js";
   export let showGenerator = false;
   let inputValue;
   let inputError = false;
   let inputFocused = false;
   let inputHovered = false;
   let monkeySvg;
-  /* Variables for the generation animation */
-  let hideForm = false;
-  let hideFormAnimation = false;
-  let showLoading = false;
-  let showLoadingAnimation = false;
-  let showCurtain = false;
-  let showCurtainAnimation = false;
-  let showMonkeyContainer = false;
-  let showMonkeyContainerAnimation = false;
-  let showAgainButton = false;
-  let showAgainButtonAnimation = false;
-  let hideMonkeyContainer = false;
-  let toHideMonkeyContainer = false;
-  /* ////////////////////////////////////// */
+  /* Variables for the generation animation/transitions */
+  let monkeyLoading = false;
+  let monkeyLoaded = false;
+  ///////////////////////////////////////////
   async function getMonkey(address) {
     try {
       return axios.get("https://natricon.com/api/v1/nano?address=" + address);
@@ -31,33 +28,15 @@
   }
   async function generateMonkey(address) {
     if (validateAddress(address)) {
-      hideFormAnimation = true;
-      setTimeout(() => {
-        hideForm = true;
-      }, 175);
-      showLoading = true;
-      setTimeout(() => {
-        showLoadingAnimation = true;
-      }, 175);
+      monkeyLoading = true;
+      console.log("Monkey loading");
       let monkeyResult = await getMonkey(address);
       if (monkeyResult.data) {
-        showMonkeyContainer = true;
-        showCurtain = true;
-        setTimeout(() => {
-          showCurtainAnimation = true;
-          showMonkeyContainerAnimation = true;
-        }, 25);
+        monkeyLoaded = true;
         setTimeout(() => {
           monkeySvg = monkeyResult.data;
-          showLoading = false;
+          monkeyLoading = false;
         }, 200);
-        showAgainButton = true;
-        setTimeout(() => {
-          showAgainButtonAnimation = true;
-        }, 400);
-        setTimeout(() => {
-          showCurtain = false;
-        }, 725);
       }
     } else {
       inputError = true;
@@ -71,47 +50,27 @@
     }, 200);
   }
   function resetGeneration() {
-    showLoading = false;
-    showLoadingAnimation = false;
-    showCurtain = false;
-    showCurtainAnimation = false;
-    toHideMonkeyContainer = true;
-    showAgainButtonAnimation = false;
-    setTimeout(() => {
-      showAgainButton = false;
-    }, 250);
-    hideForm = false;
+    monkeyLoading = false;
+    monkeyLoaded = false;
     inputError = false;
-    setTimeout(() => {
-      hideMonkeyContainer = true;
-    }, 25);
-    setTimeout(() => {
-      showMonkeyContainer = false;
-      showMonkeyContainerAnimation = false;
-      hideMonkeyContainer = false;
-      toHideMonkeyContainer = false;
-      monkeySvg = null;
-    }, 300);
-    setTimeout(() => {
-      hideFormAnimation = false;
-    }, 175);
+    monkeySvg = null;
   }
 </script>
 
 <!-- HTML -->
 {#if showGenerator}
   <div
-    in:fadeAndScaleIn
-    out:fadeAndScaleOut
+    in:generatorIn
+    out:generatorOut
     class="max-w-md max-h-md generator flex flex-col bg-white absolute top-0
     mt-8 overflow-hidden"
   >
     <!-- MonKey loading animation -->
-    {#if showLoading}
+    {#if monkeyLoading}
       <div
-        class="{showLoadingAnimation ? 'scale-100 opacity-100' : 'scale-0 opacity-50'}
-        transform duration-200 ease-out w-full h-full flex flex-row
-        justify-center items-center absolute left-0 top-0"
+        in:monkeyLoadingIn={{ delay: 150 }}
+        class="w-full h-full flex flex-row justify-center items-center absolute
+        left-0 top-0"
       >
         <div class="w-24 h-24 relative">
           <div class="w-full h-full absolute cube cube-grayLight" />
@@ -122,123 +81,112 @@
       </div>
     {/if}
     <!-- MonKey container -->
-    {#if showMonkeyContainer}
-      <div
-        class="{showMonkeyContainerAnimation ? (hideMonkeyContainer ? 'hide-monkey-container' : 'show-monkey-container') : 'hidden-monkey-container'}
-        {toHideMonkeyContainer ? 'to-hide-monkey-container' : 'monkey-container'}
-        w-full h-auto absolute left-0 top-0"
-      >
+    {#if monkeyLoaded}
+      <div class="w-full h-auto absolute left-0 top-0">
         {#if monkeySvg}
           {@html monkeySvg}
         {/if}
       </div>
     {/if}
-    {#if showAgainButton}
+    {#if monkeyLoaded}
       <!-- Again Button -->
-      <div class="w-full flex flex-row justify-center absolute bottom-0">
+      <div
+        in:againIn={{ delay: 400 }}
+        class="w-full flex flex-row justify-center absolute bottom-0"
+      >
         <button
-          disabled={!showAgainButtonAnimation}
           on:click={resetGeneration}
-          class="{showAgainButtonAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}
-          transform duration-350 ease-out bg-primary btn-primary text-white
-          text-lg font-bold rounded-lg border-2 border-black px-6 md:px-8 py-1
-          mx-4 md:mx-8 my-4 md:my-5"
+          class="bg-primary btn-primary text-white text-lg font-bold rounded-lg
+          border-2 border-black px-6 md:px-8 py-1 mx-4 md:mx-8 my-4 md:my-5"
         >
           Again!
         </button>
       </div>
     {/if}
     <!-- Input, Show Me & Randomize -->
-    {#if !hideForm}
+    {#if !monkeyLoading && !monkeyLoaded}
       <div class="w-full h-full flex flex-col relative">
-        <form
-          on:submit|preventDefault={generateMonkey(inputValue)}
-          class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
-          transform duration-200 ease-out flex flex-col items-center my-auto
-          relative mx-4 md:mx-6"
-        >
-          <div class="w-full">
-            <label
-              class="{inputError ? 'text-danger' : inputFocused || inputHovered ? 'text-brownLight' : 'text-gray'}
-              absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2 text-xl
-              font-bold transition-all duration-200 ease-out"
-              for="bananoAddress"
+        {#if !monkeyLoading && !monkeyLoaded}
+          <form
+            out:formOut
+            on:submit|preventDefault={generateMonkey(inputValue)}
+            class="flex flex-col items-center my-auto relative mx-4 md:mx-6"
+          >
+            <div class="w-full">
+              <label
+                class="{inputError ? 'text-danger' : inputFocused || inputHovered ? 'text-brownLight' : 'text-gray'}
+                absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2
+                text-xl font-bold transition-all duration-200 ease-out"
+                for="bananoAddress"
+              >
+                Address
+              </label>
+              <input
+                name="bananoAddress"
+                id="bananoAddress"
+                on:blur={() => {
+                  inputFocused = false;
+                }}
+                on:focus={() => {
+                  inputFocused = true;
+                }}
+                on:mouseenter={() => {
+                  inputHovered = true;
+                }}
+                on:mouseleave={() => {
+                  inputHovered = false;
+                }}
+                bind:value={inputValue}
+                on:input={() => {
+                  if (inputError) {
+                    inputError = false;
+                  }
+                }}
+                class="{inputError ? 'border-danger text-danger' : 'text-gray border-primary focus:border-brownLight hover:border-brownLight'}
+                w-full text-xl font-bold px-4 py-3 border-3 rounded-xl
+                transition-all duration-200 ease-out"
+                type="text"
+                autocomplete="off"
+                placeholder="Enter your address"
+              />
+            </div>
+            <button
+              on:click={generateMonkey(inputValue)}
+              class="w-full bg-primary btn-primary text-white text-xl font-bold
+              rounded-xl border-black border-2 px-6 py-2 mx-auto mt-3"
             >
-              Address
-            </label>
-            <input
-              disabled={hideFormAnimation}
-              name="bananoAddress"
-              id="bananoAddress"
-              on:blur={() => {
-                inputFocused = false;
-              }}
-              on:focus={() => {
-                inputFocused = true;
-              }}
-              on:mouseenter={() => {
-                inputHovered = true;
-              }}
-              on:mouseleave={() => {
-                inputHovered = false;
-              }}
-              bind:value={inputValue}
-              on:input={() => {
-                if (inputError) {
-                  inputError = false;
-                }
-              }}
-              class="{inputError ? 'border-danger text-danger' : 'text-gray border-primary focus:border-brownLight hover:border-brownLight'}
-              w-full text-xl font-bold px-4 py-3 border-3 rounded-xl
-              transition-all duration-200 ease-out"
-              type="text"
-              autocomplete="off"
-              placeholder="Enter your address"
-            />
+              Show Me
+            </button>
+          </form>
+        {/if}
+        {#if !monkeyLoading && !monkeyLoaded}
+          <div
+            out:formOut
+            class="w-full flex flex-row justify-center absolute bottom-0"
+          >
+            <button
+              on:click={generateRandomMonkey}
+              class="bg-primary btn-primary text-white text-lg font-bold
+              rounded-lg border-black border-2 px-6 md:px-8 py-1 my-4 md:my-5"
+            >
+              Randomize
+            </button>
           </div>
-          <button
-            disabled={hideFormAnimation}
-            on:click={generateMonkey(inputValue)}
-            class="w-full bg-primary btn-primary text-white text-xl font-bold
-            rounded-xl border-black border-2 px-6 py-2 mx-auto mt-3"
-          >
-            Show Me
-          </button>
-        </form>
-        <div
-          class="{hideFormAnimation ? 'scale-0 opacity-25' : 'scale-100 opacity-100'}
-          transform duration-200 ease-out w-full flex flex-row justify-center
-          absolute bottom-0"
-        >
-          <button
-            disabled={hideFormAnimation}
-            on:click={generateRandomMonkey}
-            class="bg-primary btn-primary text-white text-lg font-bold
-            rounded-lg border-black border-2 px-6 md:px-8 py-1 my-4 md:my-5"
-          >
-            Randomize
-          </button>
-        </div>
+        {/if}
       </div>
     {/if}
     <!-- Curtain -->
-    {#if showCurtain}
+    {#if monkeyLoaded}
       <div
-        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
-        curtain-4 w-full h-full bg-grayLight absolute"
-      />
-      <div
-        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
-        curtain-3 w-full h-full bg-brownLight absolute"
-      />
-      <div
-        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
-        curtain-2 w-full h-full bg-brown absolute"
-      />
-      <div
-        class="{showCurtainAnimation ? 'show-curtain' : 'hide-curtain'}
-        curtain-1 w-full h-full bg-gray absolute"
-      />
+        in:curtainIn
+        class="w-full h-full absolute transform -translate-y-full
+        overflow-hidden"
+      >
+        <div class="w-full h-full bg-grayLight absolute" />
+        <div class="w-full h-full bg-brownLight absolute mt-1/8" />
+        <div class="w-full h-full bg-brown absolute mt-1/20" />
+        <div class="w-full h-full bg-gray absolute mt-1/35" />
+      </div>
     {/if}
   </div>
 {/if}
@@ -344,41 +292,6 @@
     animation-name: animation-1;
     animation-duration: 1.2s;
     animation-iteration-count: infinite;
-  }
-  .hide-curtain {
-    transform: translateY(-100%);
-  }
-  .show-curtain {
-    transform: translateY(100%);
-  }
-  .curtain-1 {
-    transition: all 0.49s;
-  }
-  .curtain-2 {
-    transition: all 0.55s;
-  }
-  .curtain-3 {
-    transition: all 0.62s;
-  }
-  .curtain-4 {
-    transition: all 0.7s;
-  }
-  .monkey-container {
-    transition: all 0.55s ease-out;
-  }
-  .hidden-monkey-container {
-    transform: translateY(-20%);
-  }
-  .show-monkey-container {
-    transform: translateY(0%);
-  }
-  .to-hide-monkey-container {
-    transition: all 0.4s ease-out;
-    opacity: 1;
-  }
-  .hide-monkey-container {
-    transform: translateY(-100%);
-    opacity: 0;
   }
   @keyframes animation-1 {
     0% {

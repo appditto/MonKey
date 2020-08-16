@@ -1,6 +1,6 @@
-import { cubicOut } from 'svelte/easing';
+import { cubicOut, cubicIn } from 'svelte/easing';
 
-export const fadeAndScaleIn = (node, { delay = 0, duration = 500 }) => {
+export const generatorIn = (node, { delay = 0, duration = 500 }) => {
   return {
     delay,
     duration,
@@ -11,12 +11,56 @@ export const fadeAndScaleIn = (node, { delay = 0, duration = 500 }) => {
   };
 };
 
-export const fadeAndScaleOut = (node, { delay = 0, duration = 200 }) => {
+export const generatorOut = (node, { delay = 0, duration = 200 }) => {
   return {
     delay,
     duration,
     css: (t) => {
       return `opacity: ${t}; transform: scale(${t * 1 / 2 + 0.5})`
+    },
+  };
+};
+
+export const monkeyLoadingIn = (node, { delay = 0, duration = 200 }) => {
+  return {
+    delay,
+    duration,
+    css: (t) => {
+      const eased = cubicOut(t);
+      return `transform: scale(${eased});opacity: ${(eased * 1 / 2) + 0.5}`
+    },
+  };
+};
+
+export const formOut = (node, { delay = 0, duration = 200 }) => {
+  return {
+    delay,
+    duration,
+    css: (t) => {
+      const eased = cubicIn(t);
+      return `transform: scale(${eased})`
+    },
+  };
+};
+
+export const curtainIn = (node, { delay = 0, duration = 800 }) => {
+  return {
+    delay,
+    duration,
+    css: (t) => {
+      const eased = cubicOut(t);
+      return `transform: translateY(${2 * (eased * 100) - 100}%)`
+    },
+  };
+};
+
+export const againIn = (node, { delay = 0, duration = 400 }) => {
+  return {
+    delay,
+    duration,
+    css: (t) => {
+      const eased = cubicOut(t);
+      return `transform: translateY(${6 - 6 * eased}rem);`
     },
   };
 };
