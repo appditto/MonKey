@@ -30,7 +30,7 @@ spec:
       - path: /
         backend:
           serviceName: nuxt-monkey-service
-          servicePort: 3000
+          servicePort: 5000
       - path: /api
         backend:
           serviceName: go-monkey-service

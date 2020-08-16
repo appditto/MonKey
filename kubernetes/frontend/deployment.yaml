@@ -19,7 +19,7 @@ spec:
       - name: nuxt-monkey
         image: replaceme
         ports:
-          - containerPort: 3000
+          - containerPort: 5000
         imagePullPolicy: "Always"
       imagePullSecrets:
           - name: regcred
