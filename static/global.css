@@ -101,15 +101,6 @@ body{
     background-color: rgba(0,0,0,0.15);
 }
 
-input:focus, a:focus{
+input:focus, a:focus, button:focus{
     outline: none!important;
 }
-
-.menu-button {
-    transition: all 0.2s ease-out;
-    border-radius: 0.2rem;
-}
-
-.menu-button:focus {
-    background-color: rgba(0,0,0,0.15);
-} 

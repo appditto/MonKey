@@ -108,3 +108,25 @@ export const monkeyContainerOut = (node, { delay = 0, duration = 600 }) => {
     },
   };
 };
+
+export const modalIn = (node, { delay = 0, duration = 200 }) => {
+  return {
+    delay,
+    duration,
+    css: (t) => {
+      const eased = cubicOut(t);
+      return `transform: scale(${t / 2 + 0.5}); opacity: ${eased}`
+    },
+  };
+};
+
+export const modalOut = (node, { delay = 0, duration = 200 }) => {
+  return {
+    delay,
+    duration,
+    css: (t) => {
+      const eased = cubicIn(t);
+      return `transform: scale(${t / 2 + 0.5}); opacity: ${eased}`
+    },
+  };
+};

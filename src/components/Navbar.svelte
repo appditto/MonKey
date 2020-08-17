@@ -3,6 +3,10 @@
   export let segment;
   let navItems = [
     {
+      text: "Home",
+      href: "/",
+    },
+    {
       text: "API",
       href: "/documentation",
     },
@@ -18,10 +22,10 @@
 </script>
 
 <!-- HTML -->
-<div class="w-full px-2 py-2 md:px-4 md:py-3 absolute z-20">
+<div class="w-full px-3 py-3 md:px-5 md:py-4 absolute z-20">
   <div class="y-container flex flex-row justify-between items-center">
     <!-- Logo -->
-    <a class="w-32 md:w-36 p-1 logo-button m-2" href="/">
+    <a class="w-32 md:w-36 p-1 logo-button mr-2" href="/">
       <img
         class="w-full h-auto"
         alt="Logo"
