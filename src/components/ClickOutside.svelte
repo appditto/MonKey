@@ -1,16 +1,13 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  let child;
+  let subject;
   const dispatch = createEventDispatcher();
   function isChildClicked(target) {
-    var clicked = target;
-    while (clicked) {
-      if (clicked === child) {
-        return true;
-      }
-      clicked = clicked.parentNode;
+    if (target === subject || subject.contains(target)) {
+      return true;
+    } else {
+      return false;
     }
-    return false;
   }
   function onClickOutside(event) {
     if (!isChildClicked(event.target)) {
@@ -20,6 +17,6 @@
 </script>
 
 <svelte:body on:click={onClickOutside} />
-<div bind:this={child}>
+<div bind:this={subject}>
   <slot />
 </div>
