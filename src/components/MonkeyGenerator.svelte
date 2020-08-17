@@ -107,7 +107,7 @@
         <button
           on:click={resetGeneration}
           class="bg-primary btn-primary text-white text-lg font-bold rounded-lg
-          border-2 border-black px-6 md:px-8 py-1 mx-4 md:mx-8 my-4 md:my-5"
+          border-2 border-black px-10 md:px-12 py-1 mx-4 md:mx-8 my-4 md:my-5"
         >
           Again!
         </button>
@@ -179,9 +179,9 @@
             <button
               on:click={generateRandomMonkey}
               class="bg-primary btn-primary text-white text-lg font-bold
-              rounded-lg border-black border-2 px-6 md:px-8 py-1 my-4 md:my-5"
+              rounded-lg border-black border-2 px-8 md:px-10 py-1 my-4 md:my-5"
             >
-              Randomize
+              Randomize!
             </button>
           </div>
         {/if}
