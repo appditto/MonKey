@@ -16,6 +16,7 @@ module.exports = {
         offWhite: "#E4E5E9"
       },
       spacing: {
+        "11": '2.75rem',
         '36': '9rem'
       },
       borderRadius: {

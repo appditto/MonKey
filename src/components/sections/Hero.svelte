@@ -11,7 +11,7 @@
   <div class="w-full flex flex-col items-center px-4">
     <h1
       class="font-bold text-4xl md:text-5xl mx-5 text-center leading-tight
-      tracking-tight mt-5 md:mt-16"
+      tracking-tight mt-6 md:mt-16"
     >
       Welcome to the jungle.
     </h1>

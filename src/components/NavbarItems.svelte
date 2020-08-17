@@ -31,7 +31,7 @@
       class="menu-button"
     >
       <img
-        class="{isModalOpen ? '-rotate-90' : ''} w-10 h-10 transition-all
+        class="{isModalOpen ? '-rotate-90' : ''} w-11 h-11 transition-all
         transform ease-out duration-300"
         src="images/icons/icon-menu.svg"
         alt="Menu Icon"

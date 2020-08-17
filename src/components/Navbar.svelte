@@ -25,7 +25,7 @@
 <div class="w-full px-3 py-3 md:px-5 md:py-4 absolute z-20">
   <div class="y-container flex flex-row justify-between items-center">
     <!-- Logo -->
-    <a class="w-32 md:w-36 p-1 logo-button mr-2" href="/">
+    <a class="w-36 h-auto p-1 logo-button mr-2" href="/">
       <img
         class="w-full h-auto"
         alt="Logo"
