@@ -59,7 +59,11 @@
                 menu-item w-full px-6 py-2 my-1 text-xl text-center
                 transition-all duration-300 ease-out rounded-md"
               >
-                {item.text}
+                <span
+                  class="inline-block line {item.href == '/' + segment || (item.href == '/' && !segment) ? 'line-brownLight-active' : ''}"
+                >
+                  {item.text}
+                </span>
               </a>
             {/if}
           {/each}
@@ -88,12 +92,12 @@
 <style>
   .line::after {
     content: "";
-    height: 4px;
+    height: 3px;
     width: calc(100% + 8px);
     margin-left: -4px;
-    margin-top: 0.2rem;
+    margin-top: 0.15rem;
     display: block;
-    border-radius: 2px;
+    border-radius: 1.5px;
     transition: transform 0.2s ease-out;
     transform-origin: center;
     transform: scaleX(0);
@@ -115,5 +119,9 @@
   }
   .menu-button:focus {
     background-color: rgba(0, 0, 0, 0.15);
+  }
+  .line-brownLight-active::after {
+    background-color: #cd9e6c;
+    transform: scaleX(1);
   }
 </style>

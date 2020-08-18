@@ -1,4 +1,4 @@
-import { cubicOut, cubicIn } from 'svelte/easing';
+import { cubicOut, cubicIn, } from 'svelte/easing';
 
 export const generatorIn = (node, { delay = 0, duration = 500 }) => {
   return {
@@ -109,7 +109,7 @@ export const monkeyContainerOut = (node, { delay = 0, duration = 600 }) => {
   };
 };
 
-export const modalIn = (node, { delay = 0, duration = 200 }) => {
+export const modalIn = (node, { delay = 0, duration = 250 }) => {
   return {
     delay,
     duration,
@@ -120,7 +120,7 @@ export const modalIn = (node, { delay = 0, duration = 200 }) => {
   };
 };
 
-export const modalOut = (node, { delay = 0, duration = 200 }) => {
+export const modalOut = (node, { delay = 0, duration = 250 }) => {
   return {
     delay,
     duration,
