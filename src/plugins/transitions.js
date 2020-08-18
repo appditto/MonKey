@@ -109,7 +109,7 @@ export const monkeyContainerOut = (node, { delay = 0, duration = 600 }) => {
   };
 };
 
-export const modalIn = (node, { delay = 0, duration = 250 }) => {
+export const modalIn = (node, { delay = 0, duration = 200 }) => {
   return {
     delay,
     duration,
@@ -120,7 +120,7 @@ export const modalIn = (node, { delay = 0, duration = 250 }) => {
   };
 };
 
-export const modalOut = (node, { delay = 0, duration = 250 }) => {
+export const modalOut = (node, { delay = 0, duration = 200 }) => {
   return {
     delay,
     duration,
