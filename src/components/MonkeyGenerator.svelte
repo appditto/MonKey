@@ -25,7 +25,7 @@
   ///////////////////////////////////////////
   async function getMonkey(address) {
     try {
-      return axios.get("https://testmonkey.appditto.com/api/v1/" + address);
+      return axios.get(`https://testmonkey.appditto.com/api/v1/${address}`);
     } catch (e) {
       console.error(e);
     }
@@ -57,6 +57,23 @@
     monkeyLoaded = false;
     inputError = false;
     monkeySvg = null;
+  }
+  function focusInput() {
+    inputFocused = true;
+  }
+  function blurInput() {
+    inputFocused = false;
+  }
+  function hoverInput() {
+    inputHovered = true;
+  }
+  function unhoverInput() {
+    inputHovered = false;
+  }
+  function clearInputError() {
+    if (inputError) {
+      inputError = false;
+    }
   }
 </script>
 
@@ -132,24 +149,12 @@
               <input
                 name="bananoAddress"
                 id="bananoAddress"
-                on:blur={() => {
-                  inputFocused = false;
-                }}
-                on:focus={() => {
-                  inputFocused = true;
-                }}
-                on:mouseenter={() => {
-                  inputHovered = true;
-                }}
-                on:mouseleave={() => {
-                  inputHovered = false;
-                }}
+                on:blur={blurInput}
+                on:focus={focusInput}
+                on:mouseenter={hoverInput}
+                on:mouseleave={unhoverInput}
                 bind:value={inputValue}
-                on:input={() => {
-                  if (inputError) {
-                    inputError = false;
-                  }
-                }}
+                on:input={clearInputError}
                 class="{inputError ? 'border-danger text-danger' : 'text-gray border-primary focus:border-brownLight hover:border-brownLight'}
                 w-full text-xl font-bold px-4 py-3 border-3 rounded-xl
                 transition-all duration-200 ease-out"

@@ -11,7 +11,7 @@ import (
 	svg "github.com/ajstarks/svgo"
 	"github.com/golang/glog"
 	minify "github.com/tdewolff/minify/v2"
-	minifysvg "github.com/tdewolff/minify/v2/svg"
+	minifyxml "github.com/tdewolff/minify/v2/xml"
 )
 
 const DefaultSize = 4000           // Default SVG width/height attribute
@@ -37,10 +37,7 @@ func PureSVG(svgData []byte) ([]byte, error) {
 	// End document
 	canvas.End()
 
-	// Minify
-	var ret []byte
-	ret, _ = getMinifier().minifier.Bytes("image/svg+xml", b.Bytes())
-	return ret, nil
+	return b.Bytes(), nil
 }
 
 func CombineSVG(accessories Accessories) ([]byte, error) {
@@ -387,7 +384,7 @@ var onceM sync.Once
 func getMinifier() *minifySingleton {
 	onceM.Do(func() {
 		minifier := minify.New()
-		minifier.AddFunc("image/svg+xml", minifysvg.Minify)
+		minifier.AddFunc("image/svg+xml", minifyxml.Minify)
 		mSingleton = &minifySingleton{
 			minifier: minifier,
 		}
