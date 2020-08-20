@@ -56,7 +56,7 @@ func main() {
 	}
 
 	// V1 API
-	router.GET("/api/v1/banano", monkeyController.GetBanano)
+	router.GET("/api/v1", monkeyController.GetBanano)
 	router.GET("/api/v1/random", monkeyController.GetRandomSvg)
 
 	// Run on 8080
