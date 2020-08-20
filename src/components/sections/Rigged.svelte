@@ -81,7 +81,7 @@
           alt="Arthas Illustration Placeholder"
         />
       </LazyImage>
-      <!-- Heisenber -->
+      <!-- Heisenberg -->
       <LazyImage classes="w-1/2 lg:w-1/4 h-auto -mx-8 md:-mx-16">
         <img
           slot="content"

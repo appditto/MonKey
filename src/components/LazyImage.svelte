@@ -1,5 +1,5 @@
 <script>
-  export let offset = 100;
+  export let offset = 0;
   export let onload = null;
   export let classes;
   let loaded = false;
@@ -87,6 +87,7 @@
       duration-300 ease-out absolute top-0 left-0"
     >
       <slot name="content" />
+      <slot />
     </div>
   </div>
 </div>

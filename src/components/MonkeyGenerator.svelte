@@ -25,9 +25,7 @@
   ///////////////////////////////////////////
   async function getMonkey(address) {
     try {
-      return axios.get(
-        "https://testmonkey.appditto.com/api/v1/banano?address=" + address
-      );
+      return axios.get("https://testmonkey.appditto.com/api/v1/" + address);
     } catch (e) {
       console.error(e);
     }
@@ -35,7 +33,6 @@
   async function generateMonkey(address) {
     if (validateAddress(address)) {
       monkeyLoading = true;
-      console.log("Monkey loading");
       let monkeyResult = await getMonkey(address);
       if (monkeyResult.data) {
         monkeyLoaded = true;

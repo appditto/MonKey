@@ -1,3 +1,17 @@
+<script>
+  import SocialIcon from "./SocialIcon.svelte";
+  let icons = [
+    { name: "Discord", href: "https://chat.banano.cc" },
+    { name: "Reddit", href: "https://www.reddit.com/r/banano" },
+    { name: "Twitter", href: "https://twitter.com/bananocoin" },
+    { name: "Medium", href: "https://medium.com/banano" },
+    { name: "Telegram", href: "https://t.me/banano_official" },
+    { name: "Facebook", href: "https://www.facebook.com/bananocurrency" },
+    { name: "Instagram", href: "https://www.instagram.com/bananocurrency" },
+    { name: "GitHub", href: "https://github.com/bananocoin" },
+  ];
+</script>
+
 <!-- HTML -->
 <div class="w-full pt-4 pb-12 relative z-0">
   <!-- Desktop Background Illustration -->
@@ -19,102 +33,9 @@
   >
     <!-- Social Icons -->
     <div class="flex flex-row flex-wrap justify-center items-center">
-      <a
-        class="m-2 icon-button p-1"
-        rel="noopener"
-        target="_blank"
-        href="https://chat.banano.cc"
-      >
-        <img
-          class="w-12 h-12"
-          src="images/icons/icon-discord.svg"
-          alt="Discord Icon"
-        />
-      </a>
-      <a
-        class="m-2 icon-button p-1"
-        rel="noopener"
-        target="_blank"
-        href="https://www.reddit.com/r/banano"
-      >
-        <img
-          class="w-12 h-12"
-          src="images/icons/icon-reddit.svg"
-          alt="Reddit Icon"
-        />
-      </a>
-      <a
-        class="m-2 icon-button p-1"
-        rel="noopener"
-        target="_blank"
-        href="https://twitter.com/bananocoin"
-      >
-        <img
-          class="w-12 h-12"
-          src="images/icons/icon-twitter.svg"
-          alt="Twitter Icon"
-        />
-      </a>
-      <a
-        class="m-2 icon-button p-1"
-        rel="noopener"
-        target="_blank"
-        href="https://medium.com/banano"
-      >
-        <img
-          class="w-12 h-12"
-          src="images/icons/icon-medium.svg"
-          alt="Medium Icon"
-        />
-      </a>
-      <a
-        class="m-2 icon-button p-1"
-        rel="noopener"
-        target="_blank"
-        href="https://t.me/banano_official"
-      >
-        <img
-          class="w-12 h-12"
-          src="images/icons/icon-telegram.svg"
-          alt="Telegram Icon"
-        />
-      </a>
-      <a
-        class="m-2 icon-button p-1"
-        rel="noopener"
-        target="_blank"
-        href="https://www.facebook.com/bananocurrency/"
-      >
-        <img
-          class="w-12 h-12"
-          src="images/icons/icon-facebook.svg"
-          alt="Facebook Icon"
-        />
-      </a>
-      <a
-        class="m-2 icon-button p-1"
-        rel="noopener"
-        target="_blank"
-        href="https://www.instagram.com/bananocurrency/"
-      >
-        <img
-          class="w-12 h-12"
-          src="images/icons/icon-instagram.svg"
-          alt="Instagram Icon"
-        />
-      </a>
-      <a
-        class="m-2 icon-button p-1"
-        rel="noopener"
-        target="_blank"
-        href="https://github.com/bananocoin"
-      >
-        <img
-          class="w-12 h-12"
-          src="images/icons/icon-github.svg"
-          alt="GitHub Icon"
-        />
-      </a>
+      {#each icons as icon}
+        <SocialIcon {icon} />
+      {/each}
     </div>
     <!-- Footer Text -->
     <div class="flex flex-row mt-6">
@@ -146,7 +67,6 @@
           />
         </div>
       </a>
-
     </div>
   </div>
 </div>
