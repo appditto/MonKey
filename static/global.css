@@ -71,21 +71,6 @@ body{
     transform: translateY(-0.2rem);
 }
 
-.icon-button {
-    transform: scale(1);
-    transition: all 0.2s ease-out;
-    border-radius: 0.35rem;
-}
-
-.icon-button:hover {
-    transform: scale(1.15);
-    transition: all 0.2s ease-out;
-}
-
-.icon-button:focus {
-    background-color: rgba(0,0,0,0.15);
-}
-
 .logo-button {
     transform: scale(1);
     transition: all 0.2s ease-out;
