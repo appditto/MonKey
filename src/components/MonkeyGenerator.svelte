@@ -13,16 +13,17 @@
     againIn,
     againOut,
   } from "../plugins/transitions.js";
+
   export let showGenerator = false;
+
   let inputValue;
   let inputError = false;
   let inputFocused = false;
   let inputHovered = false;
   let monkeySvg;
-  /* Variables for the generation animation/transitions */
   let monkeyLoading = false;
   let monkeyLoaded = false;
-  ///////////////////////////////////////////
+
   async function getMonkey(address) {
     try {
       return axios.get(`https://testmonkey.appditto.com/api/v1/${address}`);
