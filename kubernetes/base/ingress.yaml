@@ -21,10 +21,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - testmonkey.appditto.com
-    secretName: testmonkey-appditto-com-server-secret
+    - monkey.banano.cc
+    secretName: monkey-banano-cc-server-secret
   rules:
-  - host: testmonkey.appditto.com
+  - host: monkey.banano.cc
     http:
       paths:
       - path: /
