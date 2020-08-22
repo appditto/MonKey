@@ -86,7 +86,8 @@
   <div class="flex flex-wrap justify-center items-center mt-1">
     <!-- Monkey Svg Text -->
     <pre
-      class="text-sm bg-black text-orangeLight rounded-lg px-3 py-2 md:px-4 md:py-3 m-2 max-w-lg h-64 break-all overflow-y-scroll"
+      class="text-sm bg-black text-orangeLight rounded-lg px-3 py-2 md:px-4
+      md:py-3 m-2 max-w-lg h-64 break-all overflow-y-scroll"
     >
       {#if callSvgText}{callSvgText}{/if}
     </pre>
@@ -133,9 +134,9 @@
   }
   @font-face {
     font-family: "Overpass Mono";
-    src: url("static/fonts/overpass-mono-bold.woff2") format("woff2"),
-      url("static/fonts/overpass-mono-bold.woff") format("woff"),
-      url("static/fonts/overpass-mono-bold.ttf") format("truetype");
+    src: url("../../fonts/overpass-mono-bold.woff2") format("woff2"),
+      url("../../fonts/overpass-mono-bold.woff") format("woff"),
+      url("../../fonts/overpass-mono-bold.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
     font-display: fallback;
@@ -143,9 +144,9 @@
 
   @font-face {
     font-family: "Overpass Mono";
-    src: url("fonts/overpass-mono-regular.woff2") format("woff2"),
-      url("fonts/overpass-mono-regular.woff") format("woff"),
-      url("fonts/overpass-mono-regular.ttf") format("truetype");
+    src: url("../../fonts/overpass-mono-regular.woff2") format("woff2"),
+      url("../../fonts/overpass-mono-regular.woff") format("woff"),
+      url("../../fonts/overpass-mono-regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
     font-display: fallback;
