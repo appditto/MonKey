@@ -26,7 +26,7 @@
 
   async function getMonkey(address) {
     try {
-      return axios.get(`https://testmonkey.appditto.com/api/v1/${address}`);
+      return axios.get(`https://monkey.banano.cc/api/v1/${address}`);
     } catch (e) {
       console.error(e);
     }

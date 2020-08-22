@@ -6,8 +6,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-        real_ip_header CF-Connecting-IP;
     nginx.ingress.kubernetes.io/add-base-url: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/websocket-services: "go-monkey-service"
@@ -21,10 +19,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - testmonkey.appditto.com
-    secretName: testmonkey-appditto-com-server-secret
+    - monkey.banano.cc
+    secretName: monkey-banano-cc-server-secret
   rules:
-  - host: testmonkey.appditto.com
+  - host: monkey.banano.cc
     http:
       paths:
       - path: /
