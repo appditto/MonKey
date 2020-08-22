@@ -2,6 +2,14 @@
   import LazyImage from "../components/LazyImage.svelte";
   import axios from "axios";
   import { onMount } from "svelte";
+  import Meta from "../components/Meta.svelte";
+  const metadata = {
+    title: "MonKey | Documentation",
+    description: "MonKey API Documentation",
+    image: "https://monkey.banano.cc/preview.png",
+    imageAlt: "Address visualisation for Banano",
+    url: "https://monkey.banano.cc/documentation",
+  };
   let callSvgText;
   async function getSvgText() {
     try {
