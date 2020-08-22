@@ -24,6 +24,7 @@
   });
 </script>
 
+<!-- HTML -->
 <Meta {metadata} />
 <div class="y-container flex flex-col items-center px-4 pt-20">
   <h1
