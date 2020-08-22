@@ -67,10 +67,7 @@
     Example Call
   </h3>
   <div class="flex flex-wrap justify-center items-center mt-5">
-    <code
-      class="flex-shrink text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold
-      m-2"
-    >
+    <code class="text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold m-2">
       get
     </code>
     <div
@@ -93,7 +90,13 @@
       alt="Down Arrow"
     />
   </div>
-  <div class="flex flex-wrap justify-center items-center mt-1">
+  <h3
+    class="font-medium text-3xl md:text-4xl mx-4 text-center leading-tight
+    tracking-tight"
+  >
+    Example Result
+  </h3>
+  <div class="flex flex-wrap justify-center items-center mt-5">
     <!-- Monkey Svg Text -->
     <pre
       class="text-sm bg-black text-orangeLight rounded-lg px-3 py-2 md:px-4
@@ -107,17 +110,190 @@
         slot="content"
         class="h-full w-auto"
         src="images/illustrations-foreground/call-heisenberg-svg.svg"
-        alt="Call Result Heisenberg Illustration"
+        alt="SVG Call Result Heisenberg Illustration"
       />
       <img
         slot="placeholder"
         class="h-full w-auto"
         src="images/illustrations-foreground/call-heisenberg-svg-placeholder.svg"
-        alt="Call Result Heisenberg Illustration Placeholder"
+        alt="SVG Call Result Heisenberg Illustration Placeholder"
       />
     </LazyImage>
   </div>
   <div class="divider mt-20 mb-16" />
+  <!-- Optional Parameter -->
+  <h2
+    class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight
+    tracking-tight mb-5 md:mb-8"
+  >
+    Optional Paramaters
+  </h2>
+  <!-- Format -->
+  <div
+    class="w-full flex flex-row flex-wrap justify-center items-center my-6
+    md:my-4"
+  >
+    <div class="w-full md:w-1/3 flex md:justify-end text-2xl font-bold">
+      <code class="bg-cyanLight px-3 py-1 rounded-lg">format</code>
+      <span class="mx-2 md:mx-3">:</span>
+    </div>
+    <div class="w-full md:w-2/3 md:max-w-lg text-lg leading-loose">
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mr-1">
+        svg
+      </code>
+      (default),
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">
+        png
+      </code>
+      ,
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">
+        webp
+      </code>
+      .
+    </div>
+  </div>
+  <!-- Size -->
+  <div
+    class="w-full flex flex-row flex-wrap justify-center items-center my-6
+    md:my-4"
+  >
+    <div class="w-full md:w-1/3 flex md:justify-end text-2xl font-bold">
+      <code class="bg-cyanLight px-3 py-1 rounded-lg">size</code>
+      <span class="mx-2 md:mx-3">:</span>
+    </div>
+    <div class="w-full md:w-2/3 md:max-w-lg text-lg leading-loose">
+      In pixels. Ignored when format is
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">
+        svg
+      </code>
+      . Default is
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">
+        128
+      </code>
+      when format is
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">
+        webp
+      </code>
+      or
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">
+        png
+      </code>
+      . Minimum is
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">
+        100
+      </code>
+      , maximum is
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">
+        1000
+      </code>
+      .
+    </div>
+  </div>
+  <!-- Background -->
+  <div
+    class="w-full flex flex-row flex-wrap justify-center items-center my-6
+    md:my-4"
+  >
+    <div class="w-full md:w-1/3 flex md:justify-end text-2xl font-bold">
+      <code class="bg-cyanLight px-3 py-1 rounded-lg">background</code>
+      <span class="mx-2 md:mx-3">:</span>
+    </div>
+    <div class="w-full md:w-2/3 md:max-w-lg text-lg leading-loose">
+      Adds a solid color background based on the MonKey.
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">
+        false
+      </code>
+      (default) or
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">
+        true
+      </code>
+      .
+    </div>
+  </div>
+  <!-- Arrow Down -->
+  <div class="w-12 h-12 my-8">
+    <img
+      class="w-full h-auto"
+      src="images/icons/icon-arrow-down.svg"
+      alt="Down Arrow"
+    />
+  </div>
+  <!-- Example Call -->
+  <h3
+    class="font-medium text-3xl md:text-4xl mx-4 text-center leading-tight
+    tracking-tight"
+  >
+    Example Call
+  </h3>
+  <div class="flex flex-wrap justify-center items-center mt-5">
+    <code class="text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold m-2">
+      get
+    </code>
+    <div
+      class="w-full max-w-2xl flex items-center m-2 text-orangeLight bg-black
+      px-4 py-2 rounded-lg mono"
+    >
+      <span class="text-0 break-all">
+        <span class="text-xl">https://monkey.banano.cc/api/v1/</span>
+        <span class="text-xl text-purpleLight">
+          ban_1ka1ium4pfue3uxtntqsrib8mumxgazsjf58gidh1xeo5te3whsq8z476goo
+        </span>
+        <span class="text-xl text-white">?</span>
+        <span class="text-xl text-cyanLight">format=png</span>
+        <span class="text-xl text-white">&</span>
+        <span class="text-xl text-cyanLight">size=512</span>
+        <span class="text-xl text-white">&</span>
+        <span class="text-xl text-cyanLight">background=true</span>
+      </span>
+    </div>
+  </div>
+  <!-- Arrow Down -->
+  <div class="w-12 h-12 my-8">
+    <img
+      class="w-full h-auto"
+      src="images/icons/icon-arrow-down.svg"
+      alt="Down Arrow"
+    />
+  </div>
+  <h3
+    class="font-medium text-3xl md:text-4xl mx-4 text-center leading-tight
+    tracking-tight"
+  >
+    Example Result
+  </h3>
+  <div class="w-full flex justify-center mt-6">
+    <!-- Heisenber PNG Image Desktop -->
+    <LazyImage classes="hidden md:block w-full md:w-5/6 lg:w-2/3 h-auto">
+      <img
+        slot="content"
+        class="w-full h-auto"
+        src="images/illustrations-foreground/call-heisenberg-png.svg"
+        alt="PNG Call Result Heisenberg Illustration"
+      />
+      <img
+        slot="placeholder"
+        class="w-full h-auto"
+        src="images/illustrations-foreground/call-heisenberg-png-placeholder.svg"
+        alt="PNG Call Result Heisenberg Illustration Placeholder"
+      />
+    </LazyImage>
+    <!-- Heisenber PNG Image Mobile -->
+    <LazyImage classes="md:hidden w-full h-auto max-w-sm mx-4">
+      <img
+        slot="content"
+        class="w-full h-auto"
+        src="images/illustrations-foreground/call-heisenberg-png-mobile.svg"
+        alt="PNG Call Result Heisenberg Illustration"
+      />
+      <img
+        slot="placeholder"
+        class="w-full h-auto"
+        src="images/illustrations-foreground/call-heisenberg-png-mobile-placeholder.svg"
+        alt="PNG Call Result Heisenberg Illustration Placeholder"
+      />
+    </LazyImage>
+  </div>
+  <div class="divider my-20 md:my-24" />
 </div>
 
 <style>
@@ -140,7 +316,7 @@
     background-color: rgba(0, 0, 0, 0.07);
     height: 2px;
     border-radius: 1px;
-    width: 100%;
+    width: 95%;
   }
   @font-face {
     font-family: "Overpass Mono";

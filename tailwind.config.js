@@ -16,7 +16,8 @@ module.exports = {
         offWhite: "#E4E5E9",
         orangeLight: "#FFCD98",
         purpleLight: "#C6B1FF",
-        cyanLight: "A6FFEA"
+        cyanLight: "#A6FFEA",
+        white: "#ffffff"
       },
       spacing: {
         "11": '2.75rem',
