@@ -13,7 +13,10 @@ module.exports = {
         brownLight: "#cd9e6c",
         gray: "#404040",
         grayLight: "#9b9ba1",
-        offWhite: "#E4E5E9"
+        offWhite: "#E4E5E9",
+        orangeLight: "#FFCD98",
+        purpleLight: "#C6B1FF",
+        cyanLight: "A6FFEA"
       },
       spacing: {
         "11": '2.75rem',
