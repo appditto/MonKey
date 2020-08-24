@@ -5,9 +5,9 @@
   const dev = process.env.NODE_ENV === "development";
   const metadata = {
     title: `MonKey | ${status}`,
-    description: `MonKey ${status} error.`,
-    image: "https://monkey.banano.cc/previews/preview.png",
-    imageAlt: "Address visualisation for Banano",
+    description: `Oops! ${status} error.`,
+    image: "https://monkey.banano.cc/previews/preview-error.png",
+    imageAlt: "Oops! An error occured.",
   };
 </script>
 
