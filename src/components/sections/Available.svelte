@@ -4,8 +4,8 @@
 
 <!-- HTML -->
 <div class="w-full py-12 md:my-20">
-  <div class="w-full flex flex-col justify-center relative bg-banano">
-    <div class="y-container relative">
+  <div class="w-full flex flex-col justify-center relative">
+    <div class="y-container relative bg-banano">
       <h2 class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight tracking-tight mt-5">
         Available on Lots of
         <br class="hidden md:block" />
@@ -38,8 +38,8 @@
           href="https://kalium.banano.cc"
           rel="noopener"
           target="_blank"
-          class="w-full md:w-64 bg-primary btn-primary text-white text-xl font-bold rounded-xl border-2
-          border-black px-6 py-2 mx-2 mt-6 text-center"
+          class="w-full max-w-xs md:w-64 bg-primary btn-primary text-white text-xl font-bold
+          rounded-xl border-2 border-black px-6 py-2 mx-2 mt-6 text-center"
         >
           Download Kalium
         </a>
@@ -47,8 +47,8 @@
           href="https://creeper.banano.cc"
           rel="noopener"
           target="_blank"
-          class="w-full md:w-64 bg-primary btn-primary text-white text-xl font-bold rounded-xl border-2
-          border-black px-6 py-2 mx-2 mt-6 text-center"
+          class="w-full max-w-xs md:w-64 bg-primary btn-primary text-white text-xl font-bold
+          rounded-xl border-2 border-black px-6 py-2 mx-2 mt-6 text-center"
         >
           Visit Creeper
         </a>
@@ -106,8 +106,18 @@
 <style>
   .bg-banano {
     background-image: url("/images/illustrations-background/bg-banano.svg");
-    background-size: 100% auto;
+    background-size: 175% auto;
     background-position: 100% 0%;
     background-repeat: no-repeat;
+  }
+  @media screen and (min-width: 768px) {
+    .bg-banano {
+      background-size: 125% auto;
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    .bg-banano {
+      background-size: 100% auto;
+    }
   }
 </style>
