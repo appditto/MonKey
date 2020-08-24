@@ -5,9 +5,9 @@
   import Meta from "../components/Meta.svelte";
   const metadata = {
     title: "MonKey | Documentation",
-    description: "MonKey API Documentation",
+    description: "MonKey API documentation.",
     image: "https://monkey.banano.cc/previews/documentation-preview.png",
-    imageAlt: "Address visualisation for Banano",
+    imageAlt: "MonKey API documentation.",
     url: "https://monkey.banano.cc/documentation",
   };
   let callSvgText;

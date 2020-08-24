@@ -9,7 +9,7 @@
   import Meta from "../components/Meta.svelte";
   const metadata = {
     title: "MonKey",
-    description: "Address visualisation for Banano",
+    description: "Address visualisation for Banano.",
     image: "https://monkey.banano.cc/previews/preview.png",
     imageAlt: "Address visualisation for Banano",
     url: "https://monkey.banano.cc",
