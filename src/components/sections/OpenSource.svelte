@@ -17,23 +17,20 @@
     alt="Heart Illustration"
   />
   <div class="y-container flex flex-col items-center relative">
-    <h2
-      class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight
-      tracking-tight mt-5"
-    >
+    <h2 class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight tracking-tight mt-5">
       Open Source
     </h2>
     <p class="w-full max-w-2xl text-center md:mx-12 mt-3 text-2xl px-4">
-      MonKey is open source. So, you can take our code and build something else
-      with it or you can contribute to it.
+      MonKey is open source. So, you can take our code and build something else with it or you can contribute
+      to it.
     </p>
     <div class="flex flex-row justify-center mt-6">
       <a
         href="https://github.com/appditto/monkey"
         rel="noopener"
         target="_blank"
-        class="bg-primary btn-primary text-white text-xl font-bold rounded-xl
-        border-2 border-black px-8 md:px-12 py-2"
+        class="bg-primary btn-primary text-white text-xl font-bold rounded-xl border-2 border-black px-8
+        md:px-12 py-2"
       >
         Visit the Repo
       </a>

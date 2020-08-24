@@ -5,9 +5,7 @@
 </script>
 
 <div class="w-full md:w-1/2 lg:w-1/4 max-w-sm px-2 py-3">
-  <div
-    class="bg-white flex flex-col justify-center items-center card pt-6 pb-8"
-  >
+  <div class="bg-white flex flex-col justify-center items-center card pt-6 pb-8">
     <p>{header}</p>
     <p class="font-bold text-4xl">{stat}</p>
     <p>{footer}</p>

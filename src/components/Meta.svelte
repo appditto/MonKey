@@ -36,8 +36,5 @@
     <meta property="og:type" content={'website' || metadata.type} />
   {/if}
 
-  <meta
-    property="twitter:card"
-    content={metadata.twitterCard || 'summary_large_image'}
-  />
+  <meta property="twitter:card" content={metadata.twitterCard || 'summary_large_image'} />
 </svelte:head>

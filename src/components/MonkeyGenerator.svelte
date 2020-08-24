@@ -89,8 +89,7 @@
     {#if monkeyLoading}
       <div
         in:monkeyLoadingIn={{ delay: 150 }}
-        class="w-full h-full flex flex-row justify-center items-center absolute
-        left-0 top-0"
+        class="w-full h-full flex flex-row justify-center items-center absolute left-0 top-0"
       >
         <div class="w-20 h-20 md:w-24 md:h-24 relative">
           <div class="w-full h-full absolute cube cube-grayLight" />
@@ -121,8 +120,8 @@
       >
         <button
           on:click={resetGeneration}
-          class="bg-primary btn-primary text-white text-lg font-bold rounded-lg
-          border-2 border-black px-10 md:px-12 py-1 mx-4 md:mx-8 my-4 md:my-5"
+          class="bg-primary btn-primary text-white text-lg font-bold rounded-lg border-2 border-black px-10
+          md:px-12 py-1 mx-4 md:mx-8 my-4 md:my-5"
         >
           Again!
         </button>
@@ -141,8 +140,8 @@
             <div class="w-full">
               <label
                 class="{inputError ? 'text-danger' : inputFocused || inputHovered ? 'text-brownLight' : 'text-gray'}
-                absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2
-                text-xl font-bold transition-all duration-200 ease-out"
+                absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2 text-xl font-bold transition-all
+                duration-200 ease-out"
                 for="bananoAddress"
               >
                 Address
@@ -157,8 +156,7 @@
                 bind:value={inputValue}
                 on:input={clearInputError}
                 class="{inputError ? 'border-danger text-danger' : 'text-gray border-primary focus:border-brownLight hover:border-brownLight'}
-                w-full text-xl font-bold px-4 py-3 border-3 rounded-xl
-                transition-all duration-200 ease-out"
+                w-full text-xl font-bold px-4 py-3 border-3 rounded-xl transition-all duration-200 ease-out"
                 type="text"
                 autocomplete="off"
                 placeholder="Enter your address"
@@ -166,8 +164,8 @@
             </div>
             <button
               on:click={generateMonkey(inputValue)}
-              class="w-full bg-primary btn-primary text-white text-xl font-bold
-              rounded-xl border-black border-2 px-6 py-2 mx-auto mt-3"
+              class="w-full bg-primary btn-primary text-white text-xl font-bold rounded-xl border-black
+              border-2 px-6 py-2 mx-auto mt-3"
             >
               Show Me
             </button>
@@ -181,8 +179,8 @@
           >
             <button
               on:click={generateRandomMonkey}
-              class="bg-primary btn-primary text-white text-lg font-bold
-              rounded-lg border-black border-2 px-8 md:px-10 py-1 my-4 md:my-5"
+              class="bg-primary btn-primary text-white text-lg font-bold rounded-lg border-black border-2 px-8
+              md:px-10 py-1 my-4 md:my-5"
             >
               Randomize!
             </button>
@@ -192,11 +190,7 @@
     {/if}
     <!-- Curtain -->
     {#if monkeyLoaded}
-      <div
-        in:curtainIn
-        class="w-full h-full absolute transform -translate-y-full
-        overflow-hidden"
-      >
+      <div in:curtainIn class="w-full h-full absolute transform -translate-y-full overflow-hidden">
         <div class="w-full h-full bg-grayLight absolute" />
         <div class="w-full h-full bg-brownLight absolute mt-1/8" />
         <div class="w-full h-full bg-brown absolute mt-1/20" />
@@ -215,9 +209,8 @@
     border-radius: 1rem;
     border-width: 0rem;
     border-color: #404040;
-    box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
-      0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
-      -0.5rem 0.5rem 0rem 0rem #9b9ba1;
+    box-shadow: -0.5rem -0.5rem 0rem 0rem #404040, 0.5rem -0.5rem 0rem 0rem #7f6145,
+      0.5rem 0.5rem 0rem 0rem #ffcd98, -0.5rem 0.5rem 0rem 0rem #9b9ba1;
     transform-origin: top center;
     overflow: hidden;
     animation: generatorAnimation;
@@ -244,29 +237,24 @@
   }
   @keyframes generatorAnimation {
     0% {
-      box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
-        0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
-        -0.5rem 0.5rem 0rem 0rem #9b9ba1;
+      box-shadow: -0.5rem -0.5rem 0rem 0rem #404040, 0.5rem -0.5rem 0rem 0rem #7f6145,
+        0.5rem 0.5rem 0rem 0rem #ffcd98, -0.5rem 0.5rem 0rem 0rem #9b9ba1;
     }
     25% {
-      box-shadow: 0.5rem -0.5rem 0rem 0rem #404040,
-        0.5rem 0.5rem 0rem 0rem #7f6145, -0.5rem 0.5rem 0rem 0rem #ffcd98,
-        -0.5rem -0.5rem 0rem 0rem #9b9ba1;
+      box-shadow: 0.5rem -0.5rem 0rem 0rem #404040, 0.5rem 0.5rem 0rem 0rem #7f6145,
+        -0.5rem 0.5rem 0rem 0rem #ffcd98, -0.5rem -0.5rem 0rem 0rem #9b9ba1;
     }
     50% {
-      box-shadow: 0.5rem 0.5rem 0rem 0rem #404040,
-        -0.5rem 0.5rem 0rem 0rem #7f6145, -0.5rem -0.5rem 0rem 0rem #ffcd98,
-        0.5rem -0.5rem 0rem 0rem #9b9ba1;
+      box-shadow: 0.5rem 0.5rem 0rem 0rem #404040, -0.5rem 0.5rem 0rem 0rem #7f6145,
+        -0.5rem -0.5rem 0rem 0rem #ffcd98, 0.5rem -0.5rem 0rem 0rem #9b9ba1;
     }
     75% {
-      box-shadow: -0.5rem 0.5rem 0rem 0rem #404040,
-        -0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem -0.5rem 0rem 0rem #ffcd98,
-        0.5rem 0.5rem 0rem 0rem #9b9ba1;
+      box-shadow: -0.5rem 0.5rem 0rem 0rem #404040, -0.5rem -0.5rem 0rem 0rem #7f6145,
+        0.5rem -0.5rem 0rem 0rem #ffcd98, 0.5rem 0.5rem 0rem 0rem #9b9ba1;
     }
     100% {
-      box-shadow: -0.5rem -0.5rem 0rem 0rem #404040,
-        0.5rem -0.5rem 0rem 0rem #7f6145, 0.5rem 0.5rem 0rem 0rem #ffcd98,
-        -0.5rem 0.5rem 0rem 0rem #9b9ba1;
+      box-shadow: -0.5rem -0.5rem 0rem 0rem #404040, 0.5rem -0.5rem 0rem 0rem #7f6145,
+        0.5rem 0.5rem 0rem 0rem #ffcd98, -0.5rem 0.5rem 0rem 0rem #9b9ba1;
     }
   }
   .cube {

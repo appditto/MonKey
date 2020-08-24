@@ -4,11 +4,7 @@
 
 <!-- HTML -->
 <a class="m-2 icon-button p-1" rel="noopener" target="_blank" href={icon.href}>
-  <img
-    class="w-12 h-12"
-    src="images/icons/icon-{icon.name.toLowerCase()}.svg"
-    alt="{icon.name} Icon"
-  />
+  <img class="w-12 h-12" src="images/icons/icon-{icon.name.toLowerCase()}.svg" alt="{icon.name} Icon" />
 </a>
 
 <style>

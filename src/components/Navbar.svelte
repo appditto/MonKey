@@ -26,11 +26,7 @@
   <div class="y-container flex flex-row justify-between items-center">
     <!-- Logo -->
     <a class="w-36 h-auto p-1 logo-button mr-2" href="/">
-      <img
-        class="w-full h-auto"
-        alt="Logo"
-        src="images/logos/logo-monkey-horizontal.svg"
-      />
+      <img class="w-full h-auto" alt="Logo" src="images/logos/logo-monkey-horizontal.svg" />
     </a>
     <!-- Menu Options -->
     <NavbarItems {navItems} {segment} />

@@ -3,9 +3,7 @@
 </script>
 
 <!-- HTML -->
-<div
-  class="w-full flex flex-col justify-center py-16 md:pb-32 relative md:my-20"
->
+<div class="w-full flex flex-col justify-center py-16 md:pb-32 relative md:my-20">
   <!-- Background Illusration Right -->
   <img
     class="hidden md:block w-1/4 lg:w-1/5 h-auto absolute right-0 top-0"
@@ -19,10 +17,7 @@
     alt="Hats Illustration"
   />
   <div class="y-container relative">
-    <h2
-      class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight
-      tracking-tight mt-5"
-    >
+    <h2 class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight tracking-tight mt-5">
       How Does It Work?
     </h2>
     <p class="text-center mx-4 md:mx-12 mt-3 text-2xl">

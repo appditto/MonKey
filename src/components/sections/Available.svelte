@@ -6,10 +6,7 @@
 <div class="w-full py-12 md:my-20">
   <div class="w-full flex flex-col justify-center relative bg-banano">
     <div class="y-container relative">
-      <h2
-        class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight
-        tracking-tight mt-5"
-      >
+      <h2 class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight tracking-tight mt-5">
         Available on Lots of
         <br class="hidden md:block" />
         Banano Services
@@ -41,9 +38,8 @@
           href="https://kalium.banano.cc"
           rel="noopener"
           target="_blank"
-          class="w-full md:w-64 bg-primary btn-primary text-white text-xl
-          font-bold rounded-xl border-2 border-black px-6 py-2 mx-2 mt-6
-          text-center"
+          class="w-full md:w-64 bg-primary btn-primary text-white text-xl font-bold rounded-xl border-2
+          border-black px-6 py-2 mx-2 mt-6 text-center"
         >
           Download Kalium
         </a>
@@ -51,17 +47,13 @@
           href="https://creeper.banano.cc"
           rel="noopener"
           target="_blank"
-          class="w-full md:w-64 bg-primary btn-primary text-white text-xl
-          font-bold rounded-xl border-2 border-black px-6 py-2 mx-2 mt-6
-          text-center"
+          class="w-full md:w-64 bg-primary btn-primary text-white text-xl font-bold rounded-xl border-2
+          border-black px-6 py-2 mx-2 mt-6 text-center"
         >
           Visit Creeper
         </a>
       </div>
-      <div
-        class="w-full flex flex-row flex-wrap justify-center items-center mt-6
-        md:px-6"
-      >
+      <div class="w-full flex flex-row flex-wrap justify-center items-center mt-6 md:px-6">
         <LazyImage classes="w-full max-w-xs px-4 my-6">
           <img
             slot="content"

@@ -27,10 +27,7 @@
     alt="Footer Background Illustration"
   />
   <!-- Foreground -->
-  <div
-    class="y-container flex flex-col justify-between items-center relative px-2
-    md:px-4"
-  >
+  <div class="y-container flex flex-col justify-between items-center relative px-2 md:px-4">
     <!-- Social Icons -->
     <div class="flex flex-row flex-wrap justify-center items-center">
       {#each icons as icon}
@@ -53,18 +50,9 @@
     <!-- Appditto Logo -->
     <div class="w-full flex flex-row justify-center items-center mt-5">
       <p>made by</p>
-      <a
-        class="logo-button p-1 ml-1"
-        rel="noopener"
-        target="_blank"
-        href="https://appditto.com"
-      >
+      <a class="logo-button p-1 ml-1" rel="noopener" target="_blank" href="https://appditto.com">
         <div class="w-28 h-auto">
-          <img
-            class="w-full h-auto"
-            src="images/logos/logo-appditto-horizontal.svg"
-            alt="Appditto"
-          />
+          <img class="w-full h-auto" src="images/logos/logo-appditto-horizontal.svg" alt="Appditto" />
         </div>
       </a>
     </div>

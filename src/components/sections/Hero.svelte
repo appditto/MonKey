@@ -10,19 +10,16 @@
 <div class="w-full flex flex-col items-center pt-20 bg-hero">
   <div class="w-full flex flex-col items-center px-4">
     <h1
-      class="font-bold text-5xl md:text-6xl mx-5 md:mx-12 text-center
-      leading-tight tracking-tight mt-5 md:mt-16 lg:mt-20"
+      class="font-bold text-5xl md:text-6xl mx-5 md:mx-12 text-center leading-tight tracking-tight mt-5
+      md:mt-16 lg:mt-20"
     >
       Welcome to the jungle.
     </h1>
-    <p class="text-center mx-5 mt-4 text-2xl">
-      In here, Banano addresses are MonKeys.
-    </p>
+    <p class="text-center mx-5 mt-4 text-2xl">In here, Banano addresses are MonKeys.</p>
     <button
       on:click={toggleGenerator}
       class="{showGenerator ? 'bg-danger btn-danger border-dangerDark' : 'bg-primary btn-primary border-black'}
-      w-64 max-w-full text-white text-xl font-bold rounded-xl border-2 px-3
-      md:px-6 py-2 mx-auto mt-6"
+      w-64 max-w-full text-white text-xl font-bold rounded-xl border-2 px-3 md:px-6 py-2 mx-auto mt-6"
     >
       {showGenerator ? 'Close' : 'Show My MonKey'}
     </button>

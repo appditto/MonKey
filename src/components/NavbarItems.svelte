@@ -25,28 +25,19 @@
 <!-- If Mobile -->
 <ClickOutside on:clickoutside={isModalOpen ? closeModal : null}>
   <div class="flex md:hidden flex-col justify-end items-center font-medium">
-    <button
-      on:keydown={isEscPressed}
-      on:click={toggleModal}
-      class="menu-button"
-    >
+    <button on:keydown={isEscPressed} on:click={toggleModal} class="menu-button">
       <img
-        class="{isModalOpen ? '-rotate-90' : ''} w-11 h-11 transition-all
-        transform ease-out duration-300"
+        class="{isModalOpen ? '-rotate-90' : ''} w-11 h-11 transition-all transform ease-out duration-300"
         src="images/icons/icon-menu.svg"
         alt="Menu Icon"
       />
     </button>
     <!-- Mobile Menu -->
     {#if isModalOpen}
-      <div
-        in:modalIn
-        out:modalOut
-        class="w-full relative z-40 origin-top-right"
-      >
+      <div in:modalIn out:modalOut class="w-full relative z-40 origin-top-right">
         <div
-          class="modal absolute w-56 flex flex-col justify-center bg-white
-          rounded-lg shadow-2xl border-offWhite border-2 top-0 right-0 mt-2 p-2"
+          class="modal absolute w-56 flex flex-col justify-center bg-white rounded-lg shadow-2xl
+          border-offWhite border-2 top-0 right-0 mt-2 p-2"
         >
           {#each navItems as item, i}
             {#if item.text && item.href}
@@ -56,8 +47,8 @@
                 href={item.href}
                 rel="noopener"
                 class="{item.href == '/' + segment || (item.href == '/' && !segment) ? 'text-brownLight' : ''}
-                menu-item w-full px-6 py-2 my-1 text-xl text-center
-                transition-all duration-300 ease-out rounded-md"
+                menu-item w-full px-6 py-2 my-1 text-xl text-center transition-all duration-300 ease-out
+                rounded-md"
               >
                 <span
                   class="inline-block line {item.href == '/' + segment || (item.href == '/' && !segment) ? 'line-brownLight-active' : ''}"
@@ -73,9 +64,7 @@
   </div>
 </ClickOutside>
 <!-- If >= Mobile -->
-<div
-  class="hidden md:flex flex-row flex-wrap justify-end items-center font-medium"
->
+<div class="hidden md:flex flex-row flex-wrap justify-end items-center font-medium">
   {#each navItems as item}
     {#if item.text && item.href}
       <a
