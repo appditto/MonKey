@@ -6,7 +6,7 @@
   const metadata = {
     title: "MonKey | Documentation",
     description: "MonKey API documentation.",
-    image: "https://monkey.banano.cc/previews/documentation-preview.png",
+    image: "https://monkey.banano.cc/previews/preview-documentation.png",
     imageAlt: "MonKey API documentation.",
     url: "https://monkey.banano.cc/documentation",
   };
