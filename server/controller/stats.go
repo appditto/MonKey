@@ -21,7 +21,7 @@ func TestAccessoryDistribution(seed string) {
 	var address string
 	var sha256 string
 	var accessories image.Accessories
-	iterations := 10000
+	iterations := 100000
 	ret := "glas,hats,misc,mout,shpt,shoe,tail\n"
 	glas := 0
 	hats := 0
