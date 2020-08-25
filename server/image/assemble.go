@@ -14,16 +14,20 @@ import (
 	minifyxml "github.com/tdewolff/minify/v2/xml"
 )
 
-const DefaultSize = 4000           // Default SVG width/height attribute
-const lodBwReplacement = "#9CA2AF" // Replace white with this color on bw assets
+// DefaultSize SVG width/height attribute
+const DefaultSize = 4000
 
+// Replace white with this color on bw assets
+const lodBwReplacement = "#9CA2AF"
+
+// SVG struct
 type SVG struct {
 	Width  int    `xml:"width,attr"`
 	Height int    `xml:"height,attr"`
 	Doc    string `xml:",innerxml"`
 }
 
-// Return SVG minified, minus width/height/etc attributes
+// PureSVG Return SVG minified, minus width/height/etc attributes
 func PureSVG(svgData []byte) ([]byte, error) {
 	var pureSVG SVG
 	if err := xml.Unmarshal(svgData, &pureSVG); err != nil {
@@ -40,6 +44,7 @@ func PureSVG(svgData []byte) ([]byte, error) {
 	return b.Bytes(), nil
 }
 
+// CombineSVG is a function that combines svgs
 func CombineSVG(accessories Accessories) ([]byte, error) {
 	var (
 		tail          SVG
