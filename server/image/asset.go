@@ -13,20 +13,31 @@ import (
 	"github.com/golang/glog"
 )
 
+// IllustrationType signifies the type of the illustration
 type IllustrationType string
 
 const (
-	BodyPart   IllustrationType = "body-parts"
-	Glasses    IllustrationType = "glasses"
-	Hats       IllustrationType = "hats"
-	Misc       IllustrationType = "misc"
-	Mouths     IllustrationType = "mouths"
+	// BodyPart signifies the illustration type of body parts
+	BodyPart IllustrationType = "body-parts"
+	// Glasses signifies the illustration type of glasses
+	Glasses IllustrationType = "glasses"
+	// Hats signifies the illustration type of hats
+	Hats IllustrationType = "hats"
+	// Misc signifies the illustration type of body misc
+	Misc IllustrationType = "misc"
+	// Mouths signifies the illustration type of mouths
+	Mouths IllustrationType = "mouths"
+	// ShirtPants signifies the illustration type of shirt and pants
 	ShirtPants IllustrationType = "shirt-pants"
-	Shoes      IllustrationType = "shoes"
-	Tails      IllustrationType = "tails"
-	Vanity     IllustrationType = "vanities"
+	// Shoes signifies the illustration type of body shoes
+	Shoes IllustrationType = "shoes"
+	// Tails signifies the illustration type of body tail accessories
+	Tails IllustrationType = "tails"
+	// Vanity signifies the illustration type of vanities, which are special monKeys for select addresses
+	Vanity IllustrationType = "vanities"
 )
 
+// Asset struct is a struct for assets that have various properties
 type Asset struct {
 	FileName          string           // File name of asset
 	IllustrationPath  string           // Full path of illustration on the file system
@@ -110,6 +121,7 @@ func getAccessoryAsset(fname string, path string) Asset {
 var singleton *assetManager
 var once sync.Once
 
+// GetAssets functions gets the various assets to assemble
 func GetAssets() *assetManager {
 	once.Do(func() {
 		var err error
