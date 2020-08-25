@@ -40,6 +40,7 @@ type Accessories struct {
 	AccessoryColors map[string]color.RGB
 }
 
+// GetAccessoriesForHash functions gets the proper accessories for the current hash
 func GetAccessoriesForHash(hash string) (Accessories, error) {
 	var accessories = Accessories{}
 	accessories.AccessoryColors = make(map[string]color.RGB)
@@ -264,7 +265,7 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	return accessories, nil
 }
 
-// Get weighted accessory given 2-digit hex string
+// GetAccessoryFromHexWithWeight gets weighted accessory given 2-digit hex string
 func GetAccessoryFromHexWithWeight(hexStr string, assets []Asset) *Asset {
 	maxPossible := 4095.0
 	target, _ := strconv.ParseInt(hexStr, 16, 64)

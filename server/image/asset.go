@@ -17,24 +17,15 @@ import (
 type IllustrationType string
 
 const (
-	// BodyPart signifies the illustration type of body parts
-	BodyPart IllustrationType = "body-parts"
-	// Glasses signifies the illustration type of glasses
-	Glasses IllustrationType = "glasses"
-	// Hats signifies the illustration type of hats
-	Hats IllustrationType = "hats"
-	// Misc signifies the illustration type of body misc
-	Misc IllustrationType = "misc"
-	// Mouths signifies the illustration type of mouths
-	Mouths IllustrationType = "mouths"
-	// ShirtPants signifies the illustration type of shirt and pants
+	BodyPart   IllustrationType = "body-parts"
+	Glasses    IllustrationType = "glasses"
+	Hats       IllustrationType = "hats"
+	Misc       IllustrationType = "misc"
+	Mouths     IllustrationType = "mouths"
 	ShirtPants IllustrationType = "shirt-pants"
-	// Shoes signifies the illustration type of body shoes
-	Shoes IllustrationType = "shoes"
-	// Tails signifies the illustration type of body tail accessories
-	Tails IllustrationType = "tails"
-	// Vanity signifies the illustration type of vanities, which are special monKeys for select addresses
-	Vanity IllustrationType = "vanities"
+	Shoes      IllustrationType = "shoes"
+	Tails      IllustrationType = "tails"
+	Vanity     IllustrationType = "vanities"
 )
 
 // Asset struct is a struct for assets that have various properties
