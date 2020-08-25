@@ -102,9 +102,7 @@
   </div>
   <div class="divider mt-20 mb-16" />
   <!-- Optional Parameter -->
-  <h2
-    class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight tracking-tight mb-5 md:mb-8"
-  >
+  <h2 class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight tracking-tight mb-4">
     Optional Paramaters
   </h2>
   <!-- Format -->
