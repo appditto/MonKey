@@ -54,49 +54,73 @@
         </a>
       </div>
       <div class="w-full flex flex-row flex-wrap justify-center items-center mt-6 md:px-6">
-        <LazyImage classes="w-full max-w-xs px-4 my-6">
-          <img
-            slot="content"
-            class="w-full h-auto"
-            src="images/illustrations-foreground/kalium.svg"
-            alt="Kalium Illustration"
-          />
-          <img
-            slot="placeholder"
-            class="w-full h-auto"
-            src="images/illustrations-foreground/kalium-placeholder.svg"
-            alt="Kalium Illustration Placeholder"
-          />
-        </LazyImage>
+        <a
+          target="_blank"
+          rel="noopener"
+          href="https://kalium.banano.cc"
+          class="transition-all ease-out duration-250 transform scale-100 hover:scale-105
+          focus:scale-105"
+        >
+          <LazyImage classes="w-full max-w-xs px-4 my-6">
+            <img
+              slot="content"
+              class="w-full h-auto"
+              src="images/illustrations-foreground/kalium.svg"
+              alt="Kalium Illustration"
+            />
+            <img
+              slot="placeholder"
+              class="w-full h-auto"
+              src="images/illustrations-foreground/kalium-placeholder.svg"
+              alt="Kalium Illustration Placeholder"
+            />
+          </LazyImage>
+        </a>
         <div class="flex flex-col items-center justify-center md:mt-4">
-          <LazyImage classes="w-full max-w-md mx-auto px-4 my-2">
-            <img
-              slot="content"
-              class="w-full h-auto"
-              src="images/illustrations-foreground/creeper-1.svg"
-              alt="Creeper 1 Illustration"
-            />
-            <img
-              slot="placeholder"
-              class="w-full h-auto "
-              src="images/illustrations-foreground/creeper-1-placeholder.svg"
-              alt="Creeper 1 Illustration Placeholder"
-            />
-          </LazyImage>
-          <LazyImage classes="w-full md:max-w-md mx-auto px-6 my-2">
-            <img
-              slot="content"
-              class="w-full h-auto"
-              src="images/illustrations-foreground/creeper-2.svg"
-              alt="Creeper 2 Illustration"
-            />
-            <img
-              slot="placeholder"
-              class="w-full h-auto "
-              src="images/illustrations-foreground/creeper-2-placeholder.svg"
-              alt="Creeper 2 Illustration Placeholder"
-            />
-          </LazyImage>
+          <a
+            target="_blank"
+            rel="noopener"
+            href="https://creeper.banano.cc/explorer/account/ban_1creepi89mp48wkyg5fktgap9j6165d8yz6g1fbe5pneinz3by9o54fuq63m/history"
+            class="transition-all ease-out duration-250 transform scale-100 hover:scale-105
+            focus:scale-105"
+          >
+            <LazyImage classes="w-full max-w-md mx-auto px-4 my-2">
+              <img
+                slot="content"
+                class="w-full h-auto"
+                src="images/illustrations-foreground/creeper-1.svg"
+                alt="Creeper 1 Illustration"
+              />
+              <img
+                slot="placeholder"
+                class="w-full h-auto "
+                src="images/illustrations-foreground/creeper-1-placeholder.svg"
+                alt="Creeper 1 Illustration Placeholder"
+              />
+            </LazyImage>
+          </a>
+          <a
+            target="_blank"
+            rel="noopener"
+            href="https://creeper.banano.cc/explorer/account/ban_1creepi89mp48wkyg5fktgap9j6165d8yz6g1fbe5pneinz3by9o54fuq63m/history"
+            class="transition-all ease-out duration-250 transform scale-100 hover:scale-105
+            focus:scale-105"
+          >
+            <LazyImage classes="w-full md:max-w-md mx-auto px-6 my-2">
+              <img
+                slot="content"
+                class="w-full h-auto"
+                src="images/illustrations-foreground/creeper-2.svg"
+                alt="Creeper 2 Illustration"
+              />
+              <img
+                slot="placeholder"
+                class="w-full h-auto "
+                src="images/illustrations-foreground/creeper-2-placeholder.svg"
+                alt="Creeper 2 Illustration Placeholder"
+              />
+            </LazyImage>
+          </a>
         </div>
       </div>
     </div>

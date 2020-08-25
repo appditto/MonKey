@@ -70,7 +70,7 @@
     </div>
   </div>
   <!-- Arrow Down -->
-  <div class="w-12 h-12 my-4">
+  <div class="w-12 h-12 my-8">
     <img class="w-full h-auto" src="images/icons/icon-arrow-down.svg" alt="Down Arrow" />
   </div>
   <h3 class="font-medium text-3xl md:text-4xl mx-4 text-center leading-tight tracking-tight">

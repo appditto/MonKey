@@ -9,9 +9,9 @@ import (
 )
 
 // Chance an accessory category has of occuring
-const glassesChance = 0.2
-const hatChance = 0.2
-const miscChance = 0.2
+const glassesChance = 0.25
+const hatChance = 0.3
+const miscChance = 0.3
 const shirtPantChance = 0.2
 const shoeChance = 0.2
 const tailChance = 0.2
