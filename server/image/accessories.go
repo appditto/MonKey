@@ -152,7 +152,8 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	// Pick accessories based on accessoryChance
 
 	// Get threshold for existing
-	maxHasAccessoryValue := int64(255 * glassesChance)
+	glassesChanceLocal := glassesChance
+	maxHasAccessoryValue := int64(255 * glassesChanceLocal)
 	hasGlasses := false
 	hasGlassesWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasGlassesWorkingVal <= maxHasAccessoryValue {
@@ -160,7 +161,8 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	}
 	workingIdx += 2
 
-	maxHasAccessoryValue = int64(255 * hatChance)
+	hatChanceLocal := hatChance
+	maxHasAccessoryValue = int64(255 * hatChanceLocal)
 	hasHats := false
 	hasHatsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasHatsWorkingVal <= maxHasAccessoryValue {
@@ -168,7 +170,8 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	}
 	workingIdx += 2
 
-	maxHasAccessoryValue = int64(255 * miscChance)
+	miscChanceLocal := miscChance
+	maxHasAccessoryValue = int64(255 * miscChanceLocal)
 	hasMisc := false
 	hasMiscWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasMiscWorkingVal <= maxHasAccessoryValue {
@@ -176,7 +179,8 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	}
 	workingIdx += 2
 
-	maxHasAccessoryValue = int64(255 * shirtPantChance)
+	shirtPantChanceLocal := shirtPantChance
+	maxHasAccessoryValue = int64(255 * shirtPantChanceLocal)
 	hasShirtPants := false
 	hasShirtPantsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasShirtPantsWorkingVal <= maxHasAccessoryValue {
@@ -184,7 +188,8 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	}
 	workingIdx += 2
 
-	maxHasAccessoryValue = int64(255 * shoeChance)
+	shoeChanceLocal := shoeChance
+	maxHasAccessoryValue = int64(255 * shoeChanceLocal)
 	hasShoes := false
 	hasShoesWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasShoesWorkingVal <= maxHasAccessoryValue {
@@ -192,7 +197,8 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	}
 	workingIdx += 2
 
-	maxHasAccessoryValue = int64(255 * tailChance)
+	tailChanceLocal := tailChance
+	maxHasAccessoryValue = int64(255 * tailChanceLocal)
 	hasTails := false
 	hasTailsWorkingVal, _ := strconv.ParseInt(hash[workingIdx:2+workingIdx], 16, 64)
 	if hasTailsWorkingVal <= maxHasAccessoryValue {
