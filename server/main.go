@@ -39,7 +39,13 @@ func main() {
 	// Server options
 	serverHost := flag.String("host", "127.0.0.1", "Host to listen on")
 	serverPort := flag.Int("port", 8080, "Port to listen on")
+	testAccessoryDistribution := flag.Bool("test-ad", false, "Test accessory distribution")
 	flag.Parse()
+
+	if *testAccessoryDistribution {
+		controller.TestAccessoryDistribution(seed)
+		return
+	}
 
 	// Setup imagemagick
 	// Setup magickwand

@@ -28,6 +28,9 @@ github.com/appditto/monKey v0.0.0-20200814133005-905ad124e48e h1:/RZe/gfsDMFpqoT
 github.com/appditto/monKey v0.0.0-20200814143207-8c7a02cb1d2e h1:keUT7/5+qOnOVbvdZfjKDVgkSU6R4FVl34JVi7j2evk=
 github.com/appditto/monKey v0.0.0-20200814151451-f592f8fd49ba h1:dbHpz8PTjiiVa/yPYR/xBlIhX+I5zZ4ZwhbfjF6u7l8=
 github.com/appditto/monKey v0.0.0-20200814153441-1e8909cfa3bf h1:jsPiDNwO/czWqVBONscwyHpKhkXPhTO0mrlwYVGtP5A=
+github.com/appditto/natricon v0.0.0-20200822111037-a500c55d2473 h1:Fc6n7ycvSKLqICtIu+X8uf9+llh+NfjEUJK+xqWqHh8=
+github.com/appditto/natricon/server v0.0.0-20200822111037-a500c55d2473 h1:SgIGcjhCOUxa/5owyshup/iDRl5g6hSEBwrkML9GuK0=
+github.com/appditto/natricon/server v0.0.0-20200822111037-a500c55d2473/go.mod h1:WDnvuy+VpwpiZ1UK4NJmpmQ+RfFenybk6OT6V4Jql7E=
 github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6/go.mod h1:grANhF5doyWs3UAsr3K4I6qtAmlQcZDesFNEHPZAzj8=
 github.com/bbedward/crypto/ed25519 v0.0.0-20200408155757-fff4d9311ac0 h1:wKgqfBecz5AxBm/IJhmKaT1Qjsjx6Wp4aAe6nvDePYA=
 github.com/bbedward/crypto/ed25519 v0.0.0-20200408155757-fff4d9311ac0/go.mod h1:5S+eGk8KWIs2q5VGnL8fTro5peOB8562AOX1+K50KWM=
