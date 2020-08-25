@@ -13,6 +13,7 @@ import (
 	"github.com/golang/glog"
 )
 
+// IllustrationType signifies the type of the illustration
 type IllustrationType string
 
 const (
@@ -27,6 +28,7 @@ const (
 	Vanity     IllustrationType = "vanities"
 )
 
+// Asset struct is a struct for assets that have various properties
 type Asset struct {
 	FileName          string           // File name of asset
 	IllustrationPath  string           // Full path of illustration on the file system
@@ -110,6 +112,7 @@ func getAccessoryAsset(fname string, path string) Asset {
 var singleton *assetManager
 var once sync.Once
 
+// GetAssets functions gets the various assets to assemble
 func GetAssets() *assetManager {
 	once.Do(func() {
 		var err error
