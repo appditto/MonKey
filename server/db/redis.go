@@ -283,12 +283,13 @@ func (r *redisManager) TodayStatsClient() map[string]int64 {
 }
 
 // MonthStats - Stats for month
-func (r *redisManager) MonthStats(month int, year int) map[string]int64 {
+func (r *redisManager) MonthStats(month int, year int) (map[string]int64, int) {
 	ret := map[string]int64{}
+	total := 0
 	key := fmt.Sprintf("%d_%d:stats_monthly", month, year)
 	allVals, err := r.hgetall(key)
 	if err != nil {
-		return ret
+		return ret, total
 	}
 	uniqueTracker := map[string]int64{}
 	for key, val := range allVals {
@@ -296,9 +297,9 @@ func (r *redisManager) MonthStats(month int, year int) map[string]int64 {
 		if key == "total" {
 			asInt, err := strconv.Atoi(val)
 			if err != nil {
-				ret["total"] = 1
+				total = 0
 			} else {
-				ret["total"] = int64(asInt)
+				total = asInt
 			}
 		} else {
 			// Get unique
@@ -312,16 +313,17 @@ func (r *redisManager) MonthStats(month int, year int) map[string]int64 {
 			}
 		}
 	}
-	return ret
+	return ret, total
 }
 
 // MonthStatsClient - Stats for month by client
-func (r *redisManager) MonthStatsClient(month int, year int) map[string]int64 {
+func (r *redisManager) MonthStatsClient(month int, year int) (map[string]int64, int) {
+	total := 0
 	ret := map[string]int64{}
 	key := fmt.Sprintf("%d_%d:stats_monthly_client", month, year)
 	allVals, err := r.hgetall(key)
 	if err != nil {
-		return ret
+		return ret, total
 	}
 	uniqueTracker := map[string]int64{}
 	for key, val := range allVals {
@@ -329,9 +331,9 @@ func (r *redisManager) MonthStatsClient(month int, year int) map[string]int64 {
 		if key == "total" {
 			asInt, err := strconv.Atoi(val)
 			if err != nil {
-				ret["total"] = 1
+				total = 1
 			} else {
-				ret["total"] = int64(asInt)
+				total = asInt
 			}
 		} else {
 			// Get unique
@@ -345,7 +347,7 @@ func (r *redisManager) MonthStatsClient(month int, year int) map[string]int64 {
 			}
 		}
 	}
-	return ret
+	return ret, total
 }
 
 // DailyStats - Daily Stats
