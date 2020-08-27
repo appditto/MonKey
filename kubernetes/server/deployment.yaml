@@ -35,7 +35,11 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: monkey
-                key: seed            
+                key: seed
+          - name: REDIS_HOST
+            value: redis-0.redis
+          - name: REDIS_DB
+            value: "14"                         
       imagePullSecrets:
           - name: regcred
  
