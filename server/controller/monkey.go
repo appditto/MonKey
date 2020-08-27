@@ -16,7 +16,8 @@ const minConvertedSize = 100  // Minimum size of PNG/WEBP converted output
 const maxConvertedSize = 1000 // Maximum size of PNG/WEBP converted outpu
 
 type MonkeyController struct {
-	Seed string
+	Seed         string
+	StatsChannel *chan *gin.Context
 }
 
 // Return monKey for given address
@@ -28,6 +29,9 @@ func (mc MonkeyController) GetBanano(c *gin.Context) {
 		c.String(http.StatusBadRequest, "Invalid address")
 		return
 	}
+
+	// Parse stats
+	*mc.StatsChannel <- c
 
 	// See if this is a vanity
 	vanity := image.GetAssets().GetVanityAsset(address)

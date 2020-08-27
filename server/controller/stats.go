@@ -2,12 +2,81 @@ package controller
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"path"
+	"strconv"
+	"time"
 
+	"github.com/appditto/monKey/server/db"
 	"github.com/appditto/monKey/server/image"
 	"github.com/appditto/monKey/server/utils"
+	"github.com/gin-gonic/gin"
 )
+
+// Go routine for processing stats messages
+func StatsWorker(statsChan <-chan *gin.Context) {
+	// Process stats
+	for c := range statsChan {
+		// Update unique addresses
+		db.GetDB().UpdateStatsAddress(c.Param("address"))
+		// Update daily/monthly
+		db.GetDB().UpdateStatsDate(c.Param("address"))
+		db.GetDB().UpdateStatsDateClient(c.ClientIP())
+		// Update clients
+		db.GetDB().UpdateStatsClient(c.ClientIP())
+		// Update by service
+		if c.Query("svc") != "" {
+			db.GetDB().UpdateStatsByService(c.Query("svc"), c.Param("address"))
+		}
+	}
+}
+
+// Stats API
+func Stats(c *gin.Context) {
+	// Get # of unique natricons served
+	numServed := db.GetDB().StatsUniqueAddresses()
+	numServedTotal := db.GetDB().StatsTotal()
+	svcStats := db.GetDB().ServiceStats()
+	//daily := db.GetDB().DailyStats()
+	today := db.GetDB().TodayStats()
+	todayClient := db.GetDB().TodayStatsClient()
+	clientsServed := db.GetDB().ClientsServed()
+
+	// Return response
+	c.JSON(200, gin.H{
+		"unique_served":         numServed,
+		"total_served":          numServedTotal,
+		"unique_clients_served": clientsServed,
+		"services":              svcStats,
+		"today":                 today,
+		"today_clients":         todayClient,
+		//"daily":          daily,
+	})
+}
+
+// Monthly stats API
+func StatsMonthly(c *gin.Context) {
+	monthStr := c.Query("month")
+	yearStr := c.Query("year")
+	monthInt, err := strconv.Atoi(monthStr)
+	if err != nil || monthInt < 1 || monthInt > 12 {
+		c.String(http.StatusBadRequest, "%s", "month parameter required, must be between 1 and 12")
+		return
+	}
+	yearInt, err := strconv.Atoi(yearStr)
+	if err != nil {
+		yearInt = time.Now().Year()
+	}
+	statsMonthlyAddress := db.GetDB().MonthStats(monthInt, yearInt)
+	statsMonthlyClients := db.GetDB().MonthStatsClient(monthInt, yearInt)
+
+	// Return response
+	c.JSON(200, gin.H{
+		"address": statsMonthlyAddress,
+		"clients": statsMonthlyClients,
+	})
+}
 
 // For generating CSV documents for algorithm analysis
 func TestAccessoryDistribution(seed string) {

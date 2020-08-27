@@ -70,6 +70,9 @@ func main() {
 		return
 	}
 
+	// Setup channel for stats processing job
+	statsChan := make(chan *gin.Context, 100)
+
 	// Setup imagemagick
 	// Setup magickwand
 	imagick.Initialize()
@@ -81,12 +84,19 @@ func main() {
 
 	// Setup natricon controller
 	monkeyController := controller.MonkeyController{
-		Seed: seed,
+		Seed:         seed,
+		StatsChannel: &statsChan,
 	}
 
 	// V1 API
 	router.GET("/api/v1/:address", monkeyController.GetBanano)
+	// Stats
+	router.GET("/api/stats", controller.Stats)
+	router.GET("/api/stats/monthly", controller.StatsMonthly)
 	router.GET("/api/random", monkeyController.GetRandomSvg)
+
+	// Start stats worker
+	go controller.StatsWorker(statsChan)
 
 	// Run on 8080
 	router.Run(fmt.Sprintf("%s:%d", *serverHost, *serverPort))

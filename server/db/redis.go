@@ -115,13 +115,9 @@ func (r *redisManager) UpdateStatsAddress(address string) {
 	}
 	key = fmt.Sprintf("%s:stats_total", keyPrefix)
 	val, err := r.get(key)
-	if err != nil {
-		glog.Errorf("Error updating StatesAddresses %s", err)
-		return
-	}
 	valInt, err := strconv.Atoi(val)
 	if err != nil {
-		glog.Errorf("Error updating StatesAddresses %s", err)
+		valInt = 0
 	}
 	valInt += 1
 	r.set(key, strconv.Itoa(valInt))
@@ -129,7 +125,9 @@ func (r *redisManager) UpdateStatsAddress(address string) {
 
 // UpdateStatsDate - Update stats for current date
 func (r *redisManager) UpdateStatsDate(address string) {
-	dateStr := time.Now().Format("02-01-2006")
+	now := time.Now()
+	dateStr := now.Format("02-01-2006")
+	monthKey := fmt.Sprintf("%d_%d:stats_monthly", now.Month(), now.Year())
 	key := fmt.Sprintf("%s:stats_daily", keyPrefix)
 	existing, err := r.hget(key, fmt.Sprintf("%s_%s", dateStr, address))
 	count := 1
@@ -143,14 +141,68 @@ func (r *redisManager) UpdateStatsDate(address string) {
 	if err != nil {
 		glog.Errorf("Error updating StatsDate %s", err)
 	}
+	err = r.hset(monthKey, address, string(count))
+	if err != nil {
+		glog.Errorf("Error updating StatsMonthly")
+	}
 	// Total
 	total, err := r.hget(key, fmt.Sprintf("%s_%s", dateStr, "total"))
+	totalMonth, monthErr := r.hget(monthKey, "total")
 	totalInt, err := strconv.Atoi(total)
+	totalMonthInt, monthErr := strconv.Atoi(totalMonth)
 	if err != nil {
 		r.hset(key, fmt.Sprintf("%s_%s", dateStr, "total"), "1")
 	} else {
 		totalInt += 1
 		r.hset(key, fmt.Sprintf("%s_%s", dateStr, "total"), strconv.Itoa(totalInt))
+	}
+	if monthErr != nil {
+		r.hset(monthKey, "total", "1")
+	} else {
+		totalMonthInt += 1
+		r.hset(monthKey, "total", strconv.Itoa(totalMonthInt))
+	}
+}
+
+// UpdateStatsDateClient - Update stats for current date using IP as reference
+func (r *redisManager) UpdateStatsDateClient(ip string) {
+	hashed := utils.Sha256(ip)
+	now := time.Now()
+	dateStr := now.Format("02-01-2006")
+	monthKey := fmt.Sprintf("%d_%d:stats_monthly_client", now.Month(), now.Year())
+	key := fmt.Sprintf("%s:stats_daily_client", keyPrefix)
+	existing, err := r.hget(key, fmt.Sprintf("%s_%s", dateStr, hashed))
+	count := 1
+	if err == nil {
+		existingInt, err := strconv.Atoi(existing)
+		if err != nil {
+			count = existingInt + 1
+		}
+	}
+	err = r.hset(key, fmt.Sprintf("%s_%s", dateStr, hashed), string(count))
+	if err != nil {
+		glog.Errorf("Error updating StatsDate %s", err)
+	}
+	err = r.hset(monthKey, hashed, string(count))
+	if err != nil {
+		glog.Errorf("Error updating StatsMonthly")
+	}
+	// Total
+	total, err := r.hget(key, fmt.Sprintf("%s_%s", dateStr, "total"))
+	totalMonth, monthErr := r.hget(monthKey, "total")
+	totalInt, err := strconv.Atoi(total)
+	totalMonthInt, monthErr := strconv.Atoi(totalMonth)
+	if err != nil {
+		r.hset(key, fmt.Sprintf("%s_%s", dateStr, "total"), "1")
+	} else {
+		totalInt += 1
+		r.hset(key, fmt.Sprintf("%s_%s", dateStr, "total"), strconv.Itoa(totalInt))
+	}
+	if monthErr != nil {
+		r.hset(monthKey, "total", "1")
+	} else {
+		totalMonthInt += 1
+		r.hset(monthKey, "total", strconv.Itoa(totalMonthInt))
 	}
 }
 
@@ -169,7 +221,7 @@ func (r *redisManager) TodayStats() map[string]int64 {
 		if dt != dateStr {
 			continue
 		}
-		// Increase total
+		// Get total
 		if strings.Split(key, "_")[1] == "total" {
 			asInt, err := strconv.Atoi(val)
 			if err != nil {
@@ -179,6 +231,110 @@ func (r *redisManager) TodayStats() map[string]int64 {
 			}
 		} else {
 			// Check and increase unique
+			if _, ok := uniqueTracker[key]; !ok {
+				uniqueTracker[key] = 1
+				if _, ok := ret["unique"]; !ok {
+					ret["unique"] = 1
+				} else {
+					ret["unique"] += 1
+				}
+			}
+		}
+	}
+	return ret
+}
+
+// TodayStatsClient - Today Stats by Client
+func (r *redisManager) TodayStatsClient() map[string]int64 {
+	dateStr := time.Now().Format("02-01-2006")
+	ret := map[string]int64{}
+	key := fmt.Sprintf("%s:stats_daily_client", keyPrefix)
+	allVals, err := r.hgetall(key)
+	if err != nil {
+		return ret
+	}
+	uniqueTracker := map[string]int64{}
+	for key, val := range allVals {
+		dt := strings.Split(key, "_")[0]
+		if dt != dateStr {
+			continue
+		}
+		// Get total
+		if strings.Split(key, "_")[1] == "total" {
+			asInt, err := strconv.Atoi(val)
+			if err != nil {
+				ret["total"] = 1
+			} else {
+				ret["total"] = int64(asInt)
+			}
+		} else {
+			// Check and increase unique
+			if _, ok := uniqueTracker[key]; !ok {
+				uniqueTracker[key] = 1
+				if _, ok := ret["unique"]; !ok {
+					ret["unique"] = 1
+				} else {
+					ret["unique"] += 1
+				}
+			}
+		}
+	}
+	return ret
+}
+
+// MonthStats - Stats for month
+func (r *redisManager) MonthStats(month int, year int) map[string]int64 {
+	ret := map[string]int64{}
+	key := fmt.Sprintf("%d_%d:stats_monthly", month, year)
+	allVals, err := r.hgetall(key)
+	if err != nil {
+		return ret
+	}
+	uniqueTracker := map[string]int64{}
+	for key, val := range allVals {
+		// Get total
+		if key == "total" {
+			asInt, err := strconv.Atoi(val)
+			if err != nil {
+				ret["total"] = 1
+			} else {
+				ret["total"] = int64(asInt)
+			}
+		} else {
+			// Get unique
+			if _, ok := uniqueTracker[key]; !ok {
+				uniqueTracker[key] = 1
+				if _, ok := ret["unique"]; !ok {
+					ret["unique"] = 1
+				} else {
+					ret["unique"] += 1
+				}
+			}
+		}
+	}
+	return ret
+}
+
+// MonthStatsClient - Stats for month by client
+func (r *redisManager) MonthStatsClient(month int, year int) map[string]int64 {
+	ret := map[string]int64{}
+	key := fmt.Sprintf("%d_%d:stats_monthly_client", month, year)
+	allVals, err := r.hgetall(key)
+	if err != nil {
+		return ret
+	}
+	uniqueTracker := map[string]int64{}
+	for key, val := range allVals {
+		// Get total
+		if key == "total" {
+			asInt, err := strconv.Atoi(val)
+			if err != nil {
+				ret["total"] = 1
+			} else {
+				ret["total"] = int64(asInt)
+			}
+		} else {
+			// Get unique
 			if _, ok := uniqueTracker[key]; !ok {
 				uniqueTracker[key] = 1
 				if _, ok := ret["unique"]; !ok {
