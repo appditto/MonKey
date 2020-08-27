@@ -182,7 +182,7 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 		furReplacer := strings.NewReplacer("#7f6145", clr.ToHTML(true), "#7F6145", clr.ToHTML(true))
 		tail.Doc = furReplacer.Replace(tail.Doc)
 		// Shadow
-		shadowOpacity := GetShadowOpacityFur(clr)
+		shadowOpacity := GetShadowOpacityFurDark(clr)
 		shadowReplacer := strings.NewReplacer("fill-opacity=\".24\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity), "fill-opacity=\"0.24\"", fmt.Sprintf("fill-opacity=\"%f\"", shadowOpacity))
 		tail.Doc = shadowReplacer.Replace(tail.Doc)
 	}
