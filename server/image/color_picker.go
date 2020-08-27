@@ -18,7 +18,7 @@ const MaxShadowOpacityFurDark = 0.35
 
 // Min and max shadow opacity for eyes
 const MinShadowOpacityIris = 0.075
-const MaxShadowOpacityIris = 0.175
+const MaxShadowOpacityIris = 0.2
 
 // Min and max perceivedBrightness values (between 0 and 100)
 const MinPerceivedBrightness = 10.0
