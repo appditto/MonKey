@@ -9,20 +9,20 @@ import (
 )
 
 // Min and max shadow opacity for fur
-const MinShadowOpacityFur = 0.12
-const MaxShadowOpacityFur = 0.4
+const MinShadowOpacityFur = 0.1
+const MaxShadowOpacityFur = 0.25
 
 // Min and max shadow opacity for fur (dark)
 const MinShadowOpacityFurDark = 0.15
-const MaxShadowOpacityFurDark = 0.5
+const MaxShadowOpacityFurDark = 0.35
 
 // Min and max shadow opacity for eyes
 const MinShadowOpacityIris = 0.075
-const MaxShadowOpacityIris = 0.25
+const MaxShadowOpacityIris = 0.175
 
 // Min and max perceivedBrightness values (between 0 and 100)
-const MinPerceivedBrightness = 18.0
-const MaxPerceivedBrightness = 95.0
+const MinPerceivedBrightness = 10.0
+const MaxPerceivedBrightness = 90.0
 
 // Min and max perceivedBrightness values (between 0 and 255)
 const MinPerceivedBrightness255 = MinPerceivedBrightness / 100 * 255
