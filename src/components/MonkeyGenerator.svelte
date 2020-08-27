@@ -24,9 +24,9 @@
   let monkeyLoading = false;
   let monkeyLoaded = false;
 
-  let baseUrl =
+  const baseUrl =
     process.env.NODE_ENV === "development" ? "http://127.0.0.1:8080" : "https://monkey.banano.cc";
-  let svc = process.env.NODE_ENV === "development" ? "dev" : "monkey.banano.cc";
+  const svc = process.env.NODE_ENV === "development" ? "dev" : "monkey.banano.cc";
   async function getMonkey(address) {
     try {
       return axios.get(`${baseUrl}/api/v1/monkey/${address}?svc=${svc}`);
