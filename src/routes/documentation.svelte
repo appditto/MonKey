@@ -45,7 +45,7 @@
     <code class="text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold m-2">get</code>
     <div class="flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg mono">
       <span class="text-0 break-all">
-        <span class="text-xl">https://monkey.banano.cc/api/v1/</span>
+        <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span>
         <span class="text-xl text-purpleLight">{'<address>'}</span>
       </span>
     </div>
@@ -62,7 +62,7 @@
       mono"
     >
       <span class="text-0 break-all">
-        <span class="text-xl">https://monkey.banano.cc/api/v1/</span>
+        <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span>
         <span class="text-xl text-purpleLight">
           ban_1ka1ium4pfue3uxtntqsrib8mumxgazsjf58gidh1xeo5te3whsq8z476goo
         </span>
@@ -171,7 +171,7 @@
       mono"
     >
       <span class="text-0 break-all">
-        <span class="text-xl">https://monkey.banano.cc/api/v1/</span>
+        <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span>
         <span class="text-xl text-purpleLight">
           ban_1ka1ium4pfue3uxtntqsrib8mumxgazsjf58gidh1xeo5te3whsq8z476goo
         </span>

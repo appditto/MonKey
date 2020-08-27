@@ -29,7 +29,7 @@
   async function getMonkey(address) {
     try {
       return axios.get(
-        `${isDev ? "http://127.0.0.1:8080" : "https://monkey.banano.cc"}/api/v1/${address}`
+        `${isDev ? "http://127.0.0.1:8080" : "https://monkey.banano.cc"}/api/v1/monkey/${address}`
       );
     } catch (e) {
       console.error(e);
