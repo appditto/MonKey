@@ -1,5 +1,7 @@
 <script>
   import StatsCard from "../StatsCard.svelte";
+  export let stats;
+  export let statsMonthly;
 </script>
 
 <!-- HTML -->
@@ -9,10 +11,21 @@
       MonKey Stats
     </h2>
     <div class="w-full flex flex-row flex-wrap justify-center mt-5 md:mt-8 px-6 md:px-12">
-      <StatsCard stat="0.4M" header="We served" footer="MonKeys in total" />
-      <StatsCard stat="124K" header="We served" footer="unique MonKeys" />
-      <StatsCard stat="43K" header="We served to" footer="unique clients" />
-      <StatsCard stat="5" header="Available on" footer="services" />
+      <StatsCard header="We served" stat={stats.total_served} footer="MonKeys in total" />
+      <StatsCard
+        header="We served"
+        stat={statsMonthly.total_requests}
+        footer="MonKeys this month"
+      />
+      <StatsCard header="We served to" stat={stats.unique_clients_served} footer="clients in total" />
+      <StatsCard header="We served to" stat={statsMonthly.clients.unique} footer="clients this month" />
+      <!-- 
+        <StatsCard
+        header="Available on"
+        stat={Object.keys(stats.services).length}
+        footer="services"
+      />
+      -->
     </div>
   </div>
 </div>
