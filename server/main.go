@@ -3,8 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
+	"os"
 
 	"github.com/appditto/monKey/server/controller"
+	"github.com/appditto/monKey/server/image"
 	"github.com/appditto/monKey/server/utils"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/gographics/imagick.v3/imagick"
@@ -32,6 +35,21 @@ func CorsMiddleware() gin.HandlerFunc {
 	}
 }
 
+// Generate random files
+func RandFiles(count int, seed string) {
+	if _, err := os.Stat("randsvg"); os.IsNotExist(err) {
+		os.Mkdir("randsvg", os.FileMode(0755))
+	}
+	for i := 0; i < count; i++ {
+		address := utils.GenerateAddress()
+		sha256 := utils.Sha256(address, seed)
+
+		accessories, _ := image.GetAccessoriesForHash(sha256)
+		svg, _ := image.CombineSVG(accessories)
+		ioutil.WriteFile(fmt.Sprintf("randsvg/%s.svg", address), svg, os.FileMode(0644))
+	}
+}
+
 func main() {
 	// Get seed from env
 	seed := utils.GetEnv("MONKEY_SEED", "1234567890")
@@ -40,10 +58,15 @@ func main() {
 	serverHost := flag.String("host", "127.0.0.1", "Host to listen on")
 	serverPort := flag.Int("port", 8080, "Port to listen on")
 	testAccessoryDistribution := flag.Bool("test-ad", false, "Test accessory distribution")
+	randomFiles := flag.Int("rand-files", -1, "Generate this many random SVGs and output to randsvg folder")
 	flag.Parse()
 
 	if *testAccessoryDistribution {
 		controller.TestAccessoryDistribution(seed)
+		return
+	} else if *randomFiles > 0 {
+		fmt.Printf("Generating %d files in ./randsvg", *randomFiles)
+		RandFiles(*randomFiles, seed)
 		return
 	}
 

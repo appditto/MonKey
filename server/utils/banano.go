@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/hex"
 	"regexp"
+	"strings"
 
 	"github.com/bbedward/nano/address"
 	"github.com/bbedward/nano/types"
@@ -14,7 +15,7 @@ var bananoRegex = regexp.MustCompile(bananoRegexStr)
 
 func GenerateAddress() string {
 	pub, _ := address.GenerateKey()
-	return string(address.PubKeyToAddress(pub))
+	return strings.Replace(string(address.PubKeyToAddress(pub)), "nano_", "ban_", -1)
 }
 
 // ValidateAddress - Returns true if a nano address is valid

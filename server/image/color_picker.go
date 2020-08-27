@@ -84,13 +84,13 @@ func GetColor(redSeed string, greenSeed string, blueSeed string) (color.RGB, err
 }
 
 func GetShadowOpacityFur(clr color.RGB) float64 {
-	return math.Round(MinShadowOpacityFur+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityFur-MinShadowOpacityFur)*100) / 100
+	return math.Round((MinShadowOpacityFur+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityFur-MinShadowOpacityFur))*100) / 100
 }
 
 func GetShadowOpacityFurDark(clr color.RGB) float64 {
-	return math.Round(MinShadowOpacityFurDark+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityFurDark-MinShadowOpacityFurDark)*100) / 100
+	return math.Round((MinShadowOpacityFurDark+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityFurDark-MinShadowOpacityFurDark))*100) / 100
 }
 
 func GetShadowOpacityIris(clr color.RGB) float64 {
-	return math.Round(MinShadowOpacityIris+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityIris-MinShadowOpacityIris)*100) / 100
+	return math.Round((MinShadowOpacityIris+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityIris-MinShadowOpacityIris))*100) / 100
 }
