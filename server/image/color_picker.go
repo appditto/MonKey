@@ -21,8 +21,8 @@ const MinShadowOpacityIris = 0.075
 const MaxShadowOpacityIris = 0.2
 
 // Min and max perceivedBrightness values (between 0 and 100)
-const MinPerceivedBrightness = 10.0
-const MaxPerceivedBrightness = 90.0
+const MinPerceivedBrightness = 15.0
+const MaxPerceivedBrightness = 95.0
 
 // Min and max perceivedBrightness values (between 0 and 255)
 const MinPerceivedBrightness255 = MinPerceivedBrightness / 100 * 255
