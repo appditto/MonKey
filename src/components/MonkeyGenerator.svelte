@@ -29,7 +29,13 @@
 
   async function getMonkey(address) {
     try {
+<<<<<<< HEAD
       return axios.get(`${baseUrl}/api/v1/monkey/${address}`);
+=======
+      return axios.get(
+        `${isDev ? "http://127.0.0.1:8080" : "https://monkey.banano.cc"}/api/v1/monkey/${address}?svc=monkey.banano.cc`
+      );
+>>>>>>> 21bf659dc1e497939f1f33f9a3de4d79b06777ac
     } catch (e) {
       console.error(e);
     }

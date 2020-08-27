@@ -141,7 +141,15 @@ func (r *redisManager) UpdateStatsDate(address string) {
 	if err != nil {
 		glog.Errorf("Error updating StatsDate %s", err)
 	}
-	err = r.hset(monthKey, address, string(count))
+	existingMonth, err := r.hget(monthKey, fmt.Sprintf("%s_%s", dateStr, address))
+	monthCount := 1
+	if err == nil {
+		existingMonthInt, err := strconv.Atoi(existingMonth)
+		if err == nil {
+			monthCount = existingMonthInt + 1
+		}
+	}
+	err = r.hset(monthKey, address, string(monthCount))
 	if err != nil {
 		glog.Errorf("Error updating StatsMonthly")
 	}
@@ -175,7 +183,7 @@ func (r *redisManager) UpdateStatsDateClient(ip string) {
 	count := 1
 	if err == nil {
 		existingInt, err := strconv.Atoi(existing)
-		if err != nil {
+		if err == nil {
 			count = existingInt + 1
 		}
 	}
@@ -183,7 +191,15 @@ func (r *redisManager) UpdateStatsDateClient(ip string) {
 	if err != nil {
 		glog.Errorf("Error updating StatsDate %s", err)
 	}
-	err = r.hset(monthKey, hashed, string(count))
+	existingMonth, err := r.hget(monthKey, fmt.Sprintf("%s_%s", dateStr, hashed))
+	monthCount := 1
+	if err == nil {
+		existingMonthInt, err := strconv.Atoi(existingMonth)
+		if err == nil {
+			monthCount = existingMonthInt + 1
+		}
+	}
+	err = r.hset(monthKey, hashed, string(monthCount))
 	if err != nil {
 		glog.Errorf("Error updating StatsMonthly")
 	}
@@ -350,6 +366,24 @@ func (r *redisManager) MonthStatsClient(month int, year int) (map[string]int64, 
 	return ret, total
 }
 
+// MonthStatsSvc - Get monthly stats for all services
+func (r *redisManager) MonthStatsSvc(month int, year int) map[string]int {
+	ret := map[string]int{}
+	for _, svc := range spc.SvcList {
+		key := fmt.Sprintf("%d_%d:%s_monthly", month, year, svc)
+		val, err := r.hget(key, "total")
+		if err != nil {
+			ret[string(svc)] = 0
+		}
+		valInt, err := strconv.Atoi(val)
+		if err != nil {
+			ret[string(svc)] = 0
+		}
+		ret[string(svc)] = valInt
+	}
+	return ret
+}
+
 // DailyStats - Daily Stats
 func (r *redisManager) DailyStats() map[string]map[string]int64 {
 	ret := map[string]map[string]int64{}
@@ -481,6 +515,21 @@ func (r *redisManager) UpdateStatsByService(svc string, address string) {
 			}
 		} else {
 			r.hset(key, "total", strconv.Itoa(totalCountInt+1))
+		}
+		// Update monthly
+		now := time.Now()
+		monthKey := fmt.Sprintf("%d_%d:%s_monthly", now.Month(), now.Year(), svc)
+		existingMonth, err := r.hget(monthKey, "total")
+		monthCount := 1
+		if err == nil {
+			existingMonthCount, err := strconv.Atoi(existingMonth)
+			if err == nil {
+				monthCount = existingMonthCount + 1
+			}
+		}
+		err = r.hset(monthKey, "total", strconv.Itoa(monthCount))
+		if err != nil {
+			glog.Errorf("Error updating StatsMonthly by svc")
 		}
 	}
 }

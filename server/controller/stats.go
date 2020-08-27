@@ -68,6 +68,7 @@ func StatsMonthly(c *gin.Context) {
 	if err != nil {
 		yearInt = time.Now().Year()
 	}
+	statsMonthlySvc := db.GetDB().MonthStatsSvc(monthInt, yearInt)
 	statsMonthlyAddress, _ := db.GetDB().MonthStats(monthInt, yearInt)
 	statsMonthlyClients, total := db.GetDB().MonthStatsClient(monthInt, yearInt)
 
@@ -75,6 +76,7 @@ func StatsMonthly(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"address":        statsMonthlyAddress,
 		"clients":        statsMonthlyClients,
+		"services":       statsMonthlySvc,
 		"total_requests": total,
 	})
 }
