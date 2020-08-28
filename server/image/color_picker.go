@@ -9,9 +9,13 @@ import (
 )
 
 // Background Color
-const bgHueAddition = -15.0        // Add this number to fur hur
-const bgSaturationMultiplier = 0.5 // Multiply fur sat. by this value
-const bgBrightnessMultiplier = 1.5 // Multiply fur brightness by this value
+const bgHueAddition = -20.0         // Add this number to fur hur
+const bgSaturationMultiplier = 0.25 // Multiply fur sat. by this value
+const bgBrightnessMultiplier = 5    // Multiply fur brightness by this value
+const bgSaturationMin = 0.1         // Minimum background saturation
+const bgSaturationMax = 1           // Maximum background saturation
+const bgBrightnessMin = 0.1         // Maximum background brightness
+const bgBrightnessMax = 0.95        // Maximum background brightness
 
 // Min and max shadow opacity for fur
 const MinShadowOpacityFur = 0.1
@@ -112,8 +116,8 @@ func GetBackgroundColor(clr color.RGB) string {
 	bgColor.H = positiveMod(clrHSB.H+bgHueAddition, 360)
 
 	// Ensure within 0 and 1.0 boundaries
-	bgColor.S = math.Min(math.Max(clrHSB.S*bgSaturationMultiplier, 0), 1.0)
-	bgColor.B = math.Min(math.Max(clrHSB.B*bgBrightnessMultiplier, 0), 1.0)
+	bgColor.S = math.Min(math.Max(clrHSB.S*bgSaturationMultiplier, bgSaturationMin), bgSaturationMax)
+	bgColor.B = math.Min(math.Max(clrHSB.B*bgBrightnessMultiplier, bgBrightnessMin), bgBrightnessMax)
 
 	return bgColor.ToHTML(true)
 }
