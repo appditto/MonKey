@@ -40,7 +40,6 @@
       return window.innerHeight;
     }
   }
-  // From underscore souce code
   function throttle(func, wait, options) {
     let context, args, result;
     let timeout = null;
