@@ -29,7 +29,7 @@
   const svc = process.env.NODE_ENV === "development" ? "dev" : "monkey.banano.cc";
   async function getMonkey(address) {
     try {
-      return axios.get(`${baseUrl}/api/v1/monkey/${address}?svc=${svc}&background=true`);
+      return axios.get(`${baseUrl}/api/v1/monkey/${address}?svc=${svc}`);
     } catch (e) {
       console.error(e);
     }
