@@ -10,8 +10,8 @@ import (
 
 // Background Color
 const bgHueMultiplier = 1.0
-const bgSaturationMultiplier = 1.0
-const bgBrightnessMultiplier = 1.0
+const bgSaturationMultiplier = 0.5
+const bgBrightnessMultiplier = 0.5
 
 // Min and max shadow opacity for fur
 const MinShadowOpacityFur = 0.1
