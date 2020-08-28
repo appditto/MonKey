@@ -3,7 +3,7 @@
     let baseUrl = "https://monkey.banano.cc";
     const [res, resMonthly] = await Promise.all([
       this.fetch(`${baseUrl}/api/v1/stats`),
-      this.fetch(`${baseUrl}/api/v1/stats/monthly?month=8`),
+      this.fetch(`${baseUrl}/api/v1/stats/monthly`),
     ]);
     const [stats, statsMonthly] = await Promise.all([res.json(), resMonthly.json()]);
     return { stats, statsMonthly };
