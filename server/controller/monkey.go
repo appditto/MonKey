@@ -51,7 +51,7 @@ func (mc MonkeyController) GetRandomSvg(c *gin.Context) {
 	address := utils.GenerateAddress()
 	sha256 := utils.Sha256(address, mc.Seed)
 
-	accessories, err := image.GetAccessoriesForHash(sha256)
+	accessories, err := image.GetAccessoriesForHash(sha256, false)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "%s", err.Error())
 		return
@@ -89,7 +89,9 @@ func generateIcon(hash *string, c *gin.Context) {
 		}
 	}
 
-	accessories, err := image.GetAccessoriesForHash(*hash)
+	withBackground := strings.ToLower(c.Query("background")) == "true"
+
+	accessories, err := image.GetAccessoriesForHash(*hash, withBackground)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "%s", err.Error())
 		return

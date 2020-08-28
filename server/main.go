@@ -36,7 +36,7 @@ func CorsMiddleware() gin.HandlerFunc {
 }
 
 // Generate random files
-func RandFiles(count int, seed string) {
+func RandFiles(count int, seed string, bg bool) {
 	if _, err := os.Stat("randsvg"); os.IsNotExist(err) {
 		os.Mkdir("randsvg", os.FileMode(0755))
 	}
@@ -44,7 +44,7 @@ func RandFiles(count int, seed string) {
 		address := utils.GenerateAddress()
 		sha256 := utils.Sha256(address, seed)
 
-		accessories, _ := image.GetAccessoriesForHash(sha256)
+		accessories, _ := image.GetAccessoriesForHash(sha256, bg)
 		svg, _ := image.CombineSVG(accessories)
 		ioutil.WriteFile(fmt.Sprintf("randsvg/%s.svg", address), svg, os.FileMode(0644))
 	}
@@ -59,6 +59,7 @@ func main() {
 	serverPort := flag.Int("port", 8080, "Port to listen on")
 	testAccessoryDistribution := flag.Bool("test-ad", false, "Test accessory distribution")
 	randomFiles := flag.Int("rand-files", -1, "Generate this many random SVGs and output to randsvg folder")
+	randomFilesBG := flag.Int("rand-files-bg", -1, "Generate random SVGs with background and output to randsvg folder")
 	flag.Parse()
 
 	if *testAccessoryDistribution {
@@ -66,7 +67,11 @@ func main() {
 		return
 	} else if *randomFiles > 0 {
 		fmt.Printf("Generating %d files in ./randsvg", *randomFiles)
-		RandFiles(*randomFiles, seed)
+		RandFiles(*randomFiles, seed, false)
+		return
+	} else if *randomFilesBG > 0 {
+		fmt.Printf("Generating %d files in ./randsvg", *randomFilesBG)
+		RandFiles(*randomFilesBG, seed, true)
 		return
 	}
 

@@ -117,7 +117,7 @@ func TestAccessoryDistribution(seed string) {
 	for i := 0; i < iterations; i++ {
 		address = utils.GenerateAddress()
 		sha256 = utils.Sha256(address, seed)
-		accessories, _ = image.GetAccessoriesForHash(sha256)
+		accessories, _ = image.GetAccessoriesForHash(sha256, false)
 		glassesName := "none"
 		localCount := 0
 		if accessories.GlassesAsset != nil {

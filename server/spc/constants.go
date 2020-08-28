@@ -5,4 +5,7 @@ type StatsService string
 
 var SvcList = []StatsService{
 	"monkey.banano.cc",
+	"kalium",
+	"creeper",
+	"bananobet",
 }
