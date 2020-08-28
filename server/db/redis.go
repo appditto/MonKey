@@ -139,7 +139,7 @@ func (r *redisManager) Last30DayStats() map[string]int {
 		var retCached map[string]int
 		err := json.Unmarshal([]byte(cache), &retCached)
 		if err == nil {
-			return retCached
+			//return retCached
 		}
 	}
 	now := time.Now()
@@ -156,8 +156,11 @@ func (r *redisManager) Last30DayStats() map[string]int {
 	}
 	uniqueAddressTracker := make(map[string]int)
 	for k := range allData {
+		if strings.Split(k, "_")[1] == "total" {
+			continue
+		}
 		dt := strings.Split(k, "_")[0]
-		addr := strings.Split(k, "_")[1]
+		addr := k[len(dt)+1:]
 		for _, curDVal := range last30DtStrings {
 			if dt == curDVal {
 				if _, ok := uniqueAddressTracker[addr]; !ok {
@@ -185,7 +188,7 @@ func (r *redisManager) Last30DayStatsClient() map[string]int {
 		var retCached map[string]int
 		err := json.Unmarshal([]byte(cache), &retCached)
 		if err == nil {
-			return retCached
+			//return retCached
 		}
 	}
 	now := time.Now()
@@ -202,8 +205,11 @@ func (r *redisManager) Last30DayStatsClient() map[string]int {
 	}
 	uniqueIPTracker := make(map[string]int)
 	for k := range allData {
+		if strings.Split(k, "_")[1] == "total" {
+			continue
+		}
 		dt := strings.Split(k, "_")[0]
-		hashedIp := strings.Split(k, "_")[1]
+		hashedIp := k[len(dt)+1:]
 		for _, curDVal := range last30DtStrings {
 			if dt == curDVal {
 				if _, ok := uniqueIPTracker[hashedIp]; !ok {
