@@ -105,18 +105,11 @@ func GetBackgroundColor(clr color.RGB) string {
 	clrHSB := clr.ToHSB()
 
 	// Apply multipliers
-	bgColor.H = clrHSB.H + bgHueAddition
-	if bgColor.H < 0 {
-		bgColor.H += 360
-	} else if bgColor.H > 360 {
-		bgColor.H -= 360
-	}
+	bgColor.H = math.Mod(clrHSB.H+bgHueAddition, 360.0)
 
 	// Ensure within 0 and 1.0 boundaries
 	bgColor.S = math.Min(math.Max(clrHSB.S*bgSaturationMultiplier, 0), 1.0)
 	bgColor.B = math.Min(math.Max(clrHSB.B*bgBrightnessMultiplier, 0), 1.0)
-
-	fmt.Printf("H %f S %f B %f", bgColor.H, bgColor.S, bgColor.B)
 
 	return bgColor.ToHTML(true)
 }
