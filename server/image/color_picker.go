@@ -8,6 +8,11 @@ import (
 	"github.com/appditto/monKey/server/color"
 )
 
+// Background Color
+const bgHueMultiplier = 1.0
+const bgSaturationMultiplier = 1.0
+const bgBrightnessMultiplier = 1.0
+
 // Min and max shadow opacity for fur
 const MinShadowOpacityFur = 0.1
 const MaxShadowOpacityFur = 0.25
@@ -93,4 +98,16 @@ func GetShadowOpacityFurDark(clr color.RGB) float64 {
 
 func GetShadowOpacityIris(clr color.RGB) float64 {
 	return math.Round((MinShadowOpacityIris+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityIris-MinShadowOpacityIris))*100) / 100
+}
+
+func GetBackgroundColor(clr color.RGB) string {
+	bgColor := color.HSB{}
+	clrHSB := clr.ToHSB()
+
+	// Apply multipliers
+	bgColor.H = clrHSB.H * bgHueMultiplier
+	bgColor.S = clrHSB.S * bgSaturationMultiplier
+	bgColor.B = clrHSB.B * bgBrightnessMultiplier
+
+	return bgColor.ToHTML(true)
 }

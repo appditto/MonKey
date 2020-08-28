@@ -38,10 +38,11 @@ type Accessories struct {
 	HandLeftAsset   *Asset
 	HandRightAsset  *Asset
 	AccessoryColors map[string]color.RGB
+	BGColor         string
 }
 
 // GetAccessoriesForHash functions gets the proper accessories for the current hash
-func GetAccessoriesForHash(hash string) (Accessories, error) {
+func GetAccessoriesForHash(hash string, withBackground bool) (Accessories, error) {
 	var accessories = Accessories{}
 	accessories.AccessoryColors = make(map[string]color.RGB)
 
@@ -59,6 +60,11 @@ func GetAccessoriesForHash(hash string) (Accessories, error) {
 	workingIdx += 6
 	eyeColor, _ := GetColor(hash[workingIdx:workingIdx+2], hash[workingIdx+2:workingIdx+4], hash[workingIdx+4:workingIdx+6])
 	workingIdx += 6
+
+	// Get background
+	if withBackground {
+		accessories.BGColor = GetBackgroundColor(furColor)
+	}
 
 	// Get base body parts
 	for _, bodyPart := range GetAssets().GetBodyParts() {
