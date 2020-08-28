@@ -24,13 +24,12 @@
   let monkeyLoading = false;
   let monkeyLoaded = false;
 
-  let isDev = process.env.NODE_ENV === "development";
-
+  const baseUrl =
+    process.env.NODE_ENV === "development" ? "http://127.0.0.1:8080" : "https://monkey.banano.cc";
+  const svc = process.env.NODE_ENV === "development" ? "dev" : "monkey.banano.cc";
   async function getMonkey(address) {
     try {
-      return axios.get(
-        `${isDev ? "http://127.0.0.1:8080" : "https://monkey.banano.cc"}/api/v1/monkey/${address}?svc=monkey.banano.cc`
-      );
+      return axios.get(`${baseUrl}/api/v1/monkey/${address}?svc=${svc}`);
     } catch (e) {
       console.error(e);
     }

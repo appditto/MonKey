@@ -4,7 +4,7 @@
   import Meta from "../components/Meta.svelte";
   const dev = process.env.NODE_ENV === "development";
   const metadata = {
-    title: `MonKey | ${status}`,
+    title: `MonKey | ${status} Error`,
     description: `Oops! ${status} error.`,
     image: "https://monkey.banano.cc/previews/preview-error.png",
     imageAlt: "Oops! An error occured.",
