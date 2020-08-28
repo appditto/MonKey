@@ -12,7 +12,7 @@ import (
 const glassesChance = 0.25
 const hatChance = 0.35
 const miscChance = 0.3
-const shirtPantChance = 0.2
+const shirtPantChance = 0.25
 const shoeChance = 0.2
 const tailChance = 0.2
 
