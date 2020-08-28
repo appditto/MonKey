@@ -2,28 +2,34 @@
   export let offset = 200;
   export let classes;
   import { onMount } from "svelte";
+  import { onDestroy } from "svelte";
+
   let observer = null;
   let showContent = false;
   let item;
+  let hasAPI;
+
   function onIntersection(entries) {
     if (entries[0].isIntersecting && !showContent) {
       showContent = true;
+      observer && observer.unobserve(item);
+      console.log("DESTROYED NORMALLY");
     }
   }
-  function lazyLoad(node) {
-    observer && observer.observe(node);
-    return {
-      destroy() {
-        observer && observer.unobserve(node);
-      },
-    };
+  function lazyLoad() {
+    observer && observer.observe(item);
   }
+
   onMount(async () => {
-    let hasAPI = "IntersectionObserver" in window;
+    hasAPI = "IntersectionObserver" in window;
     if (hasAPI) {
       observer = new IntersectionObserver(onIntersection, { rootMargin: `${offset}px` });
       lazyLoad(item);
     }
+  });
+
+  onDestroy(() => {
+    observer && observer.unobserve(item);
   });
 </script>
 
@@ -39,7 +45,7 @@
       class="{showContent ? 'opacity-100' : 'opacity-0'} w-full h-full transition-opacity
       duration-300 ease-out absolute top-0 left-0"
     >
-      {#if showContent}
+      {#if hasAPI == false || showContent}
         <slot name="content" />
         <slot />
       {/if}
