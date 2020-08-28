@@ -174,10 +174,10 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	// Create new SVG writer for final assembly
 	var b bytes.Buffer
 	canvas := svg.New(&b)
+	canvas.Startraw(fmt.Sprintf("viewBox=\"0 0 %d %d\"", DefaultSize, DefaultSize))
+
 	if accessories.BGColor != "" {
-		canvas.Startraw(fmt.Sprintf(fmt.Sprintf("viewBox=\"0 0 %d %d\" style=\"background-color:%s;\"", DefaultSize, DefaultSize, accessories.BGColor)))
-	} else {
-		canvas.Startraw(fmt.Sprintf("viewBox=\"0 0 %d %d\"", DefaultSize, DefaultSize))
+		canvas.Rect(0, 0, 4000, 4000, fmt.Sprintf("id=\"%s\" fill=\"%s\"", "bg", accessories.BGColor))
 	}
 
 	// Add tail
