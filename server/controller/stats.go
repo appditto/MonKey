@@ -60,8 +60,10 @@ func StatsMonthly(c *gin.Context) {
 	monthStr := c.Query("month")
 	yearStr := c.Query("year")
 	monthInt, err := strconv.Atoi(monthStr)
-	if err != nil || monthInt < 1 || monthInt > 12 {
-		c.String(http.StatusBadRequest, "%s", "month parameter required, must be between 1 and 12")
+	if err != nil {
+		monthInt = int(time.Now().Month())
+	} else if monthInt < 1 || monthInt > 12 {
+		c.String(http.StatusBadRequest, "%s", "month must be between 1 and 12")
 		return
 	}
 	yearInt, err := strconv.Atoi(yearStr)
@@ -71,6 +73,8 @@ func StatsMonthly(c *gin.Context) {
 	statsMonthlySvc := db.GetDB().MonthStatsSvc(monthInt, yearInt)
 	statsMonthlyAddress, _ := db.GetDB().MonthStats(monthInt, yearInt)
 	statsMonthlyClients, total := db.GetDB().MonthStatsClient(monthInt, yearInt)
+	last30Day := db.GetDB().Last30DayStats()
+	last30dayClient := db.GetDB().Last30DayStatsClient()
 
 	// Return response
 	c.JSON(200, gin.H{
@@ -78,6 +82,8 @@ func StatsMonthly(c *gin.Context) {
 		"clients":        statsMonthlyClients,
 		"services":       statsMonthlySvc,
 		"total_requests": total,
+		"last30":         last30Day,
+		"last30client":   last30dayClient,
 	})
 }
 

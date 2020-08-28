@@ -1,6 +1,7 @@
 package db
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -13,6 +14,8 @@ import (
 	"github.com/go-redis/redis/v7"
 	"github.com/golang/glog"
 )
+
+// This is incredibly messy and should probably be done in SQL
 
 // Prefix for all keys
 const keyPrefix = "monKey"
@@ -65,6 +68,12 @@ func (r *redisManager) get(key string) (string, error) {
 // set - Redis SET
 func (r *redisManager) set(key string, value string) error {
 	err := r.Client.Set(key, value, 0).Err()
+	return err
+}
+
+// setWithExpiration - Redis SET with EXPIRY in seconds
+func (r *redisManager) setWithExpiration(key string, value string, expiry time.Duration) error {
+	err := r.Client.Set(key, value, expiry*time.Second).Err()
 	return err
 }
 
@@ -121,6 +130,98 @@ func (r *redisManager) UpdateStatsAddress(address string) {
 	}
 	valInt += 1
 	r.set(key, strconv.Itoa(valInt))
+}
+
+// Last30DayStats - Get last 30 day stats
+func (r *redisManager) Last30DayStats() map[string]int {
+	cache, err := r.get("last30day_cache")
+	if err == nil {
+		var retCached map[string]int
+		err := json.Unmarshal([]byte(cache), &retCached)
+		if err == nil {
+			return retCached
+		}
+	}
+	now := time.Now()
+	last30DtStrings := make([]string, 30)
+	for i := 0; i < 30; i++ {
+		last30DtStrings[i] = now.Format("02-01-2006")
+		now = now.AddDate(0, 0, -1)
+	}
+	retMap := make(map[string]int)
+	retMap["unique"] = 0
+	allData, err := r.hgetall(fmt.Sprintf("%s:stats_daily", keyPrefix))
+	if err != nil {
+		return retMap
+	}
+	uniqueAddressTracker := make(map[string]int)
+	for k := range allData {
+		dt := strings.Split(k, "_")[0]
+		addr := strings.Split(k, "_")[1]
+		for _, curDVal := range last30DtStrings {
+			if dt == curDVal {
+				if _, ok := uniqueAddressTracker[addr]; !ok {
+					retMap["unique"] += 1
+					uniqueAddressTracker[addr] = 1
+				}
+				break
+			}
+		}
+	}
+	// Store in cache since this is a heavier OP
+	encoded, err := json.Marshal(retMap)
+	if err != nil {
+		glog.Warningf("Failed to serialize result of Last30Day stats")
+	} else {
+		r.setWithExpiration("last30day_cache", string(encoded), 300)
+	}
+	return retMap
+}
+
+// Last30DayStatsClient - Get last 30 day stats for clients
+func (r *redisManager) Last30DayStatsClient() map[string]int {
+	cache, err := r.get("last30day_cache_client")
+	if err == nil {
+		var retCached map[string]int
+		err := json.Unmarshal([]byte(cache), &retCached)
+		if err == nil {
+			return retCached
+		}
+	}
+	now := time.Now()
+	last30DtStrings := make([]string, 30)
+	for i := 0; i < 30; i++ {
+		last30DtStrings[i] = now.Format("02-01-2006")
+		now = now.AddDate(0, 0, -1)
+	}
+	retMap := make(map[string]int)
+	retMap["unique"] = 0
+	allData, err := r.hgetall(fmt.Sprintf("%s:stats_daily_client", keyPrefix))
+	if err != nil {
+		return retMap
+	}
+	uniqueIPTracker := make(map[string]int)
+	for k := range allData {
+		dt := strings.Split(k, "_")[0]
+		hashedIp := strings.Split(k, "_")[1]
+		for _, curDVal := range last30DtStrings {
+			if dt == curDVal {
+				if _, ok := uniqueIPTracker[hashedIp]; !ok {
+					retMap["unique"] += 1
+					uniqueIPTracker[hashedIp] = 1
+				}
+				break
+			}
+		}
+	}
+	// Store in cache since this is a heavier OP
+	encoded, err := json.Marshal(retMap)
+	if err != nil {
+		glog.Warningf("Failed to serialize result of Last30Day stats")
+	} else {
+		r.setWithExpiration("last30day_cache_client", string(encoded), 300)
+	}
+	return retMap
 }
 
 // UpdateStatsDate - Update stats for current date
