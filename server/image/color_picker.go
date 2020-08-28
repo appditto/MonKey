@@ -9,9 +9,9 @@ import (
 )
 
 // Background Color
-const bgHueAddition = -20.0        // Add this number to fur hur
-const bgSaturationMultiplier = 0.8 // Multiply fur sat. by this value
-const bgBrightnessMultiplier = 2.0 // Multiply fur brightness by this value
+const bgHueAddition = -15.0        // Add this number to fur hur
+const bgSaturationMultiplier = 0.5 // Multiply fur sat. by this value
+const bgBrightnessMultiplier = 1.5 // Multiply fur brightness by this value
 
 // Min and max shadow opacity for fur
 const MinShadowOpacityFur = 0.1
@@ -100,12 +100,16 @@ func GetShadowOpacityIris(clr color.RGB) float64 {
 	return math.Round((MinShadowOpacityIris+(1-clr.PerceivedBrightness()/100)*(MaxShadowOpacityIris-MinShadowOpacityIris))*100) / 100
 }
 
+func positiveMod(a, b float64) float64 {
+	return math.Mod((math.Mod(a, b) + b), b)
+}
+
 func GetBackgroundColor(clr color.RGB) string {
 	bgColor := color.HSB{}
 	clrHSB := clr.ToHSB()
 
 	// Apply multipliers
-	bgColor.H = math.Mod(clrHSB.H+bgHueAddition, 360.0)
+	bgColor.H = positiveMod(clrHSB.H+bgHueAddition, 360)
 
 	// Ensure within 0 and 1.0 boundaries
 	bgColor.S = math.Min(math.Max(clrHSB.S*bgSaturationMultiplier, 0), 1.0)
