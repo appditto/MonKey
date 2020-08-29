@@ -27,7 +27,8 @@
   <div class="flex md:hidden flex-col justify-end items-center font-medium">
     <button on:keydown={isEscPressed} on:click={toggleModal} class="menu-button">
       <img
-        class="{isModalOpen ? '-rotate-90' : ''} w-11 h-11 transition-all transform ease-out duration-300"
+        class="{isModalOpen ? '-rotate-90' : ''} w-11 h-11 transition-all transform ease-out
+        duration-300"
         src="images/icons/icon-menu.svg"
         alt="Menu Icon"
       />
@@ -47,8 +48,8 @@
                 href={item.href}
                 rel="noopener"
                 class="{item.href == '/' + segment || (item.href == '/' && !segment) ? 'text-brownLight' : ''}
-                menu-item w-full px-6 py-2 my-1 text-xl text-center transition-all duration-300 ease-out
-                rounded-md"
+                menu-item w-full px-6 py-2 my-1 text-xl text-center transition-all duration-300
+                ease-out rounded-md"
               >
                 <span
                   class="inline-block line {item.href == '/' + segment || (item.href == '/' && !segment) ? 'line-brownLight-active' : ''}"

@@ -13,7 +13,6 @@
     if (entries[0].isIntersecting && !showContent) {
       showContent = true;
       observer && observer.unobserve(item);
-      console.log("DESTROYED NORMALLY");
     }
   }
   function lazyLoad() {

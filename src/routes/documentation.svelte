@@ -26,31 +26,35 @@
 
 <!-- HTML -->
 <Meta {metadata} />
-<div class="y-container flex flex-col items-center px-4 pt-20">
-  <h1
-    class="font-bold text-4xl md:text-6xl mx-5 md:mx-12 text-center leading-tight tracking-tight
-    mt-5 md:mt-16 lg:mt-20"
-  >
-    API Documentation
-  </h1>
-  <p class="text-center mx-5 mt-4 text-2xl">
-    We have a single endpoint and just a couple of paramaters.
-  </p>
-  <div class="divider mt-20 mb-16" />
-  <!-- Endpoint -->
-  <h2 class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight tracking-tight">
-    Endpoint
-  </h2>
-  <div class="flex flex-wrap justify-center mt-8">
-    <code class="text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold m-2">get</code>
-    <div class="flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg mono">
-      <span class="text-0 break-all">
-        <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span>
-        <span class="text-xl text-purpleLight">{'<address>'}</span>
-      </span>
+<div class="w-full bg-hero pt-20 md:pt-16">
+  <div class="y-container flex flex-col items-center px-4">
+    <h1
+      class="font-bold text-4xl md:text-6xl mx-5 md:mx-12 text-center leading-tight tracking-tight
+      mt-5 md:mt-16 lg:mt-20"
+    >
+      API Documentation
+    </h1>
+    <p class="text-center mx-5 mt-4 text-2xl">
+      We have a single endpoint and just a couple of paramaters.
+    </p>
+    <div class="divider mt-20 mb-16" />
+    <!-- Endpoint -->
+    <h2 class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight tracking-tight">
+      Endpoint
+    </h2>
+    <div class="flex flex-wrap justify-center mt-8">
+      <code class="text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold m-2">get</code>
+      <div class="flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg mono">
+        <span class="text-0 break-all">
+          <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span>
+          <span class="text-xl text-purpleLight">{'<address>'}</span>
+        </span>
+      </div>
     </div>
+    <div class="divider mt-20 mb-16" />
   </div>
-  <div class="divider mt-20 mb-16" />
+</div>
+<div class="y-container flex flex-col items-center px-4">
   <!-- Example Call -->
   <h3 class="font-medium text-3xl md:text-4xl mx-4 text-center leading-tight tracking-tight">
     Example Call
@@ -227,6 +231,12 @@
 </div>
 
 <style>
+  .bg-hero {
+    background-image: url("/images/illustrations-background/bg-hero.svg");
+    background-size: auto 100%;
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+  }
   .text-0 {
     font-size: 0em;
   }
