@@ -28,15 +28,18 @@ type SVG struct {
 }
 
 // PureSVG Return SVG minified, minus width/height/etc attributes
-func PureSVG(svgData []byte) ([]byte, error) {
+func PureSVG(asset *Asset, withBackground bool) ([]byte, error) {
 	var pureSVG SVG
-	if err := xml.Unmarshal(svgData, &pureSVG); err != nil {
+	if err := xml.Unmarshal(asset.SVGContents, &pureSVG); err != nil {
 		glog.Fatal("Unable to parse SVG")
 		return nil, err
 	}
 	var b bytes.Buffer
 	canvas := svg.New(&b)
 	canvas.Startraw(fmt.Sprintf("viewBox=\"0 0 %d %d\"", DefaultSize, DefaultSize), "fill=\"none\"")
+	if withBackground {
+		canvas.Rect(0, 0, 4000, 4000, fmt.Sprintf("id=\"%s\" fill=\"%s\"", "bg", asset.BGColor))
+	}
 	io.WriteString(canvas.Writer, pureSVG.Doc)
 	// End document
 	canvas.End()

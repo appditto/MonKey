@@ -117,7 +117,7 @@ func generateIcon(hash *string, c *gin.Context) {
 }
 
 // Return vanity with given options
-func generateVanityAsset(vanity []byte, c *gin.Context) {
+func generateVanityAsset(vanity *image.Asset, c *gin.Context) {
 	var err error
 
 	format := strings.ToLower(c.Query("format"))
@@ -140,7 +140,9 @@ func generateVanityAsset(vanity []byte, c *gin.Context) {
 		}
 	}
 
-	svg, err := image.PureSVG(vanity)
+	withBackground := strings.ToLower(c.Query("background")) == "true"
+
+	svg, err := image.PureSVG(vanity, withBackground)
 
 	if format != "svg" {
 		// Convert
