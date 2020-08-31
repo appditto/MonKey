@@ -63,7 +63,7 @@
   <div class="flex flex-wrap justify-center items-center mt-5">
     <code class="text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold m-2">get</code>
     <div
-      class="w-full max-w-2xl flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg
+      class="w-full max-w-1.5xl flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg
         mono"
     >
       <span class="text-0 break-all">
@@ -170,7 +170,7 @@
   <div class="flex flex-wrap justify-center items-center mt-5">
     <code class="text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold m-2">get</code>
     <div
-      class="w-full max-w-2xl flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg
+      class="w-full max-w-1.5xl flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg
         mono"
     >
       <span class="text-0 break-all">

@@ -56,6 +56,9 @@ module.exports = {
         md: "28rem",
         lg: "32rem",
       },
+      maxWidth: {
+        "1.5xl": "45rem",
+      },
       transitionDuration: {
         250: "250ms",
         350: "350ms",
