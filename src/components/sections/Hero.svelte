@@ -78,8 +78,8 @@
 <style>
   .bg-hero {
     background-image: url("/images/illustrations-background/bg-hero.svg");
-    background-size: auto 100%;
-    background-position: 100% 50%;
+    background-size: cover;
+    background-position: 100% 100%;
     background-repeat: no-repeat;
   }
 </style>

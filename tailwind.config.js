@@ -27,6 +27,7 @@ module.exports = {
       },
       maxWidth: {
         xxs: "16rem",
+        "1_5xl": "45rem",
       },
       width: {
         28: "7rem",
@@ -55,9 +56,6 @@ module.exports = {
         sm: "24rem",
         md: "28rem",
         lg: "32rem",
-      },
-      maxWidth: {
-        "1.5xl": "45rem",
       },
       transitionDuration: {
         250: "250ms",

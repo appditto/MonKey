@@ -21,9 +21,8 @@
       How Does It Work?
     </h2>
     <p class="text-center mx-4 md:mx-12 mt-3 text-2xl">
-      We take your Banano address, apply some extremely
-      <br class="hidden lg:block" />
-      advanced science to it, and it turns into MonKey.
+      We take your Banano address, apply some extremely <br class="hidden lg:block" /> advanced science
+      to it, and it turns into MonKey.
     </p>
     <!-- Desktop Illustration -->
     <LazyImage classes="w-full px-12 lg:px-20 mt-8 hidden md:block">
