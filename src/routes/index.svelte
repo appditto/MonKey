@@ -41,9 +41,3 @@
 <OpenSource />
 <Integrate />
 <Stats {stats} {statsMonthly} />
-
-<style global>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-</style>

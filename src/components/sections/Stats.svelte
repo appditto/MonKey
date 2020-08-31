@@ -17,8 +17,16 @@
         stat={statsMonthly.total_requests}
         footer="MonKeys this month"
       />
-      <StatsCard header="We served to" stat={stats.unique_clients_served} footer="clients in total" />
-      <StatsCard header="We served to" stat={statsMonthly.clients.unique} footer="clients this month" />
+      <StatsCard
+        header="We served to"
+        stat={stats.unique_clients_served}
+        footer="clients in total"
+      />
+      <StatsCard
+        header="We served to"
+        stat={statsMonthly.clients.unique}
+        footer="clients this month"
+      />
       <!-- 
         <StatsCard
         header="Available on"
