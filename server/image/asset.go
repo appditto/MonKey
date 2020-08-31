@@ -1,6 +1,7 @@
 package image
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -49,6 +50,7 @@ type Asset struct {
 	AboveHands        bool             // Should be assembled above hands
 	Weight            float64          // The weight of this accessory, determines how often it appears
 	Address           string           // Fixed address this vanity belongs to
+	BGColor           string           // Background color of this asset (vanity)
 }
 
 // Singleton to keep assets loaded in memory
@@ -229,7 +231,8 @@ func GetAssets() *assetManager {
 					glog.Fatalf("Couldn't load file %s", path)
 					panic(err.Error())
 				}
-				vanityAsset.Address = strings.Split(vanityAsset.FileName, ".svg")[0]
+				vanityAsset.Address = vanityAsset.FileName[0:64]
+				vanityAsset.BGColor = fmt.Sprintf("#%s", vanityAsset.FileName[69:75])
 				vanityAssets[vanityAsset.Address] = vanityAsset
 			}
 			return nil
@@ -295,9 +298,9 @@ func (sm *assetManager) GetTailAssets() []Asset {
 }
 
 // GetVanityAsset - get vanity asset
-func (sm *assetManager) GetVanityAsset(address string) []byte {
+func (sm *assetManager) GetVanityAsset(address string) *Asset {
 	if asset, ok := sm.vanityAssets[strings.ToLower(address)]; ok {
-		return asset.SVGContents
+		return &asset
 	}
 	return nil
 }
