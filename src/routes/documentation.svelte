@@ -5,7 +5,8 @@
   import Meta from "../components/Meta.svelte";
   const metadata = {
     title: "MonKey | Documentation",
-    description: "MonKey API documentation.",
+    description:
+      "Integrate MonKey into your project. We have a single endpoint and just a couple of parameters, it'll be a breeze.",
     image: "https://monkey.banano.cc/previews/preview-documentation.png",
     imageAlt: "MonKey API documentation.",
     url: "https://monkey.banano.cc/documentation",
@@ -30,7 +31,7 @@
   <div class="y-container flex flex-col items-center px-4">
     <h1
       class="font-bold text-4xl md:text-6xl mx-5 md:mx-12 text-center leading-tight tracking-tight
-      mt-5 md:mt-16 lg:mt-20"
+        mt-5 md:mt-16 lg:mt-20"
     >
       API Documentation
     </h1>
@@ -63,7 +64,7 @@
     <code class="text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold m-2">get</code>
     <div
       class="w-full max-w-2xl flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg
-      mono"
+        mono"
     >
       <span class="text-0 break-all">
         <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span>
@@ -116,11 +117,9 @@
       <span class="mx-2 md:mx-3">:</span>
     </div>
     <div class="w-full md:w-2/3 md:max-w-lg text-lg leading-loose">
-      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mr-1">svg</code>
-      (default),
-      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">png</code>
-      ,
-      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">webp</code>
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mr-1">svg</code> (default), <code
+        class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1"
+      >png</code> , <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">webp</code>
       .
     </div>
   </div>
@@ -172,7 +171,7 @@
     <code class="text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold m-2">get</code>
     <div
       class="w-full max-w-2xl flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg
-      mono"
+        mono"
     >
       <span class="text-0 break-all">
         <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span>

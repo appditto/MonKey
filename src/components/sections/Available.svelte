@@ -7,31 +7,19 @@
   <div class="w-full flex flex-col justify-center relative">
     <div class="y-container relative bg-banano">
       <h2 class="font-bold text-4xl md:text-5xl mx-4 text-center leading-tight tracking-tight mt-5">
-        Available on Lots of
-        <br class="hidden md:block" />
-        Banano Services
+        Available in Every Corner
       </h2>
       <p class="text-center mx-4 md:mx-12 mt-3 text-2xl">
-        MonKeys are available in lots of places in the Banano ecosystem.
-        <br class="hidden lg:block" />
-        Most notable two are
-        <a
+        MonKey is deeply integrated into the Banano ecosystem.<br class="hidden lg:block" /> Most notable
+        two are <a
           href="https://kalium.banano.cc"
           rel="noopener"
           target="_blank"
           class="font-bold hover:underline focus:underline"
         >
           Kalium
-        </a>
-        and
-        <a
-          href="https://creeper.banano.cc"
-          rel="noopener"
-          target="_blank"
-          class="font-bold hover:underline focus:underline"
-        >
-          Creeper.
-        </a>
+        </a> and <a href="https://creeper.banano.cc" rel="noopener" target="_blank" class="font-bold
+            hover:underline focus:underline"> Creeper. </a>
       </p>
       <div class="w-full flex flex-row flex-wrap justify-center px-4 mt-2">
         <a
@@ -39,7 +27,7 @@
           rel="noopener"
           target="_blank"
           class="w-full max-w-xs md:w-64 bg-primary btn-primary text-white text-xl font-bold
-          rounded-xl border-2 border-black px-6 py-2 mx-2 mt-6 text-center"
+            rounded-xl border-2 border-black px-6 py-2 mx-2 mt-6 text-center"
         >
           Download Kalium
         </a>
@@ -48,7 +36,7 @@
           rel="noopener"
           target="_blank"
           class="w-full max-w-xs md:w-64 bg-primary btn-primary text-white text-xl font-bold
-          rounded-xl border-2 border-black px-6 py-2 mx-2 mt-6 text-center"
+            rounded-xl border-2 border-black px-6 py-2 mx-2 mt-6 text-center"
         >
           Visit Creeper
         </a>
@@ -59,7 +47,7 @@
           rel="noopener"
           href="https://kalium.banano.cc"
           class="transition-all ease-out duration-250 transform scale-100 hover:scale-105
-          focus:scale-105"
+            focus:scale-105"
         >
           <LazyImage classes="w-full max-w-xs px-4 my-6">
             <img
@@ -82,7 +70,7 @@
             rel="noopener"
             href="https://creeper.banano.cc/explorer/account/ban_1creepi89mp48wkyg5fktgap9j6165d8yz6g1fbe5pneinz3by9o54fuq63m/history"
             class="transition-all ease-out duration-250 transform scale-100 hover:scale-105
-            focus:scale-105"
+              focus:scale-105"
           >
             <LazyImage classes="w-full max-w-md mx-auto px-4 my-2">
               <img
@@ -93,7 +81,7 @@
               />
               <img
                 slot="placeholder"
-                class="w-full h-auto "
+                class="w-full h-auto"
                 src="images/illustrations-foreground/creeper-1-placeholder.svg"
                 alt="Creeper 1 Illustration Placeholder"
               />
@@ -104,7 +92,7 @@
             rel="noopener"
             href="https://creeper.banano.cc/explorer/account/ban_1creepi89mp48wkyg5fktgap9j6165d8yz6g1fbe5pneinz3by9o54fuq63m/history"
             class="transition-all ease-out duration-250 transform scale-100 hover:scale-105
-            focus:scale-105"
+              focus:scale-105"
           >
             <LazyImage classes="w-full md:max-w-md mx-auto px-6 my-2">
               <img
@@ -115,7 +103,7 @@
               />
               <img
                 slot="placeholder"
-                class="w-full h-auto "
+                class="w-full h-auto"
                 src="images/illustrations-foreground/creeper-2-placeholder.svg"
                 alt="Creeper 2 Illustration Placeholder"
               />

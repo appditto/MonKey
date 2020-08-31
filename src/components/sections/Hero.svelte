@@ -17,7 +17,7 @@
     >
       Welcome to the jungle.
     </h1>
-    <p class="text-center mx-5 mt-4 text-2xl">In here, Banano addresses are MonKeys.</p>
+    <p class="text-center mx-5 mt-4 text-2xl">Here, Banano addresses are represented by MonKeys.</p>
     <button
       on:click={toggleGenerator}
       class="{showGenerator ? 'bg-danger btn-danger border-dangerDark' : 'bg-primary btn-primary border-black'}
