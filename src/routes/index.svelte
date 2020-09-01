@@ -19,8 +19,10 @@
   import Integrate from "../components/sections/Integrate.svelte";
   import Stats from "../components/sections/Stats.svelte";
   import Meta from "../components/Meta.svelte";
+
   export let stats;
   export let statsMonthly;
+
   const metadata = {
     title: "MonKey",
     description:
@@ -30,8 +32,6 @@
     url: "https://monkey.banano.cc",
   };
 </script>
-
-<svelte:head />
 
 <!-- HTML -->
 <Meta {metadata} />
