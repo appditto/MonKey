@@ -26,4 +26,7 @@ Setting up your system for development simply requires `go` in your path.
 
 ## Licensing
 
-The license information for this software is located in the `LICENSE` file.
+By using this software you must abide by the terms of the LICENSE.
+
+You can read the terms of the license in the [LICENSE](https://github.com/appditto/monKey/blob/master/LICENSE) file.
+
