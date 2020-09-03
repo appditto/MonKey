@@ -124,7 +124,7 @@
         <button
           on:click={resetGeneration}
           class="bg-primary btn-primary text-white text-lg font-bold rounded-lg border-2
-          border-black px-10 md:px-12 py-1 mx-4 md:mx-8 my-4 md:my-5"
+            border-black px-10 md:px-12 py-1 mx-4 md:mx-8 my-4 md:my-5"
         >
           Again!
         </button>
@@ -143,8 +143,8 @@
             <div class="w-full">
               <label
                 class="{inputError ? 'text-danger' : inputFocused || inputHovered ? 'text-brownLight' : 'text-gray'}
-                absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2 text-xl font-bold
-                transition-all duration-200 ease-out"
+                  absolute bg-white rounded-lg top-0 left-0 ml-4 -mt-4 px-2 text-xl font-bold transition-all
+                  duration-200 ease-out"
                 for="bananoAddress"
               >
                 Address
@@ -159,8 +159,8 @@
                 bind:value={inputValue}
                 on:input={clearInputError}
                 class="{inputError ? 'border-danger text-danger' : 'text-gray border-primary focus:border-brownLight hover:border-brownLight'}
-                w-full text-xl font-bold px-4 py-3 border-3 rounded-xl transition-all duration-200
-                ease-out"
+                  w-full text-xl font-bold px-4 py-3 border-3 rounded-xl transition-all duration-200
+                  ease-out"
                 type="text"
                 autocomplete="off"
                 placeholder="Enter your address"
@@ -169,7 +169,7 @@
             <button
               on:click={generateMonkey(inputValue)}
               class="w-full bg-primary btn-primary text-white text-xl font-bold rounded-xl
-              border-black border-2 px-6 py-2 mx-auto mt-3"
+                border-black border-2 px-6 py-2 mx-auto mt-3"
             >
               Show Me
             </button>
@@ -184,7 +184,7 @@
             <button
               on:click={generateRandomMonkey}
               class="bg-primary btn-primary text-white text-lg font-bold rounded-lg border-black
-              border-2 px-8 md:px-10 py-1 my-4 md:my-5"
+                border-2 px-8 md:px-10 py-1 my-4 md:my-5"
             >
               Randomize!
             </button>

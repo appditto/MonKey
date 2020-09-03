@@ -19,18 +19,19 @@
   import Integrate from "../components/sections/Integrate.svelte";
   import Stats from "../components/sections/Stats.svelte";
   import Meta from "../components/Meta.svelte";
+
   export let stats;
   export let statsMonthly;
+
   const metadata = {
     title: "MonKey",
-    description: "Address visualisation for Banano.",
+    description:
+      "Welcome to the jungle! Here, Banano addresses are represented by MonKeys. Come join us and see your MonKey!",
     image: "https://monkey.banano.cc/previews/preview.png",
-    imageAlt: "Address visualisation for Banano",
+    imageAlt: "Address visualisation for Banano Addresses",
     url: "https://monkey.banano.cc",
   };
 </script>
-
-<svelte:head />
 
 <!-- HTML -->
 <Meta {metadata} />
@@ -41,9 +42,3 @@
 <OpenSource />
 <Integrate />
 <Stats {stats} {statsMonthly} />
-
-<style global>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-</style>

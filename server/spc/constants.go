@@ -8,4 +8,6 @@ var SvcList = []StatsService{
 	"kalium",
 	"creeper",
 	"bananobet",
+	"banano.cc",
+	"yellowpaper",
 }
