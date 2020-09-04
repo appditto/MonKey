@@ -3,7 +3,7 @@ package image
 import (
 	"testing"
 
-	"github.com/appditto/monKey/server/color"
+	"github.com/appditto/MonKey/server/color"
 )
 
 func TestGetColor(t *testing.T) {

@@ -25,7 +25,7 @@
     </p>
     <div class="flex flex-row justify-center mt-6">
       <a
-        href="https://github.com/appditto/monkey"
+        href="https://github.com/appditto/MonKey"
         rel="noopener"
         target="_blank"
         class="bg-primary btn-primary text-white text-xl font-bold rounded-xl border-2 border-black

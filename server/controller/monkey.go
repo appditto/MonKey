@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/appditto/monKey/server/image"
-	"github.com/appditto/monKey/server/utils"
+	"github.com/appditto/MonKey/server/image"
+	"github.com/appditto/MonKey/server/utils"
 	"github.com/gin-gonic/gin"
 )
 

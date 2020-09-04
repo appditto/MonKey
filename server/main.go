@@ -6,9 +6,9 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/appditto/monKey/server/controller"
-	"github.com/appditto/monKey/server/image"
-	"github.com/appditto/monKey/server/utils"
+	"github.com/appditto/MonKey/server/controller"
+	"github.com/appditto/MonKey/server/image"
+	"github.com/appditto/MonKey/server/utils"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/gographics/imagick.v3/imagick"
 )

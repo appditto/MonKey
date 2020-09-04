@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/appditto/monKey/server/db"
-	"github.com/appditto/monKey/server/image"
-	"github.com/appditto/monKey/server/utils"
+	"github.com/appditto/MonKey/server/db"
+	"github.com/appditto/MonKey/server/image"
+	"github.com/appditto/MonKey/server/utils"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,4 +1,4 @@
-module github.com/appditto/monKey/server
+module github.com/appditto/MonKey/server
 
 go 1.14
 

@@ -16,7 +16,7 @@
     },
     {
       text: "GitHub",
-      href: "https://github.com/appditto/monkey",
+      href: "https://github.com/appditto/MonKey",
     },
   ];
 </script>

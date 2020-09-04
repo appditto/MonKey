@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/appditto/monKey/server/color"
+	"github.com/appditto/MonKey/server/color"
 	"github.com/golang/glog"
 )
 

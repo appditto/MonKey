@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/appditto/monKey/server/spc"
-	"github.com/appditto/monKey/server/utils"
+	"github.com/appditto/MonKey/server/spc"
+	"github.com/appditto/MonKey/server/utils"
 	"github.com/bsm/redislock"
 	"github.com/go-redis/redis/v7"
 	"github.com/golang/glog"
