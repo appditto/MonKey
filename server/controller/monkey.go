@@ -157,3 +157,71 @@ func generateVanityAsset(vanity *image.Asset, c *gin.Context) {
 	}
 	c.Data(200, "image/svg+xml; charset=utf-8", svg)
 }
+
+type MonkeyStatsRequest struct {
+	Addresses []string `json:"addresses"`
+}
+
+type MonkeyStatsResponseItem map[string]map[string]string
+
+// Info about a MonKey
+func (mc MonkeyController) MonkeyStats(c *gin.Context) {
+	var reqJson MonkeyStatsRequest
+	c.BindJSON(&reqJson)
+
+	ret := make(MonkeyStatsResponseItem)
+
+	for _, address := range reqJson.Addresses {
+		if !utils.ValidateAddress(address) {
+			c.String(http.StatusBadRequest, "%s", fmt.Sprintf("Invalid address in address list %s", address))
+			return
+		}
+		// Get monkey info
+		pubKey := utils.AddressToPub(address)
+		sha256 := utils.Sha256(pubKey, mc.Seed)
+		accessories, _ := image.GetAccessoriesForHash(sha256, true)
+
+		ret[address] = make(map[string]string)
+		ret[address]["background_color"] = accessories.BGColor
+		if accessories.GlassesAsset != nil {
+			ret[address]["glasses"] = accessories.GlassesAsset.FileName
+		} else {
+			ret[address]["glasses"] = "none"
+		}
+		if accessories.HatAsset != nil {
+			ret[address]["hat"] = accessories.HatAsset.FileName
+		} else {
+			ret[address]["hat"] = "none"
+		}
+		if accessories.MiscAsset != nil {
+			ret[address]["misc"] = accessories.MiscAsset.FileName
+		} else {
+			ret[address]["misc"] = "none"
+		}
+		if accessories.MouthAsset != nil {
+			ret[address]["mouth"] = accessories.MouthAsset.FileName
+		} else {
+			ret[address]["mouth"] = "none"
+		}
+		if accessories.ShirtPantsAsset != nil {
+			ret[address]["shirt_pants"] = accessories.ShirtPantsAsset.FileName
+		} else {
+			ret[address]["shirt_pants"] = "none"
+		}
+		if accessories.ShoeAsset != nil {
+			ret[address]["shoes"] = accessories.ShoeAsset.FileName
+		} else {
+			ret[address]["shoes"] = "none"
+		}
+		if accessories.TailAccessory != nil {
+			ret[address]["tail_accessory"] = accessories.TailAccessory.FileName
+		} else {
+			ret[address]["tail_accessory"] = "none"
+		}
+		for k, v := range accessories.AccessoryColors {
+			ret[address][fmt.Sprintf("color_%s", k)] = v.ToHTML(true)
+		}
+	}
+
+	c.JSON(200, ret)
+}
