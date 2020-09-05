@@ -52,7 +52,11 @@
       <p>made by</p>
       <a class="logo-button p-1 ml-1" rel="noopener" target="_blank" href="https://appditto.com">
         <div class="w-28 h-auto">
-          <img class="w-full h-auto" src="images/logos/logo-appditto-horizontal.svg" alt="Appditto" />
+          <img
+            class="w-full h-auto"
+            src="images/logos/logo-appditto-horizontal.svg"
+            alt="Appditto"
+          />
         </div>
       </a>
     </div>

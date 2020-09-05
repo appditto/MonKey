@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+
+@font-face {
+  font-family: "Now Alt";
+  src: url("fonts/now-alt-bold.woff2") format("woff2"),
+    url("fonts/now-alt-bold.woff") format("woff"), url("fonts/now-alt-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: "Now Alt";
+  src: url("fonts/now-alt-medium.woff2") format("woff2"),
+    url("fonts/now-alt-medium.woff") format("woff"),
+    url("fonts/now-alt-medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: "Now Alt";
+  src: url("fonts/now-alt-regular.woff2") format("woff2"),
+    url("fonts/now-alt-regular.woff") format("woff"),
+    url("fonts/now-alt-regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: fallback;
+}
+
+body {
+  font-family: "Now Alt", sans-serif;
+}
+
+.y-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-primary {
+  transition: all 0.2s ease-out;
+  box-shadow: 0rem 0.3rem 0rem 0rem black;
+  transform: translateY(0rem);
+  outline: none !important;
+}
+
+.btn-primary:hover {
+  box-shadow: 0rem 0.5rem 0rem 0rem black;
+  transform: translateY(-0.2rem);
+}
+
+.btn-primary:focus {
+  filter: brightness(1.6);
+}
+
+.btn-danger {
+  transition: all 0.2s ease-out;
+  box-shadow: 0rem 0.3rem 0rem 0rem #97000e;
+  transform: translateY(0rem);
+  outline: none !important;
+}
+
+.btn-danger:focus {
+  filter: brightness(1.3);
+}
+
+.btn-danger:hover {
+  box-shadow: 0rem 0.5rem 0rem 0rem #97000e;
+  transform: translateY(-0.2rem);
+}
+
+.logo-button {
+  transform: scale(1);
+  transition: all 0.2s ease-out;
+  border-radius: 0.2rem;
+}
+
+.logo-button:hover {
+  transform: scale(1.08);
+  transition: all 0.2s ease-out;
+}
+
+.logo-button:focus {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+input:focus,
+a:focus,
+button:focus {
+  outline: none !important;
+}
+
+@tailwind utilities;
