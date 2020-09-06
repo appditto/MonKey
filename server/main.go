@@ -100,6 +100,7 @@ func main() {
 	apiGroup.GET("/stats/monthly", controller.StatsMonthly)
 	// Address
 	apiGroup.GET("/monkey/:address", monkeyController.GetBanano)
+	apiGroup.POST("/monkey/dtl", monkeyController.MonkeyStats)
 	// Testing
 	if gin.IsDebugging() {
 		apiGroup.GET("/random", monkeyController.GetRandomSvg)
