@@ -1,15 +1,3 @@
-<script context="module">
-  export async function preload() {
-    let baseUrl = "https://monkey.banano.cc";
-    const [res, resMonthly] = await Promise.all([
-      this.fetch(`${baseUrl}/api/v1/stats`),
-      this.fetch(`${baseUrl}/api/v1/stats/monthly`),
-    ]);
-    const [stats, statsMonthly] = await Promise.all([res.json(), resMonthly.json()]);
-    return { stats, statsMonthly };
-  }
-</script>
-
 <script>
   import Hero from "../components/sections/Hero.svelte";
   import How from "../components/sections/How.svelte";
@@ -19,9 +7,21 @@
   import Integrate from "../components/sections/Integrate.svelte";
   import Stats from "../components/sections/Stats.svelte";
   import Meta from "../components/Meta.svelte";
+  import { onMount } from "svelte";
 
-  export let stats;
-  export let statsMonthly;
+  let stats;
+  let statsMonthly;
+
+  onMount(async () => {
+    let baseUrl = "https://monkey.banano.cc";
+    const [res, resMonthly] = await Promise.all([
+      fetch(`${baseUrl}/api/v1/stats`),
+      fetch(`${baseUrl}/api/v1/stats/monthly`),
+    ]);
+    const [_stats, _statsMonthly] = await Promise.all([res.json(), resMonthly.json()]);
+    stats = _stats;
+    statsMonthly = _statsMonthly;
+  });
 
   const metadata = {
     title: "MonKey",
@@ -41,4 +41,6 @@
 <Available />
 <OpenSource />
 <Integrate />
-<Stats {stats} {statsMonthly} />
+{#if stats && statsMonthly}
+  <Stats {stats} {statsMonthly} />
+{/if}
