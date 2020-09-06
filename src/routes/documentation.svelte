@@ -36,7 +36,7 @@
       API Documentation
     </h1>
     <p class="text-center mx-5 mt-4 text-2xl">
-      We have a single endpoint and just a couple of paramaters.
+      We have a single endpoint and just a couple of parameters.
     </p>
     <div class="divider mt-20 mb-16" />
     <!-- Endpoint -->
