@@ -11,12 +11,12 @@
       href: "/documentation",
     },
     {
-      text: "Banano",
-      href: "https://banano.cc",
-    },
-    {
       text: "GitHub",
       href: "https://github.com/appditto/MonKey",
+    },
+    {
+      text: "Banano",
+      href: "https://banano.cc",
     },
   ];
 </script>
