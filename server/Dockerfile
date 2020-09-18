@@ -12,7 +12,7 @@ ADD assets assets
 # Install dependencies, imagemagick, go, and cleanup
 RUN apt-get update && apt-get install -y \
     gcc pkg-config \
-&& go get -u \
+&& go get \
 && go build -o monkey-server \
 && rm -rf /var/lib/apt/lists/*
 
