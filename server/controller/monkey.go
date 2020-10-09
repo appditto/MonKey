@@ -31,7 +31,7 @@ func (mc MonkeyController) GetBanano(c *gin.Context) {
 	}
 
 	// Parse stats
-	*mc.StatsChannel <- c
+	//*mc.StatsChannel <- c
 
 	// See if this is a vanity
 	vanity := image.GetAssets().GetVanityAsset(address)
