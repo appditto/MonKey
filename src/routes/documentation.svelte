@@ -46,9 +46,10 @@
     <div class="flex flex-wrap justify-center mt-8">
       <code class="text-3xl bg-orangeLight rounded-lg px-3 py-1 font-bold m-2">get</code>
       <div class="flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg mono">
-        <span class="text-0 break-all">
-          <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span>
-          <span class="text-xl text-purpleLight">{'<address>'}</span>
+        <span class="break-all">
+          <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span><span
+            class="text-xl text-purpleLight"
+          >{'<address>'}</span>
         </span>
       </div>
     </div>
@@ -66,9 +67,10 @@
       class="w-full max-w-1_5xl flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg
         mono"
     >
-      <span class="text-0 break-all">
-        <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span>
-        <span class="text-xl text-purpleLight">
+      <span class="break-all">
+        <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span><span
+          class="text-xl text-purpleLight"
+        >
           ban_1ka1ium4pfue3uxtntqsrib8mumxgazsjf58gidh1xeo5te3whsq8z476goo
         </span>
       </span>
@@ -117,10 +119,10 @@
       <span class="mx-2 md:mx-3">:</span>
     </div>
     <div class="w-full md:w-2/3 md:max-w-lg text-lg leading-loose">
-      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mr-1">svg</code> (default), <code
-        class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1"
-      >png</code> , <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">webp</code>
-      .
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mr-1">svg</code>
+      (default),
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">png</code>,
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">webp</code>.
     </div>
   </div>
   <!-- Size -->
@@ -131,18 +133,22 @@
     </div>
     <div class="w-full md:w-2/3 md:max-w-lg text-lg leading-loose text-0">
       <span class="text-lg">In pixels. Ignored when format is</span>
-      <code class="text-lg font-bold bg-black text-cyanLight rounded-md px-2 mx-1">svg</code>
-      <span class="text-lg">. Default is</span>
+      <code class="text-lg font-bold bg-black text-cyanLight rounded-md px-2 mx-1">svg</code><span
+        class="text-lg"
+      >. Default is</span>
       <code class="text-lg font-bold bg-black text-cyanLight rounded-md px-2 mx-1">128</code>
       <span class="text-lg">when format is</span>
       <code class="text-lg font-bold bg-black text-cyanLight rounded-md px-2 mx-1">webp</code>
       <span class="text-lg">or</span>
-      <code class="text-lg font-bold bg-black text-cyanLight rounded-md px-2 mx-1">png</code>
-      <span class="text-lg">. Minimum is</span>
-      <code class="text-lg font-bold bg-black text-cyanLight rounded-md px-2 mx-1">100</code>
-      <span class="text-lg">, maximum is</span>
-      <code class="text-lg font-bold bg-black text-cyanLight rounded-md px-2 mx-1">1000</code>
-      <span class="text-lg">.</span>
+      <code class="text-lg font-bold bg-black text-cyanLight rounded-md px-2 mx-1">png</code><span
+        class="text-lg"
+      >. Minimum is</span>
+      <code class="text-lg font-bold bg-black text-cyanLight rounded-md px-2 mx-1">100</code><span
+        class="text-lg"
+      >, maximum is</span>
+      <code class="text-lg font-bold bg-black text-cyanLight rounded-md px-2 mx-1">1000</code><span
+        class="text-lg"
+      >.</span>
     </div>
   </div>
   <!-- Background -->
@@ -155,8 +161,9 @@
       <span class="text-lg">Adds a solid color background based on the MonKey.</span>
       <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">false</code>
       <span class="text-lg">(default) or</span>
-      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">true</code>
-      <span class="text-lg">.</span>
+      <code class="font-bold bg-black text-cyanLight rounded-md px-2 mx-1">true</code><span
+        class="text-lg"
+      >.</span>
     </div>
   </div>
   <!-- Arrow Down -->
@@ -173,17 +180,17 @@
       class="w-full max-w-1_5xl flex items-center m-2 text-orangeLight bg-black px-4 py-2 rounded-lg
         mono"
     >
-      <span class="text-0 break-all">
-        <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span>
-        <span class="text-xl text-purpleLight">
-          ban_1ka1ium4pfue3uxtntqsrib8mumxgazsjf58gidh1xeo5te3whsq8z476goo
-        </span>
-        <span class="text-xl text-white">?</span>
-        <span class="text-xl text-cyanLight">format=png</span>
-        <span class="text-xl text-white">&</span>
-        <span class="text-xl text-cyanLight">size=512</span>
-        <span class="text-xl text-white">&</span>
-        <span class="text-xl text-cyanLight">background=true</span>
+      <span class="break-all">
+        <span class="text-xl">https://monkey.banano.cc/api/v1/monkey/</span><span
+          class="text-xl text-purpleLight"
+        >
+          ban_1ka1ium4pfue3uxtntqsrib8mumxgazsjf58gidh1xeo5te3whsq8z476goo</span><span
+          class="text-xl text-white"
+        >?</span><span class="text-xl text-cyanLight">format=png</span><span
+          class="text-xl text-white"
+        >&</span><span class="text-xl text-cyanLight">size=512</span><span
+          class="text-xl text-white"
+        >&</span><span class="text-xl text-cyanLight">background=true</span>
       </span>
     </div>
   </div>
@@ -235,9 +242,6 @@
     background-size: cover;
     background-position: 100% 100%;
     background-repeat: no-repeat;
-  }
-  .text-0 {
-    font-size: 0em;
   }
   code,
   pre,
