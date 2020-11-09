@@ -11,4 +11,5 @@ var SvcList = []StatsService{
 	"banano.cc",
 	"yellowpaper",
 	"bananovault",
+	"monkeytalks",
 }

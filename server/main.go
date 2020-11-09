@@ -107,7 +107,7 @@ func main() {
 	}
 
 	// Start stats worker
-	go controller.StatsWorker(statsChan)
+	//go controller.StatsWorker(statsChan)
 
 	// Run on 8080
 	router.Run(fmt.Sprintf("%s:%d", *serverHost, *serverPort))

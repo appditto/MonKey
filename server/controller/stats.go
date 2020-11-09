@@ -16,20 +16,23 @@ import (
 
 // Go routine for processing stats messages
 func StatsWorker(statsChan <-chan *gin.Context) {
-	// Process stats
-	for c := range statsChan {
-		// Update unique addresses
-		db.GetDB().UpdateStatsAddress(c.Param("address"))
-		// Update daily/monthly
-		db.GetDB().UpdateStatsDate(c.Param("address"))
-		db.GetDB().UpdateStatsDateClient(c.ClientIP())
-		// Update clients
-		db.GetDB().UpdateStatsClient(c.ClientIP())
-		// Update by service
-		if c.Query("svc") != "" {
-			db.GetDB().UpdateStatsByService(c.Query("svc"), c.Param("address"))
-		}
-	}
+	return
+	/*
+		// Process stats
+		for c := range statsChan {
+			continue
+			// Update unique addresses
+			db.GetDB().UpdateStatsAddress(c.Param("address"))
+			// Update daily/monthly
+			db.GetDB().UpdateStatsDate(c.Param("address"))
+			db.GetDB().UpdateStatsDateClient(c.ClientIP())
+			// Update clients
+			db.GetDB().UpdateStatsClient(c.ClientIP())
+			// Update by service
+			if c.Query("svc") != "" {
+				db.GetDB().UpdateStatsByService(c.Query("svc"), c.Param("address"))
+			}
+		}*/
 }
 
 // Stats API
