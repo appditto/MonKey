@@ -15,7 +15,7 @@
     "sapper:dev": "sapper dev"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "blakejs": "^1.1.0",
     "compression": "^1.7.1",
     "polka": "next",
