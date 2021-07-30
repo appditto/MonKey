@@ -21,8 +21,8 @@ spec:
         command: ["/bin/bash", "-c"]
         resources:
           requests:
-            cpu: 400m
-            memory: 750Mi
+            cpu: 500m
+            memory: 1000Mi
           limits:
             cpu: 1500m
             memory: 3000Mi
