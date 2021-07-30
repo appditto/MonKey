@@ -21,11 +21,11 @@ spec:
         command: ["/bin/bash", "-c"]
         resources:
           requests:
-            cpu: 250m
-            memory: 500Mi
+            cpu: 400m
+            memory: 750Mi
           limits:
-            cpu: 1250m
-            memory: 1500Mi
+            cpu: 1500m
+            memory: 3000Mi
         args: ["./monkey-server -host=0.0.0.0 -port=5555 -logtostderr"]
         ports:
           - containerPort: 5555
