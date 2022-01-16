@@ -38,6 +38,7 @@
     "postcss-cli": "^7.1.2",
     "postcss-load-config": "^2.1.0",
     "rollup": "^2.3.4",
+    "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-svelte": "^5.0.1",
     "rollup-plugin-terser": "^7.0.0",
     "sapper": "^0.27.0",

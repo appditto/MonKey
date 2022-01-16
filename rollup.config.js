@@ -5,6 +5,7 @@ import svelte from "rollup-plugin-svelte";
 import babel from "@rollup/plugin-babel";
 import { terser } from "rollup-plugin-terser";
 import config from "sapper/config/rollup.js";
+import json from 'rollup-plugin-json';
 
 import pkg from "./package.json";
 
@@ -35,7 +36,7 @@ export default {
         dedupe: ["svelte"],
       }),
       commonjs(),
-
+      json(),
       legacy &&
         babel({
           extensions: [".js", ".mjs", ".html", ".svelte"],
