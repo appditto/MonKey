@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: monkey-ingress
@@ -18,18 +18,24 @@ metadata:
     nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
 spec:
   tls:
-  - hosts:
-    - monkey.banano.cc
-    secretName: monkey-banano-cc-server-secret
+    - hosts:
+        - monkey.banano.cc
+      secretName: monkey-banano-cc-server-secret
   rules:
-  - host: monkey.banano.cc
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: nuxt-monkey-service
-          servicePort: 3000
-      - path: /api
-        backend:
-          serviceName: go-monkey-service
-          servicePort: 5555
+    - host: monkey.banano.cc
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nuxt-monkey-service
+                port:
+                  number: 3000
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: go-monkey-service
+                port:
+                  number: 5555
