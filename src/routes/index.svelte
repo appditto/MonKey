@@ -5,11 +5,11 @@
   import Available from "../components/sections/Available.svelte";
   import OpenSource from "../components/sections/OpenSource.svelte";
   import Integrate from "../components/sections/Integrate.svelte";
-  import Stats from "../components/sections/Stats.svelte";
+  /* import Stats from "../components/sections/Stats.svelte"; */
   import Meta from "../components/Meta.svelte";
-  import { onMount } from "svelte";
+  /* import { onMount } from "svelte"; */
 
-  let stats;
+  /* let stats;
   let statsMonthly;
 
   onMount(async () => {
@@ -21,7 +21,7 @@
     const [_stats, _statsMonthly] = await Promise.all([res.json(), resMonthly.json()]);
     stats = _stats;
     statsMonthly = _statsMonthly;
-  });
+  }); */
 
   const metadata = {
     title: "MonKey",
@@ -33,7 +33,6 @@
   };
 </script>
 
-<!-- HTML -->
 <Meta {metadata} />
 <Hero />
 <How />
@@ -41,6 +40,6 @@
 <Available />
 <OpenSource />
 <Integrate />
-{#if stats && statsMonthly}
+<!-- {#if stats && statsMonthly}
   <Stats {stats} {statsMonthly} />
-{/if}
+{/if} -->
