@@ -1,17 +1,40 @@
 module github.com/appditto/MonKey/server
 
-go 1.14
+go 1.19
 
 require (
-	github.com/ajstarks/svgo v0.0.0-20200725142600-7a3c8b57fecb
+	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b
 	github.com/bbedward/nano v0.0.0-20200816190148-07c73bdcaff6
-	github.com/bsm/redislock v0.5.0
-	github.com/gin-gonic/gin v1.7.0
-	github.com/go-redis/redis/v7 v7.4.0
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-	github.com/tdewolff/minify/v2 v2.9.0
-	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a // indirect
-	golang.org/x/sys v0.0.0-20200826173525-f9321e4c35a6 // indirect
-	google.golang.org/protobuf v1.25.0 // indirect
-	gopkg.in/gographics/imagick.v3 v3.3.0
+	github.com/bsm/redislock v0.7.2
+	github.com/gin-gonic/gin v1.8.1
+	github.com/go-redis/redis/v8 v8.11.5
+	github.com/golang/glog v1.0.0
+	github.com/tdewolff/minify/v2 v2.12.0
+	gopkg.in/gographics/imagick.v3 v3.4.1
+)
+
+require (
+	github.com/bbedward/crypto/ed25519 v0.0.0-20220804193241-34e811d3dfe5 // indirect
+	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/gin-contrib/pprof v1.4.0 // indirect
+	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/go-playground/locales v0.14.0 // indirect
+	github.com/go-playground/universal-translator v0.18.0 // indirect
+	github.com/go-playground/validator/v10 v10.11.0 // indirect
+	github.com/goccy/go-json v0.9.10 // indirect
+	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/mattn/go-isatty v0.0.16 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/pelletier/go-toml/v2 v2.0.2 // indirect
+	github.com/tdewolff/parse/v2 v2.6.2 // indirect
+	github.com/ugorji/go/codec v1.2.7 // indirect
+	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
+	golang.org/x/net v0.0.0-20220812174116-3211cb980234 // indirect
+	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
+	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

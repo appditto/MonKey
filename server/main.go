@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/appditto/MonKey/server/controller"
@@ -46,7 +45,7 @@ func RandFiles(count int, seed string, bg bool) {
 
 		accessories, _ := image.GetAccessoriesForHash(sha256, bg)
 		svg, _ := image.CombineSVG(accessories)
-		ioutil.WriteFile(fmt.Sprintf("randsvg/%s.svg", address), svg, os.FileMode(0644))
+		os.WriteFile(fmt.Sprintf("randsvg/%s.svg", address), svg, os.FileMode(0644))
 	}
 }
 
@@ -85,6 +84,7 @@ func main() {
 
 	// Setup router
 	router := gin.Default()
+	// pprof.Register(router)
 	router.Use(CorsMiddleware())
 
 	// Setup natricon controller

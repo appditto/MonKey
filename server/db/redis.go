@@ -1,6 +1,7 @@
 package db
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -11,9 +12,11 @@ import (
 	"github.com/appditto/MonKey/server/spc"
 	"github.com/appditto/MonKey/server/utils"
 	"github.com/bsm/redislock"
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 	"github.com/golang/glog"
 )
+
+var ctx = context.Background()
 
 // This is incredibly messy and should probably be done in SQL
 
@@ -55,55 +58,55 @@ func GetDB() *redisManager {
 
 // del - Redis DEL
 func (r *redisManager) del(key string) (int64, error) {
-	val, err := r.Client.Del(key).Result()
+	val, err := r.Client.Del(ctx, key).Result()
 	return val, err
 }
 
 // get - Redis GET
 func (r *redisManager) get(key string) (string, error) {
-	val, err := r.Client.Get(key).Result()
+	val, err := r.Client.Get(ctx, key).Result()
 	return val, err
 }
 
 // set - Redis SET
 func (r *redisManager) set(key string, value string) error {
-	err := r.Client.Set(key, value, 0).Err()
+	err := r.Client.Set(ctx, key, value, 0).Err()
 	return err
 }
 
 // setWithExpiration - Redis SET with EXPIRY in seconds
 func (r *redisManager) setWithExpiration(key string, value string, expiry time.Duration) error {
-	err := r.Client.Set(key, value, expiry*time.Second).Err()
+	err := r.Client.Set(ctx, key, value, expiry*time.Second).Err()
 	return err
 }
 
 // hlen - Redis HLEN
 func (r *redisManager) hlen(key string) (int64, error) {
-	val, err := r.Client.HLen(key).Result()
+	val, err := r.Client.HLen(ctx, key).Result()
 	return val, err
 }
 
 // hget - Redis HGET
 func (r *redisManager) hget(key string, field string) (string, error) {
-	val, err := r.Client.HGet(key, field).Result()
+	val, err := r.Client.HGet(ctx, key, field).Result()
 	return val, err
 }
 
 // hgetall - Redis HGETALL
 func (r *redisManager) hgetall(key string) (map[string]string, error) {
-	val, err := r.Client.HGetAll(key).Result()
+	val, err := r.Client.HGetAll(ctx, key).Result()
 	return val, err
 }
 
 // hset - Redis HSET
 func (r *redisManager) hset(key string, field string, value string) error {
-	err := r.Client.HSet(key, field, value).Err()
+	err := r.Client.HSet(ctx, key, field, value).Err()
 	return err
 }
 
 // hdel - Redis HDEL
 func (r *redisManager) hdel(key string, field string) error {
-	err := r.Client.HDel(key, field).Err()
+	err := r.Client.HDel(ctx, key, field).Err()
 	return err
 }
 

@@ -2,7 +2,6 @@ package image
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -89,7 +88,7 @@ func getAccessoryAsset(fname string, path string) Asset {
 	asset := Asset{}
 	asset.FileName = fname
 	asset.IllustrationPath = path
-	asset.SVGContents, err = ioutil.ReadFile(path)
+	asset.SVGContents, err = os.ReadFile(path)
 	if err != nil {
 		glog.Fatalf("Couldn't load file %s", path)
 		panic(err.Error())
@@ -132,7 +131,7 @@ func GetAssets() *assetManager {
 				bodyAsset = Asset{}
 				bodyAsset.FileName = info.Name()
 				bodyAsset.IllustrationPath = path
-				bodyAsset.SVGContents, err = ioutil.ReadFile(path)
+				bodyAsset.SVGContents, err = os.ReadFile(path)
 				if err != nil {
 					glog.Fatalf("Couldn't load file %s", path)
 					panic(err.Error())
@@ -226,7 +225,7 @@ func GetAssets() *assetManager {
 				vanityAsset = Asset{}
 				vanityAsset.FileName = info.Name()
 				vanityAsset.IllustrationPath = path
-				vanityAsset.SVGContents, err = ioutil.ReadFile(path)
+				vanityAsset.SVGContents, err = os.ReadFile(path)
 				if err != nil {
 					glog.Fatalf("Couldn't load file %s", path)
 					panic(err.Error())
