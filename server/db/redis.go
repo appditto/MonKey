@@ -121,7 +121,7 @@ func (r *redisManager) UpdateStatsAddress(address string) {
 			count = existingInt + 1
 		}
 	}
-	err = r.hset(key, address, string(count))
+	err = r.hset(key, address, strconv.Itoa(count))
 	if err != nil {
 		glog.Errorf("Error updating StatesAddresses %s", err)
 	}
@@ -247,7 +247,7 @@ func (r *redisManager) UpdateStatsDate(address string) {
 			count = existingInt + 1
 		}
 	}
-	err = r.hset(key, fmt.Sprintf("%s_%s", dateStr, address), string(count))
+	err = r.hset(key, fmt.Sprintf("%s_%s", dateStr, address), strconv.Itoa(count))
 	if err != nil {
 		glog.Errorf("Error updating StatsDate %s", err)
 	}
@@ -259,7 +259,7 @@ func (r *redisManager) UpdateStatsDate(address string) {
 			monthCount = existingMonthInt + 1
 		}
 	}
-	err = r.hset(monthKey, address, string(monthCount))
+	err = r.hset(monthKey, address, strconv.Itoa(monthCount))
 	if err != nil {
 		glog.Errorf("Error updating StatsMonthly")
 	}
@@ -297,7 +297,7 @@ func (r *redisManager) UpdateStatsDateClient(ip string) {
 			count = existingInt + 1
 		}
 	}
-	err = r.hset(key, fmt.Sprintf("%s_%s", dateStr, hashed), string(count))
+	err = r.hset(key, fmt.Sprintf("%s_%s", dateStr, hashed), strconv.Itoa(count))
 	if err != nil {
 		glog.Errorf("Error updating StatsDate %s", err)
 	}
@@ -309,7 +309,7 @@ func (r *redisManager) UpdateStatsDateClient(ip string) {
 			monthCount = existingMonthInt + 1
 		}
 	}
-	err = r.hset(monthKey, hashed, string(monthCount))
+	err = r.hset(monthKey, hashed, strconv.Itoa(monthCount))
 	if err != nil {
 		glog.Errorf("Error updating StatsMonthly")
 	}
@@ -544,7 +544,7 @@ func (r *redisManager) UpdateStatsClient(ip string) {
 			count = existingInt + 1
 		}
 	}
-	err = r.hset(key, hashed, string(count))
+	err = r.hset(key, hashed, strconv.Itoa(count))
 	if err != nil {
 		glog.Errorf("Error updating StatsClient %s", err)
 	}
