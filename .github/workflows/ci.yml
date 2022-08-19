@@ -32,7 +32,6 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REPO }}
 
       - name: Get branch name (merge)
         if: github.event_name != 'pull_request'
@@ -46,13 +45,13 @@ jobs:
           
       - name: Build and tag
         if: success()
-        run: docker build -t ${{ secrets.DOCKER_REPO }}/nuxt-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }} .
+        run: docker build -t appditto/nuxt-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }} .
 
       - name: Push image   
         if: success()
         uses: actions-hub/docker@master
         with:
-          args: push ${{ secrets.DOCKER_REPO }}/nuxt-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+          args: push appditto/nuxt-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
 
 
   build_and_publish_go:
@@ -79,17 +78,16 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REPO }}
 
       - name: Build and tag
         if: success()
-        run: docker build -t ${{ secrets.DOCKER_REPO }}/go-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }} server
+        run: docker build -t appditto/go-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }} server
 
       - name: Push image   
         if: success()
         uses: actions-hub/docker@master
         with:
-          args: push ${{ secrets.DOCKER_REPO }}/go-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+          args: push appditto/go-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
 
   deploy_nuxt:
     name: Deploy nuxt app
@@ -116,7 +114,7 @@ jobs:
       - name: Set image
         working-directory: ./kubernetes/frontend
         run: |
-          kustomize edit set image replaceme=${{ secrets.DOCKER_REPO }}/nuxt-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+          kustomize edit set image replaceme=appditto/nuxt-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
           kustomize build . > nuxt-deployment-k.yaml
 
       - name: Deploy image to k8s cluster
@@ -151,7 +149,7 @@ jobs:
       - name: Set image
         working-directory: ./kubernetes/server
         run: |
-          kustomize edit set image replaceme=${{ secrets.DOCKER_REPO }}/go-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+          kustomize edit set image replaceme=appditto/go-monkey:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
           kustomize build . > go-deployment-k.yaml
 
       - name: Deploy image to k8s cluster
