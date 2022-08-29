@@ -9,12 +9,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/appditto/MonKey/server/database"
 	"github.com/appditto/MonKey/server/image"
 	"github.com/appditto/MonKey/server/models"
 	"github.com/appditto/MonKey/server/spc"
 	"github.com/appditto/MonKey/server/utils"
-	"github.com/go-redis/redis/v9"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/exp/slices"
 	"gorm.io/gorm"
@@ -74,23 +72,6 @@ func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
 		} else {
 			klog.Errorf("Error setting stats: %v", err)
 		}
-
-		// Add to unique IP addresses
-		database.GetRedisDB().Hset("unique_ip_addresses", stats.IPAddress, "1")
-		// Add to unique ban addresses
-		database.GetRedisDB().Hset("unique_ban_addresses", stats.BanAddress, "1")
-		// Add to total requests
-		ret, err := database.GetRedisDB().Get("total_requests")
-		if err == redis.Nil {
-			database.GetRedisDB().Set("total_requests", "1", 0)
-		} else if err == nil {
-			count, err := strconv.ParseUint(ret, 10, 64)
-			if err != nil {
-				klog.Errorf("Error parsing total requests: %v", err)
-			} else {
-				database.GetRedisDB().Set("total_requests", strconv.FormatUint(count+1, 10), 0)
-			}
-		}
 	}
 }
 
@@ -107,31 +88,29 @@ type ServiceStats struct {
 // Stats API
 func (sc *StatsController) Stats(c *fiber.Ctx) error {
 	// Unique IPs
-	uniqueClients, err := database.GetRedisDB().Hlen("unique_ip_addresses")
+	var uniqueClients uint64
+	err := sc.DB.Model(&models.Stats{}).Select("count(distinct ip_address)").Find(&uniqueClients).Error
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).SendString("Error getting unique monkeys served")
 	}
 
 	// Unique ban addresses
-	uniqueBanAddress, err := database.GetRedisDB().Hlen("unique_ban_addresses")
+	var uniqueBanAddress uint64
+	err = sc.DB.Model(&models.Stats{}).Select("count(distinct ban_address)").Find(&uniqueBanAddress).Error
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).SendString("Error getting unique monkeys served")
 	}
 
 	// Total  count
 	var count uint64
-	// See if we have it cached
-	cStr, err := database.GetRedisDB().Get("total_requests")
-	if err != redis.Nil {
-		count, err = strconv.ParseUint(cStr, 10, 64)
-	}
-	if err == redis.Nil || err != nil {
-		count = 0
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count)").Find(&count).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).SendString("Error getting total requests")
 	}
 
 	// By service
 	var svcStats []ServiceStats
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ban_address) as unique, service").Group("service").Order("total desc").Find(&svcStats).Error
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique, service").Group("service").Order("total desc").Find(&svcStats).Error
 	if err != nil {
 		klog.Errorf("Error getting svc stats: %v", err)
 		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
@@ -156,13 +135,13 @@ func (sc *StatsController) Stats(c *fiber.Ctx) error {
 	// Today
 	todayStr := time.Now().Format("01-02-2006")
 	var todayStats StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ban_address) as unique").Where("date(created_at) = ?", todayStr).Order("total desc").Find(&todayStats).Error
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique").Where("date(created_at) = ?", todayStr).Order("total desc").Find(&todayStats).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats: %v", err)
 		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
 	}
 	var todayStatsIP StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ip_address) as unique").Where("date(created_at) = ?", todayStr).Order("total desc").Find(&todayStatsIP).Error
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ip_address) as unique").Where("date(created_at) = ?", todayStr).Order("total desc").Find(&todayStatsIP).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats IP: %v", err)
 		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
@@ -174,11 +153,11 @@ func (sc *StatsController) Stats(c *fiber.Ctx) error {
 		"unique_clients_served": uniqueClients,
 		"total_served":          count,
 		"services":              svcStatsRet,
-		"addresses": map[string]interface{}{
+		"addresses_today": map[string]interface{}{
 			"total":  todayStats.Total,
 			"unique": todayStats.Unique,
 		},
-		"clients": map[string]interface{}{
+		"clients_today": map[string]interface{}{
 			"total":  todayStatsIP.Total,
 			"unique": todayStatsIP.Unique,
 		},
@@ -203,7 +182,7 @@ func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
 	targetDt := time.Date(yearInt, time.Month(monthInt), 1, 0, 0, 0, 0, time.UTC).Format("01-02-2006")
 	// By service
 	var svcStats []ServiceStats
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ban_address) as unique, service").Where("date_trunc('month', created_at) = ?", targetDt).Group("service").Order("total desc").Find(&svcStats).Error
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique, service").Where("date_trunc('month', created_at) = ?", targetDt).Group("service").Order("total desc").Find(&svcStats).Error
 	if err != nil {
 		klog.Errorf("Error getting svc stats: %v", err)
 		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
@@ -227,13 +206,13 @@ func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
 
 	// Target
 	var targetStats StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ban_address) as unique").Where("date_trunc('month', created_at) = ?", targetDt).Order("total desc").Find(&targetStats).Error
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique").Where("date_trunc('month', created_at) = ?", targetDt).Order("total desc").Find(&targetStats).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats: %v", err)
 		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
 	}
 	var targetStatsIP StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ip_address) as unique").Where("date_trunc('month', created_at) = ?", targetDt).Order("total desc").Find(&targetStatsIP).Error
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ip_address) as unique").Where("date_trunc('month', created_at) = ?", targetDt).Order("total desc").Find(&targetStatsIP).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats IP: %v", err)
 		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
@@ -242,13 +221,13 @@ func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
 	// 30 days ago
 	last30dt := time.Now().AddDate(0, 0, -30).Format("01-02-2006")
 	var last30Stats StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ban_address) as unique").Where("date(created_at) >= ?", last30dt).Order("total desc").Find(&last30Stats).Error
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique").Where("date(created_at) >= ?", last30dt).Order("total desc").Find(&last30Stats).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats: %v", err)
 		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
 	}
 	var last30StatsIP StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ip_address) as unique").Where("date(created_at) >= ?", last30dt).Order("total desc").Find(&last30StatsIP).Error
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ip_address) as unique").Where("date(created_at) >= ?", last30dt).Order("total desc").Find(&last30StatsIP).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats IP: %v", err)
 		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
