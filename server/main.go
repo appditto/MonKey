@@ -8,31 +8,11 @@ import (
 	"github.com/appditto/MonKey/server/controller"
 	"github.com/appditto/MonKey/server/image"
 	"github.com/appditto/MonKey/server/utils"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"gopkg.in/gographics/imagick.v3/imagick"
+	"k8s.io/klog/v2"
 )
-
-func CorsMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		origin := c.Request.Header.Get("Origin")
-		if origin == "" {
-			origin = "https://monkey.banano.cc"
-		}
-		c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Accept, Authorization, Content-Type, Content-Length, X-CSRF-Token, Token, session, Origin, Host, Connection, Accept-Encoding, Accept-Language, X-Requested-With, ResponseType")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-
-		c.Request.Header.Del("Origin")
-
-		c.Next()
-	}
-}
 
 // Generate random files
 func RandFiles(count int, seed string, bg bool) {
@@ -49,12 +29,26 @@ func RandFiles(count int, seed string, bg bool) {
 	}
 }
 
+func usage() {
+	flag.PrintDefaults()
+	os.Exit(2)
+}
+
 func main() {
 	// Get seed from env
 	seed := utils.GetEnv("MONKEY_SEED", "1234567890")
 
 	// Server options
-	serverHost := flag.String("host", "127.0.0.1", "Host to listen on")
+	flag.Usage = usage
+	klog.InitFlags(nil)
+	flag.Set("logtostderr", "true")
+	flag.Set("stderrthreshold", "WARNING")
+	flag.Set("v", "2")
+	if utils.GetEnv("ENVIRONMENT", "development") == "development" {
+		flag.Set("stderrthreshold", "INFO")
+		flag.Set("v", "3")
+	}
+	serverHost := flag.String("host", "localhost", "Host to listen on")
 	serverPort := flag.Int("port", 8080, "Port to listen on")
 	testAccessoryDistribution := flag.Bool("test-ad", false, "Test accessory distribution")
 	randomFiles := flag.Int("rand-files", -1, "Generate this many random SVGs and output to randsvg folder")
@@ -75,7 +69,7 @@ func main() {
 	}
 
 	// Setup channel for stats processing job
-	statsChan := make(chan *gin.Context, 100)
+	// statsChan := make(chan *gin.Context, 100)
 
 	// Setup imagemagick
 	// Setup magickwand
@@ -83,32 +77,37 @@ func main() {
 	defer imagick.Terminate()
 
 	// Setup router
-	router := gin.Default()
+	router := fiber.New()
 	// pprof.Register(router)
-	router.Use(CorsMiddleware())
+	router.Use(cors.New(cors.Config{
+		Next: func(c *fiber.Ctx) bool {
+			return true
+		},
+	}))
 
 	// Setup natricon controller
 	monkeyController := controller.MonkeyController{
-		Seed:         seed,
-		StatsChannel: &statsChan,
+		Seed: seed,
+		// StatsChannel: &statsChan,
 	}
 
 	// V1 API
 	apiGroup := router.Group("/api/v1")
 	// Stats
-	apiGroup.GET("/stats", controller.Stats)
-	apiGroup.GET("/stats/monthly", controller.StatsMonthly)
+	apiGroup.Get("/stats", controller.Stats)
+	apiGroup.Get("/stats/monthly", controller.StatsMonthly)
 	// Address
-	apiGroup.GET("/monkey/:address", monkeyController.GetBanano)
-	apiGroup.POST("/monkey/dtl", monkeyController.MonkeyStats)
+	apiGroup.Get("/monkey/:address", monkeyController.GetBanano)
+	apiGroup.Post("/monkey/dtl", monkeyController.MonkeyStats)
 	// Testing
-	if gin.IsDebugging() {
-		apiGroup.GET("/random", monkeyController.GetRandomSvg)
+	if utils.GetEnv("ENVIRONMENT", "development") == "development" {
+		apiGroup.Get("/random", monkeyController.GetRandomSvg)
+
 	}
 
 	// Start stats worker
 	//go controller.StatsWorker(statsChan)
 
 	// Run on 8080
-	router.Run(fmt.Sprintf("%s:%d", *serverHost, *serverPort))
+	router.Listen(fmt.Sprintf("%s:%d", *serverHost, *serverPort))
 }

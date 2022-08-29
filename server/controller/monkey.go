@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -8,7 +9,7 @@ import (
 
 	"github.com/appditto/MonKey/server/image"
 	"github.com/appditto/MonKey/server/utils"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
 const defaultRasterSize = 128 // Default size of PNG/WEBP images
@@ -16,57 +17,55 @@ const minConvertedSize = 100  // Minimum size of PNG/WEBP converted output
 const maxConvertedSize = 1000 // Maximum size of PNG/WEBP converted outpu
 
 type MonkeyController struct {
-	Seed         string
-	StatsChannel *chan *gin.Context
+	Seed string
+	// StatsChannel *chan *gin.Context
 }
 
 // Return monKey for given address
-func (mc MonkeyController) GetBanano(c *gin.Context) {
-	address := c.Param("address")
+func (mc MonkeyController) GetBanano(c *fiber.Ctx) error {
+	address := c.Params("address")
 
 	valid := utils.ValidateAddress(address)
 	if !valid {
-		c.String(http.StatusBadRequest, "Invalid address")
-		return
+		return c.Status(http.StatusBadRequest).SendString("Invalid address")
 	}
 
 	// Parse stats
 	//*mc.StatsChannel <- c
 
-	// See if this is a vanity
+	// See if this is a vanity∂
 	vanity := image.GetAssets().GetVanityAsset(address)
 	if vanity != nil {
-		generateVanityAsset(vanity, c)
-		return
+		return generateVanityAsset(vanity, c)
 	}
 
 	pubKey := utils.AddressToPub(address)
 	sha256 := utils.Sha256(pubKey, mc.Seed)
 
 	generateIcon(&sha256, c)
+	return nil
 }
 
 // Testing APIs
-func (mc MonkeyController) GetRandomSvg(c *gin.Context) {
+func (mc MonkeyController) GetRandomSvg(c *fiber.Ctx) error {
 	address := utils.GenerateAddress()
 	sha256 := utils.Sha256(address, mc.Seed)
 
 	accessories, err := image.GetAccessoriesForHash(sha256, false)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "%s", err.Error())
-		return
+		return c.Status(http.StatusInternalServerError).SendString(err.Error())
 	}
 
 	svg, err := image.CombineSVG(accessories)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Error occured")
-		return
+		return c.Status(http.StatusInternalServerError).SendString("Error occured")
 	}
-	c.Data(200, "image/svg+xml; charset=utf-8", svg)
+	c.Set("Content-Type", "image/svg+xml; charset=utf-8")
+	return c.Status(http.StatusOK).SendStream(bytes.NewReader(svg))
 }
 
 // Generate monKey with given hash
-func generateIcon(hash *string, c *gin.Context) {
+func generateIcon(hash *string, c *fiber.Ctx) error {
 	var err error
 
 	format := strings.ToLower(c.Query("format"))
@@ -74,8 +73,7 @@ func generateIcon(hash *string, c *gin.Context) {
 	if format == "" || format == "svg" {
 		format = "svg"
 	} else if format != "png" && format != "webp" {
-		c.String(http.StatusBadRequest, "%s", "Valid formats are 'svg', 'png', or 'webp'")
-		return
+		return c.Status(http.StatusBadRequest).SendString("Valid formats are 'svg', 'png', or 'webp'")
 	} else {
 		sizeStr := c.Query("size")
 		if sizeStr == "" {
@@ -83,8 +81,7 @@ func generateIcon(hash *string, c *gin.Context) {
 		} else {
 			size, err = strconv.Atoi(c.Query("size"))
 			if err != nil || size < minConvertedSize || size > maxConvertedSize {
-				c.String(http.StatusBadRequest, "%s", fmt.Sprintf("size must be an integer between %d and %d", minConvertedSize, maxConvertedSize))
-				return
+				return c.Status(http.StatusBadRequest).SendString(fmt.Sprintf("size must be an integer between %d and %d", minConvertedSize, maxConvertedSize))
 			}
 		}
 	}
@@ -93,31 +90,29 @@ func generateIcon(hash *string, c *gin.Context) {
 
 	accessories, err := image.GetAccessoriesForHash(*hash, withBackground)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "%s", err.Error())
-		return
+		return c.Status(http.StatusInternalServerError).SendString(err.Error())
 	}
 
 	svg, err := image.CombineSVG(accessories)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Error occured")
-		return
+		return c.Status(http.StatusInternalServerError).SendString("Error occured")
 	}
 	if format != "svg" {
 		// Convert
 		var converted []byte
 		converted, err = image.ConvertSvgToBinary(svg, image.ImageFormat(format), uint(size))
 		if err != nil {
-			c.String(http.StatusInternalServerError, "Error occured")
-			return
+			return c.Status(http.StatusInternalServerError).SendString("Error occured")
 		}
-		c.Data(200, fmt.Sprintf("image/%s", format), converted)
-		return
+		c.Set("Content-Type", fmt.Sprintf("image/%s", format))
+		return c.Status(http.StatusOK).SendStream(bytes.NewReader(converted))
 	}
-	c.Data(200, "image/svg+xml; charset=utf-8", svg)
+	c.Set("Content-Type", "image/svg+xml; charset=utf-8")
+	return c.Status(http.StatusOK).SendStream(bytes.NewReader(svg))
 }
 
 // Return vanity with given options
-func generateVanityAsset(vanity *image.Asset, c *gin.Context) {
+func generateVanityAsset(vanity *image.Asset, c *fiber.Ctx) error {
 	var err error
 
 	format := strings.ToLower(c.Query("format"))
@@ -125,8 +120,7 @@ func generateVanityAsset(vanity *image.Asset, c *gin.Context) {
 	if format == "" || format == "svg" {
 		format = "svg"
 	} else if format != "png" && format != "webp" {
-		c.String(http.StatusBadRequest, "%s", "Valid formats are 'svg', 'png', or 'webp'")
-		return
+		return c.Status(http.StatusBadRequest).SendString("Valid formats are 'svg', 'png', or 'webp'")
 	} else {
 		sizeStr := c.Query("size")
 		if sizeStr == "" {
@@ -134,8 +128,7 @@ func generateVanityAsset(vanity *image.Asset, c *gin.Context) {
 		} else {
 			size, err = strconv.Atoi(c.Query("size"))
 			if err != nil || size < minConvertedSize || size > maxConvertedSize {
-				c.String(http.StatusBadRequest, "%s", fmt.Sprintf("size must be an integer between %d and %d", minConvertedSize, maxConvertedSize))
-				return
+				return c.Status(http.StatusBadRequest).SendString(fmt.Sprintf("size must be an integer between %d and %d", minConvertedSize, maxConvertedSize))
 			}
 		}
 	}
@@ -149,13 +142,13 @@ func generateVanityAsset(vanity *image.Asset, c *gin.Context) {
 		var converted []byte
 		converted, err = image.ConvertSvgToBinary(svg, image.ImageFormat(format), uint(size))
 		if err != nil {
-			c.String(http.StatusInternalServerError, "Error occured")
-			return
+			return c.Status(http.StatusInternalServerError).SendString("Error occured")
 		}
-		c.Data(200, fmt.Sprintf("image/%s", format), converted)
-		return
+		c.Set("Content-Type", fmt.Sprintf("image/%s", format))
+		return c.Status(http.StatusOK).SendStream(bytes.NewReader(converted))
 	}
-	c.Data(200, "image/svg+xml; charset=utf-8", svg)
+	c.Set("Content-Type", "image/svg+xml; charset=utf-8")
+	return c.Status(http.StatusOK).SendStream(bytes.NewReader(svg))
 }
 
 type MonkeyStatsRequest struct {
@@ -165,16 +158,14 @@ type MonkeyStatsRequest struct {
 type MonkeyStatsResponseItem map[string]map[string]string
 
 // Info about a MonKey
-func (mc MonkeyController) MonkeyStats(c *gin.Context) {
+func (mc MonkeyController) MonkeyStats(c *fiber.Ctx) error {
 	var reqJson MonkeyStatsRequest
-	c.BindJSON(&reqJson)
 
 	ret := make(MonkeyStatsResponseItem)
 
 	for _, address := range reqJson.Addresses {
 		if !utils.ValidateAddress(address) {
-			c.String(http.StatusBadRequest, "%s", fmt.Sprintf("Invalid address in address list %s", address))
-			return
+			return c.Status(http.StatusBadRequest).SendString(fmt.Sprintf("Invalid address in address list %s", address))
 		}
 		// Get monkey info
 		pubKey := utils.AddressToPub(address)
@@ -223,5 +214,5 @@ func (mc MonkeyController) MonkeyStats(c *gin.Context) {
 		}
 	}
 
-	c.JSON(200, ret)
+	return c.Status(http.StatusOK).JSON(ret)
 }

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/golang/glog"
+	"k8s.io/klog/v2"
 )
 
 // IllustrationType signifies the type of the illustration
@@ -90,7 +90,7 @@ func getAccessoryAsset(fname string, path string) Asset {
 	asset.IllustrationPath = path
 	asset.SVGContents, err = os.ReadFile(path)
 	if err != nil {
-		glog.Fatalf("Couldn't load file %s", path)
+		klog.Fatalf("Couldn't load file %s", path)
 		panic(err.Error())
 	}
 	asset.FurColored = false
@@ -133,7 +133,7 @@ func GetAssets() *assetManager {
 				bodyAsset.IllustrationPath = path
 				bodyAsset.SVGContents, err = os.ReadFile(path)
 				if err != nil {
-					glog.Fatalf("Couldn't load file %s", path)
+					klog.Fatalf("Couldn't load file %s", path)
 					panic(err.Error())
 				}
 				bodyAsset.FurColored = hasTag(bodyAsset.FileName, "[fur-color]")
@@ -227,7 +227,7 @@ func GetAssets() *assetManager {
 				vanityAsset.IllustrationPath = path
 				vanityAsset.SVGContents, err = os.ReadFile(path)
 				if err != nil {
-					glog.Fatalf("Couldn't load file %s", path)
+					klog.Fatalf("Couldn't load file %s", path)
 					panic(err.Error())
 				}
 				vanityAsset.Address = vanityAsset.FileName[0:64]

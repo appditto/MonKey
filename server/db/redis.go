@@ -13,7 +13,7 @@ import (
 	"github.com/appditto/MonKey/server/utils"
 	"github.com/bsm/redislock"
 	"github.com/go-redis/redis/v8"
-	"github.com/golang/glog"
+	"k8s.io/klog/v2"
 )
 
 var ctx = context.Background()
@@ -123,7 +123,7 @@ func (r *redisManager) UpdateStatsAddress(address string) {
 	}
 	err = r.hset(key, address, strconv.Itoa(count))
 	if err != nil {
-		glog.Errorf("Error updating StatesAddresses %s", err)
+		klog.Errorf("Error updating StatesAddresses %s", err)
 	}
 	key = fmt.Sprintf("%s:stats_total", keyPrefix)
 	val, err := r.get(key)
@@ -177,7 +177,7 @@ func (r *redisManager) Last30DayStats() map[string]int {
 	// Store in cache since this is a heavier OP
 	encoded, err := json.Marshal(retMap)
 	if err != nil {
-		glog.Warningf("Failed to serialize result of Last30Day stats")
+		klog.Warningf("Failed to serialize result of Last30Day stats")
 	} else {
 		r.setWithExpiration("last30day_cache", string(encoded), 300)
 	}
@@ -226,7 +226,7 @@ func (r *redisManager) Last30DayStatsClient() map[string]int {
 	// Store in cache since this is a heavier OP
 	encoded, err := json.Marshal(retMap)
 	if err != nil {
-		glog.Warningf("Failed to serialize result of Last30Day stats")
+		klog.Warningf("Failed to serialize result of Last30Day stats")
 	} else {
 		r.setWithExpiration("last30day_cache_client", string(encoded), 300)
 	}
@@ -249,7 +249,7 @@ func (r *redisManager) UpdateStatsDate(address string) {
 	}
 	err = r.hset(key, fmt.Sprintf("%s_%s", dateStr, address), strconv.Itoa(count))
 	if err != nil {
-		glog.Errorf("Error updating StatsDate %s", err)
+		klog.Errorf("Error updating StatsDate %s", err)
 	}
 	existingMonth, err := r.hget(monthKey, fmt.Sprintf("%s_%s", dateStr, address))
 	monthCount := 1
@@ -261,7 +261,7 @@ func (r *redisManager) UpdateStatsDate(address string) {
 	}
 	err = r.hset(monthKey, address, strconv.Itoa(monthCount))
 	if err != nil {
-		glog.Errorf("Error updating StatsMonthly")
+		klog.Errorf("Error updating StatsMonthly")
 	}
 	// Total
 	total, err := r.hget(key, fmt.Sprintf("%s_%s", dateStr, "total"))
@@ -299,7 +299,7 @@ func (r *redisManager) UpdateStatsDateClient(ip string) {
 	}
 	err = r.hset(key, fmt.Sprintf("%s_%s", dateStr, hashed), strconv.Itoa(count))
 	if err != nil {
-		glog.Errorf("Error updating StatsDate %s", err)
+		klog.Errorf("Error updating StatsDate %s", err)
 	}
 	existingMonth, err := r.hget(monthKey, fmt.Sprintf("%s_%s", dateStr, hashed))
 	monthCount := 1
@@ -311,7 +311,7 @@ func (r *redisManager) UpdateStatsDateClient(ip string) {
 	}
 	err = r.hset(monthKey, hashed, strconv.Itoa(monthCount))
 	if err != nil {
-		glog.Errorf("Error updating StatsMonthly")
+		klog.Errorf("Error updating StatsMonthly")
 	}
 	// Total
 	total, err := r.hget(key, fmt.Sprintf("%s_%s", dateStr, "total"))
@@ -546,7 +546,7 @@ func (r *redisManager) UpdateStatsClient(ip string) {
 	}
 	err = r.hset(key, hashed, strconv.Itoa(count))
 	if err != nil {
-		glog.Errorf("Error updating StatsClient %s", err)
+		klog.Errorf("Error updating StatsClient %s", err)
 	}
 }
 
@@ -605,7 +605,7 @@ func (r *redisManager) UpdateStatsByService(svc string, address string) {
 		}
 		err = r.hset(key, address, strconv.Itoa(count))
 		if err != nil {
-			glog.Errorf("Error updating StatsByService %s %s", svc, err)
+			klog.Errorf("Error updating StatsByService %s %s", svc, err)
 		}
 		totalCount, err := r.hget(key, "total")
 		totalCountInt, err := strconv.Atoi(totalCount)
@@ -621,7 +621,7 @@ func (r *redisManager) UpdateStatsByService(svc string, address string) {
 				}
 				r.hset(key, "total", strconv.Itoa(totalCountInt))
 			} else {
-				glog.Errorf("Error retrieving StatsBySvc %s %s", key, err)
+				klog.Errorf("Error retrieving StatsBySvc %s %s", key, err)
 			}
 		} else {
 			r.hset(key, "total", strconv.Itoa(totalCountInt+1))
@@ -639,7 +639,7 @@ func (r *redisManager) UpdateStatsByService(svc string, address string) {
 		}
 		err = r.hset(monthKey, "total", strconv.Itoa(monthCount))
 		if err != nil {
-			glog.Errorf("Error updating StatsMonthly by svc")
+			klog.Errorf("Error updating StatsMonthly by svc")
 		}
 	}
 }

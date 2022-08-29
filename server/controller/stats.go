@@ -11,11 +11,11 @@ import (
 	"github.com/appditto/MonKey/server/db"
 	"github.com/appditto/MonKey/server/image"
 	"github.com/appditto/MonKey/server/utils"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
 // Go routine for processing stats messages
-func StatsWorker(statsChan <-chan *gin.Context) {
+func StatsWorker(statsChan <-chan *fiber.Ctx) {
 	return
 	/*
 		// Process stats
@@ -36,7 +36,7 @@ func StatsWorker(statsChan <-chan *gin.Context) {
 }
 
 // Stats API
-func Stats(c *gin.Context) {
+func Stats(c *fiber.Ctx) error {
 	// Get # of unique natricons served
 	numServed := db.GetDB().StatsUniqueAddresses()
 	numServedTotal := db.GetDB().StatsTotal()
@@ -47,7 +47,7 @@ func Stats(c *gin.Context) {
 	clientsServed := db.GetDB().ClientsServed()
 
 	// Return response
-	c.JSON(200, gin.H{
+	return c.Status(http.StatusOK).JSON(map[string]interface{}{
 		"unique_served":         numServed,
 		"total_served":          numServedTotal,
 		"unique_clients_served": clientsServed,
@@ -59,15 +59,14 @@ func Stats(c *gin.Context) {
 }
 
 // Monthly stats API
-func StatsMonthly(c *gin.Context) {
+func StatsMonthly(c *fiber.Ctx) error {
 	monthStr := c.Query("month")
 	yearStr := c.Query("year")
 	monthInt, err := strconv.Atoi(monthStr)
 	if err != nil {
 		monthInt = int(time.Now().Month())
 	} else if monthInt < 1 || monthInt > 12 {
-		c.String(http.StatusBadRequest, "%s", "month must be between 1 and 12")
-		return
+		return c.Status(http.StatusBadRequest).SendString("month must be between 1 and 12")
 	}
 	yearInt, err := strconv.Atoi(yearStr)
 	if err != nil {
@@ -80,7 +79,7 @@ func StatsMonthly(c *gin.Context) {
 	last30dayClient := db.GetDB().Last30DayStatsClient()
 
 	// Return response
-	c.JSON(200, gin.H{
+	return c.Status(http.StatusOK).JSON(map[string]interface{}{
 		"address":        statsMonthlyAddress,
 		"clients":        statsMonthlyClients,
 		"services":       statsMonthlySvc,
