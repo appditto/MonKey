@@ -7,7 +7,7 @@
   import Integrate from "../components/sections/Integrate.svelte";
   import Stats from "../components/sections/Stats.svelte";
   import Meta from "../components/Meta.svelte";
-  /* import { onMount } from "svelte"; */
+  import { onMount } from "svelte";
 
   let stats;
   let statsMonthly;

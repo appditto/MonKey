@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/appditto/MonKey/server/database"
 	"github.com/appditto/MonKey/server/image"
 	"github.com/appditto/MonKey/server/models"
 	"github.com/appditto/MonKey/server/spc"
@@ -233,7 +235,7 @@ func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
 	}
 	// Return response
-	return c.Status(http.StatusOK).JSON(map[string]interface{}{
+	ret := map[string]interface{}{
 		"services": svcStatsRet,
 		"addresses": map[string]interface{}{
 			"total":  targetStats.Total,
@@ -251,7 +253,15 @@ func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
 			"total":  last30StatsIP.Total,
 			"unique": last30StatsIP.Unique,
 		},
-	})
+	}
+	// Cache first
+	serialized, err := json.Marshal(ret)
+	if err != nil {
+		klog.Errorf("Error serializing stats: %v", err)
+	} else {
+		database.GetRedisDB().Set("stats_monthly_cache", string(serialized), time.Second*300)
+	}
+	return c.Status(http.StatusOK).JSON(ret)
 }
 
 // For generating CSV documents for algorithm analysis
