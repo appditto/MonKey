@@ -40,6 +40,8 @@ func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
 			c.Svc = ""
 		}
 
+		todayStr := time.Now().Format("01-02-2006")
+
 		var serviceExpr clause.Expr
 		if c.Svc != "" {
 			serviceExpr = gorm.Expr("service = ?", c.Svc)
@@ -48,7 +50,7 @@ func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
 		}
 		// Create or update stats object
 		var stats models.Stats
-		err := sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).First(&stats).Error
+		err := sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Where("date(created_at) = ?", todayStr).First(&stats).Error
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			stats := &models.Stats{
 				IPAddress:  c.IP,
@@ -65,7 +67,7 @@ func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
 				klog.Errorf("Error saving stats: %v", err)
 			}
 		} else if err == nil {
-			err = sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Updates(map[string]interface{}{
+			err = sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Where("date(created_at) = ?", todayStr).Updates(map[string]interface{}{
 				"count": gorm.Expr("count + ?", 1),
 			}).Error
 			if err != nil {
