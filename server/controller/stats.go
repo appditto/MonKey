@@ -3,7 +3,6 @@ package controller
 import (
 	"errors"
 	"fmt"
-	"math/big"
 	"net/http"
 	"os"
 	"path"
@@ -17,7 +16,6 @@ import (
 	"github.com/appditto/MonKey/server/utils"
 	"github.com/go-redis/redis/v9"
 	"github.com/gofiber/fiber/v2"
-	"github.com/jackc/pgtype"
 	"golang.org/x/exp/slices"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -55,7 +53,7 @@ func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
 			stats := &models.Stats{
 				IPAddress:  c.IP,
 				BanAddress: c.Address,
-				Count:      pgtype.Numeric{Int: big.NewInt(1), Status: pgtype.Present},
+				Count:      1,
 			}
 			if c.Svc != "" {
 				stats.Service = &c.Svc
