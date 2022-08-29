@@ -22,10 +22,10 @@ spec:
         resources:
           requests:
             cpu: 500m
-            memory: 1000Mi
+            memory: 512Mi
           limits:
-            cpu: 1500m
-            memory: 3000Mi
+            cpu: 1000m
+            memory: 1000Mi
         args: ["./monkey-server -host=0.0.0.0 -port=5555 -logtostderr"]
         ports:
           - containerPort: 5555
@@ -40,4 +40,24 @@ spec:
             value: redis.redis
           - name: REDIS_DB
             value: "14"                         
- 
+          - name: DB_HOST
+            value: postgres.kubegres          
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_SSLMODE
+            value: disable
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: monkey
+                key: db_name   
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: monkey
+                key: db_user  
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: monkey
+                key: db_password  
