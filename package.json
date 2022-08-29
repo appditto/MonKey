@@ -39,9 +39,9 @@
     "postcss-load-config": "^2.1.0",
     "rollup": "^2.3.4",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-svelte": "^5.0.1",
+    "rollup-plugin-svelte": "^6.1.1",
     "rollup-plugin-terser": "^7.0.0",
-    "sapper": "^0.27.0",
+    "sapper": "^0.29.3",
     "svelte": "^3.49.0",
     "tailwindcss": "^1.7.6"
   }
