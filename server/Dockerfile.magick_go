@@ -3,14 +3,16 @@ FROM appditto/imagemagick:latest as base
 
 FROM base as builder
 
+ARG TARGETARCH
+
 WORKDIR /root
 
 ENV CGO_CFLAGS_ALLOW="-Xpreprocessor"
 
 # Dependencies and build
 RUN apt-get update && apt-get install -y wget \
-  && wget -c https://dl.google.com/go/go1.19.linux-amd64.tar.gz -O - | tar -xz -C /usr/local \
-  && rm -rf go1.19.linux-amd64.tar.gz \
+  && wget -c https://dl.google.com/go/go1.19.linux-${TARGETARCH}.tar.gz -O - | tar -xz -C /usr/local \
+  && rm -rf go1.19.linux-${TARGETARCH}.tar.gz \
   && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/usr/local/go/bin:${PATH}"

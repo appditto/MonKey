@@ -1,9 +1,7 @@
 package spc
 
 // SvcList ... Services registered for stats
-type StatsService string
-
-var SvcList = []StatsService{
+var SvcList = []string{
 	"monkey.banano.cc",
 	"kalium",
 	"creeper",

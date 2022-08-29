@@ -1,65 +1,194 @@
 package controller
 
 import (
+	"errors"
 	"fmt"
+	"math/big"
 	"net/http"
 	"os"
 	"path"
 	"strconv"
 	"time"
 
-	"github.com/appditto/MonKey/server/db"
+	"github.com/appditto/MonKey/server/database"
 	"github.com/appditto/MonKey/server/image"
+	"github.com/appditto/MonKey/server/models"
+	"github.com/appditto/MonKey/server/spc"
 	"github.com/appditto/MonKey/server/utils"
+	"github.com/go-redis/redis/v9"
 	"github.com/gofiber/fiber/v2"
+	"github.com/jackc/pgtype"
+	"golang.org/x/exp/slices"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+	"k8s.io/klog/v2"
 )
 
+type StatsController struct {
+	DB *gorm.DB
+}
+
+type StatsMessage struct {
+	Svc     string
+	Address string
+	IP      string
+}
+
 // Go routine for processing stats messages
-func StatsWorker(statsChan <-chan *fiber.Ctx) {
-	return
-	/*
-		// Process stats
-		for c := range statsChan {
-			continue
-			// Update unique addresses
-			db.GetDB().UpdateStatsAddress(c.Param("address"))
-			// Update daily/monthly
-			db.GetDB().UpdateStatsDate(c.Param("address"))
-			db.GetDB().UpdateStatsDateClient(c.ClientIP())
-			// Update clients
-			db.GetDB().UpdateStatsClient(c.ClientIP())
-			// Update by service
-			if c.Query("svc") != "" {
-				db.GetDB().UpdateStatsByService(c.Query("svc"), c.Param("address"))
+func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
+	// Process stats
+	for c := range statsChan {
+		if !slices.Contains(spc.SvcList, c.Svc) {
+			c.Svc = ""
+		}
+
+		var serviceExpr clause.Expr
+		if c.Svc != "" {
+			serviceExpr = gorm.Expr("service = ?", c.Svc)
+		} else {
+			serviceExpr = gorm.Expr("service is null")
+		}
+		// Create or update stats object
+		var stats models.Stats
+		err := sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).First(&stats).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			stats := &models.Stats{
+				IPAddress:  c.IP,
+				BanAddress: c.Address,
+				Count:      pgtype.Numeric{Int: big.NewInt(1), Status: pgtype.Present},
 			}
-		}*/
+			if c.Svc != "" {
+				stats.Service = &c.Svc
+			}
+
+			err := sc.DB.Create(stats).Error
+
+			if err != nil {
+				klog.Errorf("Error saving stats: %v", err)
+			}
+		} else if err == nil {
+			err = sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Updates(map[string]interface{}{
+				"count": gorm.Expr("count + ?", 1),
+			}).Error
+			if err != nil {
+				klog.Errorf("Error updating stats: %v", err)
+			}
+		} else {
+			klog.Errorf("Error setting stats: %v", err)
+		}
+
+		// Add to unique IP addresses
+		database.GetRedisDB().Hset("unique_ip_addresses", stats.IPAddress, "1")
+		// Add to unique ban addresses
+		database.GetRedisDB().Hset("unique_ban_addresses", stats.BanAddress, "1")
+		// Add to total requests
+		ret, err := database.GetRedisDB().Get("total_requests")
+		if err == redis.Nil {
+			database.GetRedisDB().Set("total_requests", "1", 0)
+		} else if err == nil {
+			count, err := strconv.ParseUint(ret, 10, 64)
+			if err != nil {
+				klog.Errorf("Error parsing total requests: %v", err)
+			} else {
+				database.GetRedisDB().Set("total_requests", strconv.FormatUint(count+1, 10), 0)
+			}
+		}
+	}
+}
+
+type StatsNumbers struct {
+	Total  uint64 `json:"total"`
+	Unique uint64 `json:"unique"`
+}
+
+type ServiceStats struct {
+	StatsNumbers
+	Service string `json:"service"`
 }
 
 // Stats API
-func Stats(c *fiber.Ctx) error {
-	// Get # of unique natricons served
-	numServed := db.GetDB().StatsUniqueAddresses()
-	numServedTotal := db.GetDB().StatsTotal()
-	svcStats := db.GetDB().ServiceStats()
-	//daily := db.GetDB().DailyStats()
-	today := db.GetDB().TodayStats()
-	todayClient := db.GetDB().TodayStatsClient()
-	clientsServed := db.GetDB().ClientsServed()
+func (sc *StatsController) Stats(c *fiber.Ctx) error {
+	// Unique IPs
+	uniqueClients, err := database.GetRedisDB().Hlen("unique_ip_addresses")
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).SendString("Error getting unique monkeys served")
+	}
+
+	// Unique ban addresses
+	uniqueBanAddress, err := database.GetRedisDB().Hlen("unique_ban_addresses")
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).SendString("Error getting unique monkeys served")
+	}
+
+	// Total  count
+	var count uint64
+	// See if we have it cached
+	cStr, err := database.GetRedisDB().Get("total_requests")
+	if err != redis.Nil {
+		count, err = strconv.ParseUint(cStr, 10, 64)
+	}
+	if err == redis.Nil || err != nil {
+		count = 0
+	}
+
+	// By service
+	var svcStats []ServiceStats
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ban_address) as unique, service").Group("service").Order("total desc").Find(&svcStats).Error
+	if err != nil {
+		klog.Errorf("Error getting svc stats: %v", err)
+		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+	}
+	var svcStatsRet []map[string]interface{}
+	if len(svcStats) > 0 {
+		for _, s := range svcStats {
+			if s.Service == "" {
+				s.Service = "unspecified"
+			}
+			svcStatsRet = append(svcStatsRet, map[string]interface{}{
+				s.Service: map[string]interface{}{
+					"total":  s.Total,
+					"unique": s.Unique,
+				},
+			})
+		}
+	} else {
+		svcStatsRet = []map[string]interface{}{}
+	}
+
+	// Today
+	todayStr := time.Now().Format("01-02-2006")
+	var todayStats StatsNumbers
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ban_address) as unique").Where("date(created_at) = ?", todayStr).Order("total desc").Find(&todayStats).Error
+	if err != nil {
+		klog.Errorf("Error getting today stats: %v", err)
+		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+	}
+	var todayStatsIP StatsNumbers
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ip_address) as unique").Where("date(created_at) = ?", todayStr).Order("total desc").Find(&todayStatsIP).Error
+	if err != nil {
+		klog.Errorf("Error getting today stats IP: %v", err)
+		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+	}
 
 	// Return response
 	return c.Status(http.StatusOK).JSON(map[string]interface{}{
-		"unique_served":         numServed,
-		"total_served":          numServedTotal,
-		"unique_clients_served": clientsServed,
-		"services":              svcStats,
-		"today":                 today,
-		"today_clients":         todayClient,
-		//"daily":          daily,
+		"unique_served":         uniqueBanAddress,
+		"unique_clients_served": uniqueClients,
+		"total_served":          count,
+		"services":              svcStatsRet,
+		"addresses": map[string]interface{}{
+			"total":  todayStats.Total,
+			"unique": todayStats.Unique,
+		},
+		"clients": map[string]interface{}{
+			"total":  todayStatsIP.Total,
+			"unique": todayStatsIP.Unique,
+		},
 	})
 }
 
 // Monthly stats API
-func StatsMonthly(c *fiber.Ctx) error {
+func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
 	monthStr := c.Query("month")
 	yearStr := c.Query("year")
 	monthInt, err := strconv.Atoi(monthStr)
@@ -72,20 +201,79 @@ func StatsMonthly(c *fiber.Ctx) error {
 	if err != nil {
 		yearInt = time.Now().Year()
 	}
-	statsMonthlySvc := db.GetDB().MonthStatsSvc(monthInt, yearInt)
-	statsMonthlyAddress, _ := db.GetDB().MonthStats(monthInt, yearInt)
-	statsMonthlyClients, total := db.GetDB().MonthStatsClient(monthInt, yearInt)
-	last30Day := db.GetDB().Last30DayStats()
-	last30dayClient := db.GetDB().Last30DayStatsClient()
 
+	targetDt := time.Date(yearInt, time.Month(monthInt), 1, 0, 0, 0, 0, time.UTC).Format("01-02-2006")
+	// By service
+	var svcStats []ServiceStats
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ban_address) as unique, service").Where("date_trunc('month', created_at) = ?", targetDt).Group("service").Order("total desc").Find(&svcStats).Error
+	if err != nil {
+		klog.Errorf("Error getting svc stats: %v", err)
+		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+	}
+	var svcStatsRet []map[string]interface{}
+	if len(svcStats) > 0 {
+		for _, s := range svcStats {
+			if s.Service == "" {
+				s.Service = "unspecified"
+			}
+			svcStatsRet = append(svcStatsRet, map[string]interface{}{
+				s.Service: map[string]interface{}{
+					"total":  s.Total,
+					"unique": s.Unique,
+				},
+			})
+		}
+	} else {
+		svcStatsRet = []map[string]interface{}{}
+	}
+
+	// Target
+	var targetStats StatsNumbers
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ban_address) as unique").Where("date_trunc('month', created_at) = ?", targetDt).Order("total desc").Find(&targetStats).Error
+	if err != nil {
+		klog.Errorf("Error getting today stats: %v", err)
+		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+	}
+	var targetStatsIP StatsNumbers
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ip_address) as unique").Where("date_trunc('month', created_at) = ?", targetDt).Order("total desc").Find(&targetStatsIP).Error
+	if err != nil {
+		klog.Errorf("Error getting today stats IP: %v", err)
+		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+	}
+
+	// 30 days ago
+	last30dt := time.Now().AddDate(0, 0, -30).Format("01-02-2006")
+	var last30Stats StatsNumbers
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ban_address) as unique").Where("date(created_at) >= ?", last30dt).Order("total desc").Find(&last30Stats).Error
+	if err != nil {
+		klog.Errorf("Error getting today stats: %v", err)
+		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+	}
+	var last30StatsIP StatsNumbers
+	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(ip_address) as unique").Where("date(created_at) >= ?", last30dt).Order("total desc").Find(&last30StatsIP).Error
+	if err != nil {
+		klog.Errorf("Error getting today stats IP: %v", err)
+		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+	}
 	// Return response
 	return c.Status(http.StatusOK).JSON(map[string]interface{}{
-		"address":        statsMonthlyAddress,
-		"clients":        statsMonthlyClients,
-		"services":       statsMonthlySvc,
-		"total_requests": total,
-		"last30":         last30Day,
-		"last30client":   last30dayClient,
+		"services": svcStatsRet,
+		"addresses": map[string]interface{}{
+			"total":  targetStats.Total,
+			"unique": targetStats.Unique,
+		},
+		"clients": map[string]interface{}{
+			"total":  targetStatsIP.Total,
+			"unique": targetStatsIP.Unique,
+		},
+		"last30address": map[string]interface{}{
+			"total":  last30Stats.Total,
+			"unique": last30Stats.Unique,
+		},
+		"last30clients": map[string]interface{}{
+			"total":  last30StatsIP.Total,
+			"unique": last30StatsIP.Unique,
+		},
 	})
 }
 

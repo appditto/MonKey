@@ -6,10 +6,12 @@ import (
 	"os"
 
 	"github.com/appditto/MonKey/server/controller"
+	"github.com/appditto/MonKey/server/database"
 	"github.com/appditto/MonKey/server/image"
 	"github.com/appditto/MonKey/server/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 	"gopkg.in/gographics/imagick.v3/imagick"
 	"k8s.io/klog/v2"
 )
@@ -68,8 +70,27 @@ func main() {
 		return
 	}
 
+	godotenv.Load()
+	// Setup database conn
+	config := &database.Config{
+		Host:     os.Getenv("DB_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		Password: os.Getenv("DB_PASS"),
+		User:     os.Getenv("DB_USER"),
+		SSLMode:  os.Getenv("DB_SSLMODE"),
+		DBName:   os.Getenv("DB_NAME"),
+	}
+	fmt.Println("🏡 Connecting to database...")
+	db, err := database.NewConnection(config)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("🦋 Running database migrations...")
+	database.Migrate(db)
+
 	// Setup channel for stats processing job
-	// statsChan := make(chan *gin.Context, 100)
+	statsChan := make(chan controller.StatsMessage, 100)
 
 	// Setup imagemagick
 	// Setup magickwand
@@ -87,15 +108,18 @@ func main() {
 
 	// Setup natricon controller
 	monkeyController := controller.MonkeyController{
-		Seed: seed,
-		// StatsChannel: &statsChan,
+		Seed:         seed,
+		StatsChannel: &statsChan,
+	}
+	statsController := controller.StatsController{
+		DB: db,
 	}
 
 	// V1 API
 	apiGroup := router.Group("/api/v1")
 	// Stats
-	apiGroup.Get("/stats", controller.Stats)
-	apiGroup.Get("/stats/monthly", controller.StatsMonthly)
+	apiGroup.Get("/stats", statsController.Stats)
+	apiGroup.Get("/stats/monthly", statsController.StatsMonthly)
 	// Address
 	apiGroup.Get("/monkey/:address", monkeyController.GetBanano)
 	apiGroup.Post("/monkey/dtl", monkeyController.MonkeyStats)
@@ -106,7 +130,7 @@ func main() {
 	}
 
 	// Start stats worker
-	//go controller.StatsWorker(statsChan)
+	go statsController.StatsWorker(statsChan)
 
 	// Run on 8080
 	router.Listen(fmt.Sprintf("%s:%d", *serverHost, *serverPort))
