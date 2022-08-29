@@ -14,7 +14,7 @@
       <StatsCard header="We served" stat={stats.total_served} footer="MonKeys in total" />
       <StatsCard
         header="We served"
-        stat={statsMonthly.total_requests}
+        stat={statsMonthly.addresses.total}
         footer="MonKeys this month"
       />
       <StatsCard
@@ -27,13 +27,11 @@
         stat={statsMonthly.clients.unique}
         footer="clients this month"
       />
-      <!-- 
-        <StatsCard
+      <StatsCard
         header="Available on"
-        stat={Object.keys(stats.services).length}
+        stat={Object.keys(stats.services).length - 1}
         footer="services"
       />
-      -->
     </div>
   </div>
 </div>
