@@ -100,11 +100,7 @@ func main() {
 	// Setup router
 	router := fiber.New()
 	// pprof.Register(router)
-	router.Use(cors.New(cors.Config{
-		Next: func(c *fiber.Ctx) bool {
-			return true
-		},
-	}))
+	router.Use(cors.New(cors.ConfigDefault))
 
 	// Setup natricon controller
 	monkeyController := controller.MonkeyController{
