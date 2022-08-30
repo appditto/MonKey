@@ -2,6 +2,7 @@ The monKey logo, animations, and all assets including those in the "src/static" 
 
 Use of these assets without express written consent from Appditto LLC for any reason is strictly forbidden
 Copyrighted assets include, but are not limited to:
+
 - static/images/icons/icon-menu.svg
 - static/images/icons/icon-twitter.svg
 - static/images/icons/icon-telegram.svg
@@ -173,7 +174,7 @@ Copyrighted assets include, but are not limited to:
 
 All code is copyrighted by Appditto LLC under the MIT license.
 
-Copyright (c) 2020 Appditto LLC
+Copyright (c) 2020-2022 Appditto LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

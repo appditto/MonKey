@@ -10,6 +10,8 @@
     { name: "Instagram", href: "https://www.instagram.com/bananocurrency" },
     { name: "GitHub", href: "https://github.com/bananocoin" },
   ];
+
+  let year = new Date().getFullYear();
 </script>
 
 <!-- HTML -->
@@ -36,7 +38,7 @@
     </div>
     <!-- Footer Text -->
     <div class="flex flex-row mt-6">
-      <span>©2020,&nbsp;</span>
+      <span>©{year},&nbsp;</span>
       <a
         href="https://banano.cc"
         rel="noopener"
