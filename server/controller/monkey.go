@@ -46,8 +46,7 @@ func (mc MonkeyController) GetBanano(c *fiber.Ctx) error {
 	pubKey := utils.AddressToPub(address)
 	sha256 := utils.Sha256(pubKey, mc.Seed)
 
-	generateIcon(&sha256, c)
-	return nil
+	return generateIcon(&sha256, c)
 }
 
 // Testing APIs
