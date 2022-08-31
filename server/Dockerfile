@@ -13,5 +13,7 @@ RUN  go get \
 
 ENV ENVIRONMENT "production"
 
+ENV MALLOC_ARENA_MAX=2
+
 # run main.go
 CMD ["./monkey-server", "-host=0.0.0.0", "-port=5555", "-logtostderr"]

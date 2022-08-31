@@ -61,5 +61,3 @@ spec:
               secretKeyRef:
                 name: monkey
                 key: db_password  
-          - name: MALLOC_ARENA_MAX
-            value: "2"

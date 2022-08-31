@@ -24,4 +24,6 @@ EXPOSE  3000
 
 RUN go install github.com/go-delve/delve/cmd/dlv@latest
 
+ENV MALLOC_ARENA_MAX=2
+
 CMD [ "/bin/zsh", "-c" ]
