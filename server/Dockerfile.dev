@@ -1,18 +1,9 @@
-FROM ubuntu:22.04
+FROM appditto/libvips:latest
 
-ARG TARGETARCH
 ARG ZSH_IN_DOCKER_VERSION=1.1.2
 
-ENV CGO_CFLAGS_ALLOW="-Xpreprocessor"
-
-# Dependencies and build
-RUN apt-get update && apt-get install -y wget \
-  && wget -c https://dl.google.com/go/go1.19.linux-${TARGETARCH}.tar.gz -O - | tar -xz -C /usr/local \
-  && rm -rf go1.19.linux-${TARGETARCH}.tar.gz \
-  && rm -rf /var/lib/apt/lists/*
-
 # Install useful tools
-RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg nano zsh-syntax-highlighting less build-essential pkg-config postgresql-client libvips-dev && \
+RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg nano zsh-syntax-highlighting less build-essential pkg-config postgresql-client && \
   rm -rf /var/lib/apt/lists/*
 
 # Install zsh-in-docker
@@ -31,7 +22,6 @@ WORKDIR /app
 
 EXPOSE  3000
 
-ENV PATH="/usr/local/go/bin:${PATH}"
 RUN go install github.com/go-delve/delve/cmd/dlv@latest
 
 CMD [ "/bin/zsh", "-c" ]
