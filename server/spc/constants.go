@@ -10,4 +10,5 @@ var SvcList = []string{
 	"yellowpaper",
 	"bananovault",
 	"monkeytalks",
+	"wban",
 }
