@@ -1,6 +1,7 @@
 package image
 
 import (
+	"runtime"
 	"strings"
 
 	"gopkg.in/gographics/imagick.v3/imagick"
@@ -9,10 +10,13 @@ import (
 type ImageFormat string
 
 func ConvertSvgToBinary(svgData []byte, format ImageFormat, size uint) ([]byte, error) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
 	mw := imagick.NewMagickWand()
 	defer mw.Destroy()
 	mw.SetImageFormat("SVG")
 	pixelWand := imagick.NewPixelWand()
+	defer pixelWand.Clear()
 	pixelWand.SetColor("none")
 	mw.SetBackgroundColor(pixelWand)
 	mw.SetImageUnits(imagick.RESOLUTION_PIXELS_PER_INCH)
