@@ -9,10 +9,10 @@ import (
 	"github.com/appditto/MonKey/server/database"
 	"github.com/appditto/MonKey/server/image"
 	"github.com/appditto/MonKey/server/utils"
-	"github.com/davidbyttow/govips/v2/vips"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
+	"gopkg.in/gographics/imagick.v3/imagick"
 	"k8s.io/klog/v2"
 )
 
@@ -92,9 +92,10 @@ func main() {
 	// Setup channel for stats processing job
 	statsChan := make(chan controller.StatsMessage, 100)
 
-	// Setup libvips
-	vips.Startup(nil)
-	defer vips.Shutdown()
+	// Setup imagemagick
+	// Setup magickwand
+	imagick.Initialize()
+	defer imagick.Terminate()
 
 	// Setup router
 	router := fiber.New()

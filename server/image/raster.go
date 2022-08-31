@@ -1,34 +1,34 @@
 package image
 
 import (
-	"github.com/davidbyttow/govips/v2/vips"
+	"runtime"
+	"strings"
+
+	"gopkg.in/gographics/imagick.v3/imagick"
 )
 
 type ImageFormat string
 
 func ConvertSvgToBinary(svgData []byte, format ImageFormat, size uint) ([]byte, error) {
-	defer vips.ClearCache()
-	inputImage, err := vips.NewImageFromBuffer(svgData)
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+	mw := imagick.NewMagickWand()
+	defer mw.Destroy()
+	mw.SetImageFormat("SVG")
+	pixelWand := imagick.NewPixelWand()
+	defer pixelWand.Clear()
+	pixelWand.SetColor("none")
+	mw.SetBackgroundColor(pixelWand)
+	mw.SetImageUnits(imagick.RESOLUTION_PIXELS_PER_INCH)
+	density := 96.0 * float64(size) / float64(DefaultSize)
+	mw.SetResolution(density, density)
+	err := mw.ReadImageBlob(svgData)
 	if err != nil {
 		return nil, err
 	}
-
-	inputImage.Resize(float64(size)/float64(DefaultSize), vips.KernelAuto)
-
-	if format == "png" {
-		ep := vips.NewPngExportParams()
-		ep.StripMetadata = true
-		imageBytes, _, err := inputImage.ExportPng(ep)
-		if err != nil {
-			return nil, err
-		}
-		return imageBytes, nil
-	}
-	ep := vips.NewWebpExportParams()
-	ep.StripMetadata = true
-	imageBytes, _, err := inputImage.ExportWebp(ep)
-	if err != nil {
-		return nil, err
-	}
-	return imageBytes, nil
+	mw.SetImageCompression(imagick.COMPRESSION_NO)
+	mw.SetImageCompressionQuality(100)
+	//mw.SetAntialias(true)
+	mw.SetImageFormat(strings.ToUpper(string(format)))
+	return mw.GetImageBlob(), nil
 }
