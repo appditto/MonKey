@@ -9,9 +9,9 @@ import (
 	"github.com/appditto/MonKey/server/database"
 	"github.com/appditto/MonKey/server/image"
 	"github.com/appditto/MonKey/server/utils"
-	"github.com/davidbyttow/govips/v2/vips"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/h2non/bimg"
 	"github.com/joho/godotenv"
 	"k8s.io/klog/v2"
 )
@@ -93,8 +93,8 @@ func main() {
 	statsChan := make(chan controller.StatsMessage, 100)
 
 	// Setup libvips
-	vips.Startup(nil)
-	defer vips.Shutdown()
+	bimg.Initialize()
+	defer bimg.Shutdown()
 
 	// Setup router
 	router := fiber.New()

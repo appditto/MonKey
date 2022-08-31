@@ -1,34 +1,28 @@
 package image
 
 import (
-	"github.com/davidbyttow/govips/v2/vips"
+	"errors"
+
+	"github.com/h2non/bimg"
 )
 
 type ImageFormat string
 
-func ConvertSvgToBinary(svgData []byte, format ImageFormat, size uint) ([]byte, error) {
-	inputImage, err := vips.NewImageFromBuffer(svgData)
+func ConvertSvgToBinary(svgData []byte, format bimg.ImageType, size uint) ([]byte, error) {
+	inputImage := bimg.NewImage(svgData)
+	if inputImage == nil {
+		return nil, errors.New("Unable to load svg for rasterization")
+	}
+
+	op := bimg.Options{
+		Width:         int(size),
+		Height:        int(size),
+		Type:          format,
+		StripMetadata: true,
+	}
+	processed, err := inputImage.Process(op)
 	if err != nil {
 		return nil, err
 	}
-	defer inputImage.Close()
-
-	inputImage.Resize(float64(size)/float64(DefaultSize), vips.KernelAuto)
-
-	if format == "png" {
-		ep := vips.NewPngExportParams()
-		ep.StripMetadata = true
-		imageBytes, _, err := inputImage.ExportPng(ep)
-		if err != nil {
-			return nil, err
-		}
-		return imageBytes, nil
-	}
-	ep := vips.NewWebpExportParams()
-	ep.StripMetadata = true
-	imageBytes, _, err := inputImage.ExportWebp(ep)
-	if err != nil {
-		return nil, err
-	}
-	return imageBytes, nil
+	return processed, nil
 }
