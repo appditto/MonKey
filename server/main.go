@@ -11,8 +11,8 @@ import (
 	"github.com/appditto/MonKey/server/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/h2non/bimg"
 	"github.com/joho/godotenv"
+	"gopkg.in/gographics/imagick.v3/imagick"
 	"k8s.io/klog/v2"
 )
 
@@ -92,11 +92,10 @@ func main() {
 	// Setup channel for stats processing job
 	statsChan := make(chan controller.StatsMessage, 100)
 
-	// Setup libvips
-	bimg.Initialize()
-	bimg.VipsCacheSetMaxMem(0)
-	bimg.VipsCacheSetMax(0)
-	defer bimg.Shutdown()
+	// Setup imagemagick
+	// Setup magickwand
+	imagick.Initialize()
+	defer imagick.Terminate()
 
 	// Setup router
 	router := fiber.New()

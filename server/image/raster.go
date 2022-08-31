@@ -1,10 +1,11 @@
 package image
 
 import (
-	"errors"
+	"runtime"
+	"strings"
 	"sync"
 
-	"github.com/h2non/bimg"
+	"gopkg.in/gographics/imagick.v3/imagick"
 )
 
 type ImageFormat string
@@ -13,23 +14,28 @@ type ImageConverter struct {
 	mutex sync.Mutex
 }
 
-func (c *ImageConverter) ConvertSvgToBinary(svgData []byte, format bimg.ImageType, size uint) ([]byte, error) {
+func (c *ImageConverter) ConvertSvgToBinary(svgData []byte, format ImageFormat, size uint) ([]byte, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
-	inputImage := bimg.NewImage(svgData)
-	if inputImage == nil {
-		return nil, errors.New("Unable to load svg for rasterization")
-	}
-
-	op := bimg.Options{
-		Width:         int(size),
-		Height:        int(size),
-		Type:          format,
-		StripMetadata: true,
-	}
-	processed, err := inputImage.Process(op)
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+	mw := imagick.NewMagickWand()
+	defer mw.Destroy()
+	mw.SetImageFormat("SVG")
+	pixelWand := imagick.NewPixelWand()
+	defer pixelWand.Clear()
+	pixelWand.SetColor("none")
+	mw.SetBackgroundColor(pixelWand)
+	mw.SetImageUnits(imagick.RESOLUTION_PIXELS_PER_INCH)
+	density := 96.0 * float64(size) / float64(DefaultSize)
+	mw.SetResolution(density, density)
+	err := mw.ReadImageBlob(svgData)
 	if err != nil {
 		return nil, err
 	}
-	return processed, nil
+	mw.SetImageCompression(imagick.COMPRESSION_NO)
+	mw.SetImageCompressionQuality(100)
+	//mw.SetAntialias(true)
+	mw.SetImageFormat(strings.ToUpper(string(format)))
+	return mw.GetImageBlob(), nil
 }

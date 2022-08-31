@@ -10,7 +10,6 @@ import (
 	"github.com/appditto/MonKey/server/image"
 	"github.com/appditto/MonKey/server/utils"
 	"github.com/gofiber/fiber/v2"
-	"github.com/h2non/bimg"
 )
 
 const defaultRasterSize = 128 // Default size of PNG/WEBP images
@@ -105,13 +104,7 @@ func generateIcon(hash *string, c *fiber.Ctx, imageConverter *image.ImageConvert
 	if format != "svg" {
 		// Convert
 		var converted []byte
-		var bimgFormat bimg.ImageType
-		if format == "png" {
-			bimgFormat = bimg.PNG
-		} else {
-			bimgFormat = bimg.WEBP
-		}
-		converted, err = imageConverter.ConvertSvgToBinary(svg, bimgFormat, uint(size))
+		converted, err = imageConverter.ConvertSvgToBinary(svg, image.ImageFormat(format), uint(size))
 		if err != nil {
 			return c.Status(http.StatusInternalServerError).SendString("Error occured")
 		}
@@ -151,13 +144,7 @@ func generateVanityAsset(vanity *image.Asset, c *fiber.Ctx, imageConverter *imag
 	if format != "svg" {
 		// Convert
 		var converted []byte
-		var bimgFormat bimg.ImageType
-		if format == "png" {
-			bimgFormat = bimg.PNG
-		} else {
-			bimgFormat = bimg.WEBP
-		}
-		converted, err = imageConverter.ConvertSvgToBinary(svg, bimgFormat, uint(size))
+		converted, err = imageConverter.ConvertSvgToBinary(svg, image.ImageFormat(format), uint(size))
 		if err != nil {
 			return c.Status(http.StatusInternalServerError).SendString("Error occured")
 		}

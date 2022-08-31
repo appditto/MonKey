@@ -11,21 +11,18 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.4.0
 	github.com/tdewolff/minify/v2 v2.12.0
+	gopkg.in/gographics/imagick.v3 v3.4.1
 	gorm.io/driver/postgres v1.3.9
 	gorm.io/gorm v1.23.8
 	k8s.io/klog/v2 v2.70.1
 )
 
-require golang.org/x/image v0.0.0-20200927104501-e162460cd6b5 // indirect
-
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/bbedward/crypto/ed25519 v0.0.0-20220804193241-34e811d3dfe5 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
-	github.com/davidbyttow/govips/v2 v2.11.0
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
-	github.com/h2non/bimg v1.1.9
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.12.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -42,7 +39,7 @@ require (
 	github.com/valyala/fasthttp v1.39.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/crypto v0.0.0-20220826181053-bd7e27e6170d // indirect
-	golang.org/x/exp v0.0.0-20220827204233-334a2380cb91
+	golang.org/x/exp v0.0.0-20220827204233-334a2380cb91 // indirect
 	golang.org/x/net v0.0.0-20220812174116-3211cb980234 // indirect
 	golang.org/x/sys v0.0.0-20220825204002-c680a09ffe64 // indirect
 	golang.org/x/text v0.3.7 // indirect
