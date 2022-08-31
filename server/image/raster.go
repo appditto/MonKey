@@ -12,6 +12,7 @@ func ConvertSvgToBinary(svgData []byte, format ImageFormat, size uint) ([]byte, 
 	if err != nil {
 		return nil, err
 	}
+	defer inputImage.Close()
 
 	inputImage.Resize(float64(size)/float64(DefaultSize), vips.KernelAuto)
 
