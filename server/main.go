@@ -36,11 +36,6 @@ func usage() {
 	os.Exit(2)
 }
 
-func init() {
-	bimg.VipsCacheSetMaxMem(0)
-	bimg.VipsCacheSetMax(0)
-}
-
 func main() {
 	// Get seed from env
 	seed := utils.GetEnv("MONKEY_SEED", "1234567890")
@@ -99,6 +94,8 @@ func main() {
 
 	// Setup libvips
 	bimg.Initialize()
+	bimg.VipsCacheSetMaxMem(0)
+	bimg.VipsCacheSetMax(0)
 	defer bimg.Shutdown()
 
 	// Setup router
