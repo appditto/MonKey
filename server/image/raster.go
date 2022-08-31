@@ -7,7 +7,6 @@ import (
 type ImageFormat string
 
 func ConvertSvgToBinary(svgData []byte, format ImageFormat, size uint) ([]byte, error) {
-	defer vips.ClearCache()
 	inputImage, err := vips.NewImageFromBuffer(svgData)
 	if err != nil {
 		return nil, err
