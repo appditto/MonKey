@@ -18,8 +18,9 @@ const minConvertedSize = 100  // Minimum size of PNG/WEBP converted output
 const maxConvertedSize = 1000 // Maximum size of PNG/WEBP converted outpu
 
 type MonkeyController struct {
-	Seed         string
-	StatsChannel *chan StatsMessage
+	Seed           string
+	StatsChannel   *chan StatsMessage
+	ImageConverter *image.ImageConverter
 }
 
 // Return monKey for given address
@@ -41,13 +42,13 @@ func (mc MonkeyController) GetBanano(c *fiber.Ctx) error {
 	// See if this is a vanity∂
 	vanity := image.GetAssets().GetVanityAsset(address)
 	if vanity != nil {
-		return generateVanityAsset(vanity, c)
+		return generateVanityAsset(vanity, c, mc.ImageConverter)
 	}
 
 	pubKey := utils.AddressToPub(address)
 	sha256 := utils.Sha256(pubKey, mc.Seed)
 
-	return generateIcon(&sha256, c)
+	return generateIcon(&sha256, c, mc.ImageConverter)
 }
 
 // Testing APIs
@@ -69,7 +70,7 @@ func (mc MonkeyController) GetRandomSvg(c *fiber.Ctx) error {
 }
 
 // Generate monKey with given hash
-func generateIcon(hash *string, c *fiber.Ctx) error {
+func generateIcon(hash *string, c *fiber.Ctx, imageConverter *image.ImageConverter) error {
 	var err error
 
 	format := strings.ToLower(c.Query("format"))
@@ -110,7 +111,7 @@ func generateIcon(hash *string, c *fiber.Ctx) error {
 		} else {
 			bimgFormat = bimg.WEBP
 		}
-		converted, err = image.ConvertSvgToBinary(svg, bimgFormat, uint(size))
+		converted, err = imageConverter.ConvertSvgToBinary(svg, bimgFormat, uint(size))
 		if err != nil {
 			return c.Status(http.StatusInternalServerError).SendString("Error occured")
 		}
@@ -122,7 +123,7 @@ func generateIcon(hash *string, c *fiber.Ctx) error {
 }
 
 // Return vanity with given options
-func generateVanityAsset(vanity *image.Asset, c *fiber.Ctx) error {
+func generateVanityAsset(vanity *image.Asset, c *fiber.Ctx, imageConverter *image.ImageConverter) error {
 	var err error
 
 	format := strings.ToLower(c.Query("format"))
@@ -156,7 +157,7 @@ func generateVanityAsset(vanity *image.Asset, c *fiber.Ctx) error {
 		} else {
 			bimgFormat = bimg.WEBP
 		}
-		converted, err = image.ConvertSvgToBinary(svg, bimgFormat, uint(size))
+		converted, err = imageConverter.ConvertSvgToBinary(svg, bimgFormat, uint(size))
 		if err != nil {
 			return c.Status(http.StatusInternalServerError).SendString("Error occured")
 		}

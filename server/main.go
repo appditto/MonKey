@@ -105,8 +105,9 @@ func main() {
 
 	// Setup natricon controller
 	monkeyController := controller.MonkeyController{
-		Seed:         seed,
-		StatsChannel: &statsChan,
+		Seed:           seed,
+		StatsChannel:   &statsChan,
+		ImageConverter: &image.ImageConverter{},
 	}
 	statsController := controller.StatsController{
 		DB: db,
