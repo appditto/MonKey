@@ -1,6 +1,15 @@
-FROM appditto/imagemagick_go:latest as base
+FROM ubuntu:22.04
 
-FROM base as builder
+ARG TARGETARCH
+
+ENV CGO_CFLAGS_ALLOW="-Xpreprocessor"
+
+# Install GOLang
+RUN apt-get update && apt-get install -y wget \
+    && wget -c https://dl.google.com/go/go1.19.linux-${TARGETARCH}.tar.gz -O - | tar -xz -C /usr/local \
+    && rm -rf go1.19.linux-${TARGETARCH}.tar.gz \
+    && rm -rf /var/lib/apt/lists/*
+ENV PATH="/usr/local/go/bin:${PATH}"
 
 WORKDIR /root
 
@@ -9,9 +18,9 @@ ADD . .
 # add assets
 ADD assets assets
 # Dependencies and buil
-# Install dependencies, imagemagick, go, and cleanup
+# Install dependencies, libvips, go, and cleanup
 RUN apt-get update && apt-get install -y \
-    gcc pkg-config \
+    gcc pkg-config libvips-dev \
     && go get \
     && go build -o monkey-server \
     && rm -rf /var/lib/apt/lists/*
