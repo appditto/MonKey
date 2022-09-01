@@ -1,0 +1,41 @@
+# appditto/imagemagick
+# Build docker image with imagemagick/ubuntu
+FROM ubuntu:20.04
+
+RUN mkdir /imagemagick-build
+WORKDIR /imagemagick-build
+
+ENV DEBIAN_FRONTEND="noninteractive"
+
+# Install dependencies, imagemagick, go, and cleanup
+RUN apt-get update && apt-get install -y \
+  software-properties-common \
+  build-essential \
+  libwebp-dev \
+  librsvg2-2 \
+  librsvg2-dev \
+  librsvg2-bin \
+  wget \
+  libpng16-16 \
+  libpng-dev \
+  libjpeg-turbo8 \
+  libjpeg-turbo8-dev \
+  libwebp6 \
+  libgomp1  \
+  libwebpmux3 \
+  libwebpdemux2 \
+  libxml2 \
+  libxml2-dev \
+  ghostscript \
+  && ln -fs /usr/share/zoneinfo/UTC /etc/localtime \
+  && dpkg-reconfigure --frontend noninteractive tzdata \
+  && wget https://imagemagick.org/archive/ImageMagick.tar.gz \
+  && mkdir ImageMagick7 && tar zxvpf ImageMagick.tar.gz -C ImageMagick7 --strip-components 1 \
+  && cd ImageMagick7 && ./configure --with-rsvg=yes && make && make install && ldconfig /usr/local/lib \
+  && rm -rf ImageMagick7 && rm -rf ImageMagick.tar.gz \
+  && apt-get remove --autoremove --purge -y build-essential libwebp-dev \
+  librsvg2-dev libpng-dev libjpeg-turbo8-dev libxml2-dev wget software-properties-common \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /
+RUN rm -rf imagemagick-build
