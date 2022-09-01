@@ -1,7 +1,6 @@
-FROM appditto/imagemagick_go:latest as base
+FROM appditto/libvips:latest
 
 ARG ZSH_IN_DOCKER_VERSION=1.1.2
-
 
 # Install useful tools
 RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg nano zsh-syntax-highlighting less build-essential pkg-config postgresql-client && \
@@ -24,5 +23,7 @@ WORKDIR /app
 EXPOSE  3000
 
 RUN go install github.com/go-delve/delve/cmd/dlv@latest
+
+ENV MALLOC_ARENA_MAX=2
 
 CMD [ "/bin/zsh", "-c" ]

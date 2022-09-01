@@ -9,7 +9,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     container: 
-      image: appditto/imagemagick_go:latest
+      image: appditto/libvips:latest
     steps:
     - name: Check out code
       uses: actions/checkout@master
@@ -17,7 +17,6 @@ jobs:
     - name: Run Tests
       run: |
         cd server
-        apt-get update && apt-get install -y gcc pkg-config
         go test ./...
 
   build_and_publish_nuxt:
