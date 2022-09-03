@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/appditto/MonKey/server/color"
-	"k8s.io/klog/v2"
+	"github.com/golang/glog"
 )
 
 // Chance an accessory category has of occuring
@@ -302,6 +302,6 @@ func GetAccessoryFromHexWithWeight(hexStr string, assets []Asset) *Asset {
 	}
 
 	// Fallback in case nothing happened
-	klog.Warningf("Couldn't find asset with appropriate weight, defaulting to index-0 asset %s %s", hexStr, assets[0].FileName)
+	glog.Warningf("Couldn't find asset with appropriate weight, defaulting to index-0 asset %s %s", hexStr, assets[0].FileName)
 	return &assets[0]
 }

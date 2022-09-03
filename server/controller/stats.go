@@ -15,7 +15,7 @@ import (
 	"github.com/appditto/MonKey/server/models"
 	"github.com/appditto/MonKey/server/spc"
 	"github.com/appditto/MonKey/server/utils"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"golang.org/x/exp/slices"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -90,26 +90,29 @@ type ServiceStats struct {
 }
 
 // Stats API
-func (sc *StatsController) Stats(c *fiber.Ctx) error {
+func (sc *StatsController) Stats(c *gin.Context) {
 	// Unique IPs
 	var uniqueClients uint64
 	err := sc.DB.Model(&models.Stats{}).Select("count(distinct ip_address)").Find(&uniqueClients).Error
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).SendString("Error getting unique monkeys served")
+		c.String(http.StatusInternalServerError, "Error getting unique clients served")
+		return
 	}
 
 	// Unique ban addresses
 	var uniqueBanAddress uint64
 	err = sc.DB.Model(&models.Stats{}).Select("count(distinct ban_address)").Find(&uniqueBanAddress).Error
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).SendString("Error getting unique monkeys served")
+		c.String(http.StatusInternalServerError, "Error getting unique monkeys served")
+		return
 	}
 
 	// Total  count
 	var count uint64
 	err = sc.DB.Model(&models.Stats{}).Select("sum(count)").Find(&count).Error
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).SendString("Error getting total requests")
+		c.String(http.StatusInternalServerError, "Error getting total requests monkeys served")
+		return
 	}
 
 	// By service
@@ -117,7 +120,8 @@ func (sc *StatsController) Stats(c *fiber.Ctx) error {
 	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique, service").Group("service").Order("total desc").Find(&svcStats).Error
 	if err != nil {
 		klog.Errorf("Error getting svc stats: %v", err)
-		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+		c.String(http.StatusInternalServerError, "Error getting statss")
+		return
 	}
 	var svcStatsRet []map[string]interface{}
 	if len(svcStats) > 0 {
@@ -142,17 +146,19 @@ func (sc *StatsController) Stats(c *fiber.Ctx) error {
 	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique").Where("date(created_at) = ?", todayStr).Order("total desc").Find(&todayStats).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats: %v", err)
-		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+		c.String(http.StatusInternalServerError, "Error getting statss")
+		return
 	}
 	var todayStatsIP StatsNumbers
 	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ip_address) as unique").Where("date(created_at) = ?", todayStr).Order("total desc").Find(&todayStatsIP).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats IP: %v", err)
-		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+		c.String(http.StatusInternalServerError, "Error getting stats")
+		return
 	}
 
 	// Return response
-	return c.Status(http.StatusOK).JSON(map[string]interface{}{
+	c.JSON(200, gin.H{
 		"unique_served":         uniqueBanAddress,
 		"unique_clients_served": uniqueClients,
 		"total_served":          count,
@@ -169,14 +175,15 @@ func (sc *StatsController) Stats(c *fiber.Ctx) error {
 }
 
 // Monthly stats API
-func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
+func (sc *StatsController) StatsMonthly(c *gin.Context) {
 	monthStr := c.Query("month")
 	yearStr := c.Query("year")
 	monthInt, err := strconv.Atoi(monthStr)
 	if err != nil {
 		monthInt = int(time.Now().Month())
 	} else if monthInt < 1 || monthInt > 12 {
-		return c.Status(http.StatusBadRequest).SendString("month must be between 1 and 12")
+		c.String(http.StatusBadRequest, "%s", "month must be between 1 and 12")
+		return
 	}
 	yearInt, err := strconv.Atoi(yearStr)
 	if err != nil {
@@ -189,7 +196,8 @@ func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
 	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique, service").Where("date_trunc('month', created_at) = ?", targetDt).Group("service").Order("total desc").Find(&svcStats).Error
 	if err != nil {
 		klog.Errorf("Error getting svc stats: %v", err)
-		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+		c.String(http.StatusInternalServerError, "Error getting stats")
+		return
 	}
 	var svcStatsRet []map[string]interface{}
 	if len(svcStats) > 0 {
@@ -213,13 +221,15 @@ func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
 	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique").Where("date_trunc('month', created_at) = ?", targetDt).Order("total desc").Find(&targetStats).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats: %v", err)
-		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+		c.String(http.StatusInternalServerError, "Error getting stats")
+		return
 	}
 	var targetStatsIP StatsNumbers
 	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ip_address) as unique").Where("date_trunc('month', created_at) = ?", targetDt).Order("total desc").Find(&targetStatsIP).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats IP: %v", err)
-		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+		c.String(http.StatusInternalServerError, "Error getting stats")
+		return
 	}
 
 	// 30 days ago
@@ -228,13 +238,15 @@ func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
 	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique").Where("date(created_at) >= ?", last30dt).Order("total desc").Find(&last30Stats).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats: %v", err)
-		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+		c.String(http.StatusInternalServerError, "Error getting stats")
+		return
 	}
 	var last30StatsIP StatsNumbers
 	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ip_address) as unique").Where("date(created_at) >= ?", last30dt).Order("total desc").Find(&last30StatsIP).Error
 	if err != nil {
 		klog.Errorf("Error getting today stats IP: %v", err)
-		return c.Status(http.StatusInternalServerError).SendString("Error getting stats")
+		c.String(http.StatusInternalServerError, "Error getting stats")
+		return
 	}
 	// Return response
 	ret := map[string]interface{}{
@@ -263,7 +275,8 @@ func (sc *StatsController) StatsMonthly(c *fiber.Ctx) error {
 	} else {
 		database.GetRedisDB().Set("stats_monthly_cache", string(serialized), time.Second*300)
 	}
-	return c.Status(http.StatusOK).JSON(ret)
+	c.JSON(200, ret)
+	return
 }
 
 // For generating CSV documents for algorithm analysis

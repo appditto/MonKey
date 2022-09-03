@@ -1,17 +1,13 @@
 package utils
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gin-gonic/gin"
+)
 
-func IPAddress(c *fiber.Ctx) string {
-	IPAddress := c.Get("CF-Connecting-IP")
+func IPAddress(c *gin.Context) string {
+	IPAddress := c.GetHeader("CF-Connecting-IP")
 	if IPAddress == "" {
-		IPAddress = c.Get("X-Real-Ip")
-	}
-	if IPAddress == "" {
-		IPAddress = c.Get("X-Forwarded-For")
-	}
-	if IPAddress == "" {
-		IPAddress = c.IP()
+		IPAddress = c.ClientIP()
 	}
 	return IPAddress
 }

@@ -9,9 +9,9 @@ import (
 	"sync"
 
 	svg "github.com/ajstarks/svgo"
+	"github.com/golang/glog"
 	minify "github.com/tdewolff/minify/v2"
 	minifyxml "github.com/tdewolff/minify/v2/xml"
-	"k8s.io/klog/v2"
 )
 
 // DefaultSize SVG width/height attribute
@@ -31,7 +31,7 @@ type SVG struct {
 func PureSVG(asset *Asset, withBackground bool) ([]byte, error) {
 	var pureSVG SVG
 	if err := xml.Unmarshal(asset.SVGContents, &pureSVG); err != nil {
-		klog.Fatal("Unable to parse SVG")
+		glog.Fatal("Unable to parse SVG")
 		return nil, err
 	}
 	var b bytes.Buffer
@@ -72,104 +72,104 @@ func CombineSVG(accessories Accessories) ([]byte, error) {
 	)
 	// Parse all SVG assets that are relevant to the final image
 	if err := xml.Unmarshal(accessories.TailAsset.SVGContents, &tail); err != nil {
-		klog.Fatalf("Unable to parse tail SVG %v", err)
+		glog.Fatalf("Unable to parse tail SVG %v", err)
 		return nil, err
 	}
 	if accessories.TailAccessory != nil {
 		if err := xml.Unmarshal(accessories.TailAccessory.SVGContents, &tailAccessory); err != nil {
-			klog.Fatalf("Unable to parse tail Accessory SVG %v", err)
+			glog.Fatalf("Unable to parse tail Accessory SVG %v", err)
 			return nil, err
 		}
 	}
 	if accessories.ShirtPantsAsset == nil || !accessories.ShirtPantsAsset.RemovesLegs {
 		if err := xml.Unmarshal(accessories.LegAsset.SVGContents, &legs); err != nil {
-			klog.Fatalf("Unable to parse legs SVG %v", err)
+			glog.Fatalf("Unable to parse legs SVG %v", err)
 			return nil, err
 		}
 	}
 	if err := xml.Unmarshal(accessories.ArmsAsset.SVGContents, &arms); err != nil {
-		klog.Fatalf("Unable to parse arms SVG %v", err)
+		glog.Fatalf("Unable to parse arms SVG %v", err)
 		return nil, err
 	}
 	if err := xml.Unmarshal(accessories.BodyUpperAsset.SVGContents, &bodyUpper); err != nil {
-		klog.Fatalf("Unable to parse body upper SVG %v", err)
+		glog.Fatalf("Unable to parse body upper SVG %v", err)
 		return nil, err
 	}
 	if accessories.ShirtPantsAsset != nil {
 		if err := xml.Unmarshal(accessories.ShirtPantsAsset.SVGContents, &shirtPants); err != nil {
-			klog.Fatalf("Unable to parse shirt pants SVG %v", err)
+			glog.Fatalf("Unable to parse shirt pants SVG %v", err)
 			return nil, err
 		}
 	}
 	if accessories.MiscAsset != nil {
 		if err := xml.Unmarshal(accessories.MiscAsset.SVGContents, &misc); err != nil {
-			klog.Fatalf("Unable to parse misc SVG %v", err)
+			glog.Fatalf("Unable to parse misc SVG %v", err)
 			return nil, err
 		}
 	}
 	if err := xml.Unmarshal(accessories.EarAsset.SVGContents, &ears); err != nil {
-		klog.Fatalf("Unable to parse ears SVG %v", err)
+		glog.Fatalf("Unable to parse ears SVG %v", err)
 		return nil, err
 	}
 	if err := xml.Unmarshal(accessories.FaceAsset.SVGContents, &face); err != nil {
-		klog.Fatalf("Unable to parse face SVG %v", err)
+		glog.Fatalf("Unable to parse face SVG %v", err)
 		return nil, err
 	}
 	if accessories.GlassesAsset == nil || !accessories.GlassesAsset.RemovesEyes {
 		if err := xml.Unmarshal(accessories.EyeAsset.SVGContents, &eyes); err != nil {
-			klog.Fatalf("Unable to parse eye SVG %v", err)
+			glog.Fatalf("Unable to parse eye SVG %v", err)
 			return nil, err
 		}
 	}
 	if accessories.GlassesAsset != nil {
 		if err := xml.Unmarshal(accessories.GlassesAsset.SVGContents, &glasses); err != nil {
-			klog.Fatalf("Unable to parse glasses SVG %v", err)
+			glog.Fatalf("Unable to parse glasses SVG %v", err)
 			return nil, err
 		}
 	}
 	if err := xml.Unmarshal(accessories.NoseAsset.SVGContents, &nose); err != nil {
-		klog.Fatalf("Unable to parse nose SVG %v", err)
+		glog.Fatalf("Unable to parse nose SVG %v", err)
 		return nil, err
 	}
 	if accessories.MouthAsset != nil {
 		if err := xml.Unmarshal(accessories.MouthAsset.SVGContents, &mouth); err != nil {
-			klog.Fatalf("Unable to parse mouth SVG %v", err)
+			glog.Fatalf("Unable to parse mouth SVG %v", err)
 			return nil, err
 		}
 	}
 	if accessories.HatAsset != nil {
 		if err := xml.Unmarshal(accessories.HatAsset.SVGContents, &hat); err != nil {
-			klog.Fatalf("Unable to parse hat SVG %v", err)
+			glog.Fatalf("Unable to parse hat SVG %v", err)
 			return nil, err
 		}
 	}
 	if accessories.ShoeAsset == nil || !accessories.ShoeAsset.RemovesFeet {
 		if err := xml.Unmarshal(accessories.FootLeftAsset.SVGContents, &footLeft); err != nil {
-			klog.Fatalf("Unable to parse foot left SVG %v", err)
+			glog.Fatalf("Unable to parse foot left SVG %v", err)
 			return nil, err
 		}
 	}
 	if accessories.ShoeAsset == nil || !accessories.ShoeAsset.RemovesFeet {
 		if err := xml.Unmarshal(accessories.FootRightAsset.SVGContents, &footRight); err != nil {
-			klog.Fatalf("Unable to parse foot right SVG %v", err)
+			glog.Fatalf("Unable to parse foot right SVG %v", err)
 			return nil, err
 		}
 	}
 	if accessories.ShoeAsset != nil {
 		if err := xml.Unmarshal(accessories.ShoeAsset.SVGContents, &shoes); err != nil {
-			klog.Fatalf("Unable to parse shoes SVG %v", err)
+			glog.Fatalf("Unable to parse shoes SVG %v", err)
 			return nil, err
 		}
 	}
 	if accessories.MiscAsset == nil || !accessories.MiscAsset.RemovesHandsLeft {
 		if err := xml.Unmarshal(accessories.HandLeftAsset.SVGContents, &handLeft); err != nil {
-			klog.Fatalf("Unable to parse hand left SVG %v", err)
+			glog.Fatalf("Unable to parse hand left SVG %v", err)
 			return nil, err
 		}
 	}
 	if accessories.MiscAsset == nil || !accessories.MiscAsset.RemovesHandsRight {
 		if err := xml.Unmarshal(accessories.HandRightAsset.SVGContents, &handRight); err != nil {
-			klog.Fatalf("Unable to parse hand right SVG %v", err)
+			glog.Fatalf("Unable to parse hand right SVG %v", err)
 			return nil, err
 		}
 	}
