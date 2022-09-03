@@ -123,9 +123,11 @@ func generateIcon(hash *string, c *gin.Context, imageConverter *image.ImageConve
 			c.String(http.StatusInternalServerError, "Error occured")
 			return
 		}
+		c.Header("Cache-Control", "public, max-age=604800")
 		c.Data(200, fmt.Sprintf("image/%s", format), converted)
 		return
 	}
+	c.Header("Cache-Control", "public, max-age=604800")
 	c.Data(200, "image/svg+xml", svg)
 }
 
@@ -171,9 +173,11 @@ func generateVanityAsset(vanity *image.Asset, c *gin.Context, imageConverter *im
 			c.String(http.StatusInternalServerError, "Error occured")
 			return
 		}
+		c.Header("Cache-Control", "public, max-age=604800")
 		c.Data(200, fmt.Sprintf("image/%s", format), converted)
 		return
 	}
+	c.Header("Cache-Control", "public, max-age=604800")
 	c.Data(200, "image/svg+xml", svg)
 }
 
