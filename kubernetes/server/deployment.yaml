@@ -26,7 +26,7 @@ spec:
           limits:
             cpu: 1000m
             memory: 1000Mi
-        args: ["./monkey-server -host=0.0.0.0 -port=5555 -logtostderr"]
+        args: ["monkey -host=0.0.0.0 -port=5555 -logtostderr"]
         ports:
           - containerPort: 5555
         imagePullPolicy: "Always"
