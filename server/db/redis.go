@@ -643,24 +643,3 @@ func (r *redisManager) UpdateStatsByService(svc string, address string) {
 		}
 	}
 }
-
-// ServiceStats - Service Stats
-func (r *redisManager) ServiceStats() map[spc.StatsService]map[string]int64 {
-	ret := map[spc.StatsService]map[string]int64{}
-	for _, svc := range spc.SvcList {
-		key := fmt.Sprintf("%s:stats:%s", keyPrefix, svc)
-		len, err := r.hlen(key)
-		ret[svc] = map[string]int64{}
-		if err != nil {
-			ret[svc]["unique"] = 0
-		}
-		ret[svc]["unique"] = len
-		totalCount, err := r.hget(key, "total")
-		totalCountInt, err := strconv.Atoi(totalCount)
-		if err != nil {
-			totalCountInt = 0
-		}
-		ret[svc]["total"] = int64(totalCountInt)
-	}
-	return ret
-}
