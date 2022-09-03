@@ -126,7 +126,7 @@ func generateIcon(hash *string, c *gin.Context, imageConverter *image.ImageConve
 		c.Data(200, fmt.Sprintf("image/%s", format), converted)
 		return
 	}
-	c.Header("Cache-Control", "max-age=604800")
+	c.Header("Cache-Control", "public, max-age=604800, s-maxage=604800")
 	c.Data(200, "image/svg+xml; charset=utf-8", svg)
 }
 
