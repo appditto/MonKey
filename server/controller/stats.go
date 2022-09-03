@@ -36,15 +36,16 @@ type StatsMessage struct {
 func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
 	// Process stats
 	for c := range statsChan {
-		if !slices.Contains(spc.SvcList, c.Svc) {
-			c.Svc = ""
+		svc := c.Svc
+		if !slices.Contains(spc.SvcList, svc) {
+			svc = ""
 		}
 
 		todayStr := time.Now().Format("01-02-2006")
 
 		var serviceExpr clause.Expr
-		if c.Svc != "" {
-			serviceExpr = gorm.Expr("service = ?", c.Svc)
+		if svc != "" {
+			serviceExpr = gorm.Expr("service = ?", svc)
 		} else {
 			serviceExpr = gorm.Expr("service is null")
 		}
@@ -57,8 +58,8 @@ func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
 				BanAddress: c.Address,
 				Count:      1,
 			}
-			if c.Svc != "" {
-				stats.Service = &c.Svc
+			if svc != "" {
+				stats.Service = &svc
 			}
 
 			err := sc.DB.Create(stats).Error

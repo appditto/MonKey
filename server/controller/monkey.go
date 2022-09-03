@@ -33,10 +33,11 @@ func (mc MonkeyController) GetBanano(c *gin.Context) {
 	}
 
 	// Parse stats
+	svc := c.Query("svc")
 	*mc.StatsChannel <- StatsMessage{
 		Address: address,
 		IP:      utils.IPAddress(c),
-		Svc:     c.Query("svc"),
+		Svc:     svc,
 	}
 
 	// See if this is a vanity
