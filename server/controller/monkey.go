@@ -69,7 +69,7 @@ func (mc MonkeyController) GetRandomSvg(c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Error occured")
 		return
 	}
-	c.Data(200, "image/svg+xml; charset=utf-8", svg)
+	c.Data(200, "image/svg+xml", svg)
 }
 
 // Generate monKey with given hash
@@ -126,7 +126,6 @@ func generateIcon(hash *string, c *gin.Context, imageConverter *image.ImageConve
 		c.Data(200, fmt.Sprintf("image/%s", format), converted)
 		return
 	}
-	c.Header("Cache-Control", "public, max-age=604800, s-maxage=604800")
 	c.Data(200, "image/svg+xml", svg)
 }
 
@@ -175,7 +174,7 @@ func generateVanityAsset(vanity *image.Asset, c *gin.Context, imageConverter *im
 		c.Data(200, fmt.Sprintf("image/%s", format), converted)
 		return
 	}
-	c.Data(200, "image/svg+xml; charset=utf-8", svg)
+	c.Data(200, "image/svg+xml", svg)
 }
 
 type MonkeyStatsRequest struct {
