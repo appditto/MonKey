@@ -11,6 +11,7 @@ RUN  go build -o /root/monkey
 
 FROM ubuntu:22.04
 
+ADD assets assets
 COPY --from=builder /root/monkey /usr/local/bin/monkey
 
 ENV MALLOC_ARENA_MAX=2
