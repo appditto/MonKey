@@ -14,7 +14,7 @@
       <StatsCard header="We served" stat={stats.total_served} footer="MonKeys in total" />
       <StatsCard
         header="We served"
-        stat={statsMonthly.addresses.total}
+        stat={statsMonthly.last30address.total}
         footer="MonKeys this month"
       />
       <StatsCard
@@ -24,7 +24,7 @@
       />
       <StatsCard
         header="We served to"
-        stat={statsMonthly.clients.unique}
+        stat={statsMonthly.last30clients.unique}
         footer="clients this month"
       />
       <StatsCard
