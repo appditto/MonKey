@@ -41,21 +41,15 @@ spec:
           - name: REDIS_DB
             value: "14"                         
           - name: DB_HOST
-            value: postgres.kubegres          
+            value: pg-monkey.monkey       
           - name: DB_PORT
             value: "5432"
           - name: DB_SSLMODE
             value: disable
           - name: DB_NAME
-            valueFrom:
-              secretKeyRef:
-                name: monkey
-                key: db_name   
+            value: postgres  
           - name: DB_USER
-            valueFrom:
-              secretKeyRef:
-                name: monkey
-                key: db_user  
+            value: postgres 
           - name: DB_PASS
             valueFrom:
               secretKeyRef:
