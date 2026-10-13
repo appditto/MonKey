@@ -26,8 +26,8 @@ import (
 const (
 	statsCacheKey        = "stats_cache"
 	statsRefreshLockKey  = "stats_refresh_lock"
-	statsRefreshInterval = 5 * time.Minute
-	statsCacheTTL        = 30 * time.Minute
+	statsRefreshInterval = 30 * time.Minute
+	statsCacheTTL        = 2 * time.Hour
 	statsTotalsColumns   = "coalesce(sum(count), 0) as total, count(distinct ban_address) as unique_addresses, count(distinct ip_address) as unique_clients"
 )
 
