@@ -39,5 +39,12 @@ func DropAndCreateTables(db *gorm.DB) error {
 }
 
 func Migrate(db *gorm.DB) error {
-	return db.AutoMigrate(&models.Stats{})
+	return db.AutoMigrate(
+		&models.StatsAddress{},
+		&models.StatsClient{},
+		&models.StatsServiceAddress{},
+		&models.StatsServiceDay{},
+		&models.StatsDay{},
+		&models.Stats{},
+	)
 }

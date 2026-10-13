@@ -21,9 +21,9 @@ func (stats *Stats) BeforeCreate(tx *gorm.DB) error {
 	// uuid.New() creates a new random UUID or panics.
 	stats.ID = uuid.New()
 
-	// generate timestamps
-	now := time.Now().UTC()
-	stats.CreatedAt = now
+	if stats.CreatedAt.IsZero() {
+		stats.CreatedAt = time.Now().UTC()
+	}
 
 	return nil
 }

@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -19,16 +18,24 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/exp/slices"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"k8s.io/klog/v2"
 )
 
 const (
-	statsCacheKey        = "stats_cache"
-	statsRefreshLockKey  = "stats_refresh_lock"
-	statsRefreshInterval = 30 * time.Minute
-	statsCacheTTL        = 2 * time.Hour
-	statsTotalsColumns   = "coalesce(sum(count), 0) as total, count(distinct ban_address) as unique_addresses, count(distinct ip_address) as unique_clients"
+	statsCacheKey         = "stats_cache"
+	statsRefreshLockKey   = "stats_refresh_lock"
+	statsRefreshInterval  = 30 * time.Minute
+	statsCacheTTL         = 2 * time.Hour
+	statsTotalsColumns    = "coalesce(sum(count), 0) as total, count(distinct ban_address) as unique_addresses, count(distinct ip_address) as unique_clients"
+	windowServiceColumns  = "sum(count) as total, count(distinct ban_address) as unique, service"
+	allTimeServiceColumns = "sum(served) as total, sum(new_addresses) as unique, service"
+	allTimeTotalsSQL      = "SELECT (SELECT coalesce(sum(served), 0) FROM stats_service_days) AS total, coalesce(sum(new_addresses), 0) AS unique_addresses, coalesce(sum(new_clients), 0) AS unique_clients FROM stats_days"
+
+	insertStatsAddressSQL        = "INSERT INTO stats_addresses (ban_address) VALUES (?) ON CONFLICT DO NOTHING"
+	insertStatsClientSQL         = "INSERT INTO stats_clients (ip_address) VALUES (?) ON CONFLICT DO NOTHING"
+	insertStatsServiceAddressSQL = "INSERT INTO stats_service_addresses (service, ban_address) VALUES (?, ?) ON CONFLICT DO NOTHING"
+	incrementStatsDaySQL         = "INSERT INTO stats_days AS d (day, new_addresses, new_clients) VALUES (?, ?, ?) ON CONFLICT (day) DO UPDATE SET new_addresses = d.new_addresses + excluded.new_addresses, new_clients = d.new_clients + excluded.new_clients"
+	incrementStatsServiceDaySQL  = "INSERT INTO stats_service_days AS d (day, service, served, new_addresses) VALUES (?, ?, 1, ?) ON CONFLICT (day, service) DO UPDATE SET served = d.served + 1, new_addresses = d.new_addresses + excluded.new_addresses"
 )
 
 type StatsController struct {
@@ -48,51 +55,87 @@ func startOfDay(t time.Time) time.Time {
 
 // Go routine for processing stats messages
 func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
-	// Process stats
 	for c := range statsChan {
-		svc := c.Svc
-		if !slices.Contains(spc.SvcList, svc) {
-			svc = ""
-		}
-
-		today := startOfDay(time.Now())
-		tomorrow := today.AddDate(0, 0, 1)
-
-		var serviceExpr clause.Expr
-		if svc != "" {
-			serviceExpr = gorm.Expr("service = ?", svc)
-		} else {
-			serviceExpr = gorm.Expr("service is null")
-		}
-		// Create or update stats object
-		var stats models.Stats
-		err := sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Where("created_at >= ? AND created_at < ?", today, tomorrow).First(&stats).Error
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			stats := &models.Stats{
-				IPAddress:  c.IP,
-				BanAddress: c.Address,
-				Count:      1,
-			}
-			if svc != "" {
-				stats.Service = &svc
-			}
-
-			err := sc.DB.Create(stats).Error
-
-			if err != nil {
-				klog.Errorf("Error saving stats: %v", err)
-			}
-		} else if err == nil {
-			err = sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Where("created_at >= ? AND created_at < ?", today, tomorrow).Updates(map[string]interface{}{
-				"count": gorm.Expr("count + ?", 1),
-			}).Error
-			if err != nil {
-				klog.Errorf("Error updating stats: %v", err)
-			}
-		} else {
-			klog.Errorf("Error setting stats: %v", err)
+		if err := sc.record(c, time.Now()); err != nil {
+			klog.Errorf("Error saving stats: %v", err)
 		}
 	}
+}
+
+func registeredService(svc string) string {
+	if slices.Contains(spc.SvcList, svc) {
+		return svc
+	}
+	return ""
+}
+
+func (sc *StatsController) record(c StatsMessage, now time.Time) error {
+	svc := registeredService(c.Svc)
+	day := startOfDay(now).Format("2006-01-02")
+	return sc.DB.Transaction(func(tx *gorm.DB) error {
+		createdRow, err := incrementDailyStats(tx, c, svc, now)
+		if err != nil {
+			return err
+		}
+		var newServiceAddresses int64
+		if createdRow {
+			newServiceAddresses, err = recordUniques(tx, c, svc, day)
+			if err != nil {
+				return err
+			}
+		}
+		return tx.Exec(incrementStatsServiceDaySQL, day, svc, newServiceAddresses).Error
+	})
+}
+
+func incrementDailyStats(tx *gorm.DB, c StatsMessage, svc string, now time.Time) (bool, error) {
+	today := startOfDay(now)
+	serviceExpr := gorm.Expr("service is null")
+	if svc != "" {
+		serviceExpr = gorm.Expr("service = ?", svc)
+	}
+	todaysRow := tx.Model(&models.Stats{}).Select("id").Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Where("created_at >= ? AND created_at < ?", today, today.AddDate(0, 0, 1)).Limit(1)
+	result := tx.Model(&models.Stats{}).Where("id = (?)", todaysRow).Update("count", gorm.Expr("count + ?", 1))
+	if result.Error != nil {
+		return false, result.Error
+	}
+	if result.RowsAffected > 0 {
+		return false, nil
+	}
+	stats := &models.Stats{
+		IPAddress:  c.IP,
+		BanAddress: c.Address,
+		Count:      1,
+		CreatedAt:  now.UTC(),
+	}
+	if svc != "" {
+		stats.Service = &svc
+	}
+	return true, tx.Create(stats).Error
+}
+
+func recordUniques(tx *gorm.DB, c StatsMessage, svc string, day string) (int64, error) {
+	newAddresses, err := insertIfAbsent(tx, insertStatsAddressSQL, c.Address)
+	if err != nil {
+		return 0, err
+	}
+	newClients, err := insertIfAbsent(tx, insertStatsClientSQL, c.IP)
+	if err != nil {
+		return 0, err
+	}
+	newServiceAddresses, err := insertIfAbsent(tx, insertStatsServiceAddressSQL, svc, c.Address)
+	if err != nil {
+		return 0, err
+	}
+	if newAddresses == 0 && newClients == 0 {
+		return newServiceAddresses, nil
+	}
+	return newServiceAddresses, tx.Exec(incrementStatsDaySQL, day, newAddresses, newClients).Error
+}
+
+func insertIfAbsent(tx *gorm.DB, sql string, values ...interface{}) (int64, error) {
+	result := tx.Exec(sql, values...)
+	return result.RowsAffected, result.Error
 }
 
 type StatsNumbers struct {
@@ -111,10 +154,6 @@ type statsTotals struct {
 	UniqueClients   uint64
 }
 
-func (sc *StatsController) all() *gorm.DB {
-	return sc.DB.Model(&models.Stats{})
-}
-
 func (sc *StatsController) between(start time.Time, end time.Time) *gorm.DB {
 	return sc.DB.Model(&models.Stats{}).Where("created_at >= ? AND created_at < ?", start, end)
 }
@@ -125,12 +164,19 @@ func (sc *StatsController) totals(query *gorm.DB) (statsTotals, error) {
 	return totals, err
 }
 
-func (sc *StatsController) serviceStats(query *gorm.DB) ([]map[string]interface{}, error) {
+func (sc *StatsController) allTimeTotals() (statsTotals, error) {
+	var totals statsTotals
+	err := sc.DB.Raw(allTimeTotalsSQL).Scan(&totals).Error
+	return totals, err
+}
+
+func (sc *StatsController) serviceStats(query *gorm.DB, columns string) ([]ServiceStats, error) {
 	var svcStats []ServiceStats
-	err := query.Select("sum(count) as total, count(distinct ban_address) as unique, service").Group("service").Order("total desc").Find(&svcStats).Error
-	if err != nil {
-		return nil, err
-	}
+	err := query.Select(columns).Group("service").Order("total desc").Find(&svcStats).Error
+	return svcStats, err
+}
+
+func servicesResponse(svcStats []ServiceStats) []map[string]interface{} {
 	svcStatsRet := []map[string]interface{}{}
 	for _, s := range svcStats {
 		if s.Service == "" {
@@ -143,15 +189,15 @@ func (sc *StatsController) serviceStats(query *gorm.DB) ([]map[string]interface{
 			},
 		})
 	}
-	return svcStatsRet, nil
+	return svcStatsRet
 }
 
 func (sc *StatsController) computeStats() (gin.H, error) {
-	allTime, err := sc.totals(sc.all())
+	allTime, err := sc.allTimeTotals()
 	if err != nil {
 		return nil, err
 	}
-	services, err := sc.serviceStats(sc.all())
+	services, err := sc.serviceStats(sc.DB.Model(&models.StatsServiceDay{}), allTimeServiceColumns)
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +210,7 @@ func (sc *StatsController) computeStats() (gin.H, error) {
 		"unique_served":         allTime.UniqueAddresses,
 		"unique_clients_served": allTime.UniqueClients,
 		"total_served":          allTime.Total,
-		"services":              services,
+		"services":              servicesResponse(services),
 		"addresses_today": gin.H{
 			"total":  todayTotals.Total,
 			"unique": todayTotals.UniqueAddresses,
@@ -179,7 +225,7 @@ func (sc *StatsController) computeStats() (gin.H, error) {
 func (sc *StatsController) computeMonthly(year int, month time.Month) (gin.H, error) {
 	monthStart := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
 	monthEnd := monthStart.AddDate(0, 1, 0)
-	services, err := sc.serviceStats(sc.between(monthStart, monthEnd))
+	services, err := sc.serviceStats(sc.between(monthStart, monthEnd), windowServiceColumns)
 	if err != nil {
 		return nil, err
 	}
@@ -193,7 +239,7 @@ func (sc *StatsController) computeMonthly(year int, month time.Month) (gin.H, er
 		return nil, err
 	}
 	return gin.H{
-		"services": services,
+		"services": servicesResponse(services),
 		"addresses": gin.H{
 			"total":  monthTotals.Total,
 			"unique": monthTotals.UniqueAddresses,
