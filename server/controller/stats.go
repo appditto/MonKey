@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/appditto/MonKey/server/database"
@@ -22,14 +23,27 @@ import (
 	"k8s.io/klog/v2"
 )
 
+const (
+	statsCacheKey        = "stats_cache"
+	statsRefreshLockKey  = "stats_refresh_lock"
+	statsRefreshInterval = 5 * time.Minute
+	statsCacheTTL        = 30 * time.Minute
+	statsTotalsColumns   = "coalesce(sum(count), 0) as total, count(distinct ban_address) as unique_addresses, count(distinct ip_address) as unique_clients"
+)
+
 type StatsController struct {
-	DB *gorm.DB
+	DB        *gorm.DB
+	computeMu sync.Mutex
 }
 
 type StatsMessage struct {
 	Svc     string
 	Address string
 	IP      string
+}
+
+func startOfDay(t time.Time) time.Time {
+	return t.UTC().Truncate(24 * time.Hour)
 }
 
 // Go routine for processing stats messages
@@ -41,7 +55,8 @@ func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
 			svc = ""
 		}
 
-		todayStr := time.Now().Format("01-02-2006")
+		today := startOfDay(time.Now())
+		tomorrow := today.AddDate(0, 0, 1)
 
 		var serviceExpr clause.Expr
 		if svc != "" {
@@ -51,7 +66,7 @@ func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
 		}
 		// Create or update stats object
 		var stats models.Stats
-		err := sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Where("date(created_at) = ?", todayStr).First(&stats).Error
+		err := sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Where("created_at >= ? AND created_at < ?", today, tomorrow).First(&stats).Error
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			stats := &models.Stats{
 				IPAddress:  c.IP,
@@ -68,7 +83,7 @@ func (sc *StatsController) StatsWorker(statsChan <-chan StatsMessage) {
 				klog.Errorf("Error saving stats: %v", err)
 			}
 		} else if err == nil {
-			err = sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Where("date(created_at) = ?", todayStr).Updates(map[string]interface{}{
+			err = sc.DB.Model(&models.Stats{}).Where("ip_address = ?", c.IP).Where("ban_address = ?", c.Address).Where(serviceExpr).Where("created_at >= ? AND created_at < ?", today, tomorrow).Updates(map[string]interface{}{
 				"count": gorm.Expr("count + ?", 1),
 			}).Error
 			if err != nil {
@@ -90,89 +105,184 @@ type ServiceStats struct {
 	Service string `json:"service"`
 }
 
+type statsTotals struct {
+	Total           uint64
+	UniqueAddresses uint64
+	UniqueClients   uint64
+}
+
+func (sc *StatsController) all() *gorm.DB {
+	return sc.DB.Model(&models.Stats{})
+}
+
+func (sc *StatsController) between(start time.Time, end time.Time) *gorm.DB {
+	return sc.DB.Model(&models.Stats{}).Where("created_at >= ? AND created_at < ?", start, end)
+}
+
+func (sc *StatsController) totals(query *gorm.DB) (statsTotals, error) {
+	var totals statsTotals
+	err := query.Select(statsTotalsColumns).Scan(&totals).Error
+	return totals, err
+}
+
+func (sc *StatsController) serviceStats(query *gorm.DB) ([]map[string]interface{}, error) {
+	var svcStats []ServiceStats
+	err := query.Select("sum(count) as total, count(distinct ban_address) as unique, service").Group("service").Order("total desc").Find(&svcStats).Error
+	if err != nil {
+		return nil, err
+	}
+	svcStatsRet := []map[string]interface{}{}
+	for _, s := range svcStats {
+		if s.Service == "" {
+			s.Service = "unspecified"
+		}
+		svcStatsRet = append(svcStatsRet, map[string]interface{}{
+			s.Service: map[string]interface{}{
+				"total":  s.Total,
+				"unique": s.Unique,
+			},
+		})
+	}
+	return svcStatsRet, nil
+}
+
+func (sc *StatsController) computeStats() (gin.H, error) {
+	allTime, err := sc.totals(sc.all())
+	if err != nil {
+		return nil, err
+	}
+	services, err := sc.serviceStats(sc.all())
+	if err != nil {
+		return nil, err
+	}
+	today := startOfDay(time.Now())
+	todayTotals, err := sc.totals(sc.between(today, today.AddDate(0, 0, 1)))
+	if err != nil {
+		return nil, err
+	}
+	return gin.H{
+		"unique_served":         allTime.UniqueAddresses,
+		"unique_clients_served": allTime.UniqueClients,
+		"total_served":          allTime.Total,
+		"services":              services,
+		"addresses_today": gin.H{
+			"total":  todayTotals.Total,
+			"unique": todayTotals.UniqueAddresses,
+		},
+		"clients_today": gin.H{
+			"total":  todayTotals.Total,
+			"unique": todayTotals.UniqueClients,
+		},
+	}, nil
+}
+
+func (sc *StatsController) computeMonthly(year int, month time.Month) (gin.H, error) {
+	monthStart := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
+	monthEnd := monthStart.AddDate(0, 1, 0)
+	services, err := sc.serviceStats(sc.between(monthStart, monthEnd))
+	if err != nil {
+		return nil, err
+	}
+	monthTotals, err := sc.totals(sc.between(monthStart, monthEnd))
+	if err != nil {
+		return nil, err
+	}
+	today := startOfDay(time.Now())
+	last30, err := sc.totals(sc.between(today.AddDate(0, 0, -30), today.AddDate(0, 0, 1)))
+	if err != nil {
+		return nil, err
+	}
+	return gin.H{
+		"services": services,
+		"addresses": gin.H{
+			"total":  monthTotals.Total,
+			"unique": monthTotals.UniqueAddresses,
+		},
+		"clients": gin.H{
+			"total":  monthTotals.Total,
+			"unique": monthTotals.UniqueClients,
+		},
+		"last30address": gin.H{
+			"total":  last30.Total,
+			"unique": last30.UniqueAddresses,
+		},
+		"last30clients": gin.H{
+			"total":  last30.Total,
+			"unique": last30.UniqueClients,
+		},
+	}, nil
+}
+
+func monthlyCacheKey(year int, month time.Month) string {
+	return fmt.Sprintf("stats_monthly_cache:%04d-%02d", year, int(month))
+}
+
+func (sc *StatsController) cached(key string, compute func() (gin.H, error)) (string, error) {
+	if body, err := database.GetRedisDB().Get(key); err == nil {
+		return body, nil
+	}
+	sc.computeMu.Lock()
+	defer sc.computeMu.Unlock()
+	if body, err := database.GetRedisDB().Get(key); err == nil {
+		return body, nil
+	}
+	return sc.store(key, compute)
+}
+
+func (sc *StatsController) store(key string, compute func() (gin.H, error)) (string, error) {
+	ret, err := compute()
+	if err != nil {
+		return "", err
+	}
+	serialized, err := json.Marshal(ret)
+	if err != nil {
+		return "", err
+	}
+	if err := database.GetRedisDB().Set(key, string(serialized), statsCacheTTL); err != nil {
+		klog.Errorf("Error caching stats: %v", err)
+	}
+	return string(serialized), nil
+}
+
+func (sc *StatsController) RefreshWorker() {
+	for {
+		sc.refresh()
+		time.Sleep(statsRefreshInterval)
+	}
+}
+
+func (sc *StatsController) refresh() {
+	acquired, err := database.GetRedisDB().SetNX(statsRefreshLockKey, "1", statsRefreshInterval)
+	if err != nil {
+		klog.Errorf("Error taking stats refresh lock: %v", err)
+		return
+	}
+	if !acquired {
+		return
+	}
+	now := time.Now().UTC()
+	sc.computeMu.Lock()
+	defer sc.computeMu.Unlock()
+	if _, err := sc.store(statsCacheKey, sc.computeStats); err != nil {
+		klog.Errorf("Error refreshing stats: %v", err)
+	}
+	_, err = sc.store(monthlyCacheKey(now.Year(), now.Month()), func() (gin.H, error) {
+		return sc.computeMonthly(now.Year(), now.Month())
+	})
+	if err != nil {
+		klog.Errorf("Error refreshing monthly stats: %v", err)
+	}
+}
+
 // Stats API
 func (sc *StatsController) Stats(c *gin.Context) {
-	// Unique IPs
-	var uniqueClients uint64
-	err := sc.DB.Model(&models.Stats{}).Select("count(distinct ip_address)").Find(&uniqueClients).Error
+	body, err := sc.cached(statsCacheKey, sc.computeStats)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Error getting unique clients served")
-		return
-	}
-
-	// Unique ban addresses
-	var uniqueBanAddress uint64
-	err = sc.DB.Model(&models.Stats{}).Select("count(distinct ban_address)").Find(&uniqueBanAddress).Error
-	if err != nil {
-		c.String(http.StatusInternalServerError, "Error getting unique monkeys served")
-		return
-	}
-
-	// Total  count
-	var count uint64
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count)").Find(&count).Error
-	if err != nil {
-		c.String(http.StatusInternalServerError, "Error getting total requests monkeys served")
-		return
-	}
-
-	// By service
-	var svcStats []ServiceStats
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique, service").Group("service").Order("total desc").Find(&svcStats).Error
-	if err != nil {
-		klog.Errorf("Error getting svc stats: %v", err)
-		c.String(http.StatusInternalServerError, "Error getting statss")
-		return
-	}
-	var svcStatsRet []map[string]interface{}
-	if len(svcStats) > 0 {
-		for _, s := range svcStats {
-			if s.Service == "" {
-				s.Service = "unspecified"
-			}
-			svcStatsRet = append(svcStatsRet, map[string]interface{}{
-				s.Service: map[string]interface{}{
-					"total":  s.Total,
-					"unique": s.Unique,
-				},
-			})
-		}
-	} else {
-		svcStatsRet = []map[string]interface{}{}
-	}
-
-	// Today
-	todayStr := time.Now().Format("01-02-2006")
-	var todayStats StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique").Where("date(created_at) = ?", todayStr).Order("total desc").Find(&todayStats).Error
-	if err != nil {
-		klog.Errorf("Error getting today stats: %v", err)
-		c.String(http.StatusInternalServerError, "Error getting statss")
-		return
-	}
-	var todayStatsIP StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ip_address) as unique").Where("date(created_at) = ?", todayStr).Order("total desc").Find(&todayStatsIP).Error
-	if err != nil {
-		klog.Errorf("Error getting today stats IP: %v", err)
+		klog.Errorf("Error getting stats: %v", err)
 		c.String(http.StatusInternalServerError, "Error getting stats")
 		return
 	}
-
-	// Return response
-	c.JSON(200, gin.H{
-		"unique_served":         uniqueBanAddress,
-		"unique_clients_served": uniqueClients,
-		"total_served":          count,
-		"services":              svcStatsRet,
-		"addresses_today": map[string]interface{}{
-			"total":  todayStats.Total,
-			"unique": todayStats.Unique,
-		},
-		"clients_today": map[string]interface{}{
-			"total":  todayStatsIP.Total,
-			"unique": todayStatsIP.Unique,
-		},
-	})
+	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(body))
 }
 
 // Monthly stats API
@@ -181,103 +291,26 @@ func (sc *StatsController) StatsMonthly(c *gin.Context) {
 	yearStr := c.Query("year")
 	monthInt, err := strconv.Atoi(monthStr)
 	if err != nil {
-		monthInt = int(time.Now().Month())
+		monthInt = int(time.Now().UTC().Month())
 	} else if monthInt < 1 || monthInt > 12 {
 		c.String(http.StatusBadRequest, "%s", "month must be between 1 and 12")
 		return
 	}
 	yearInt, err := strconv.Atoi(yearStr)
 	if err != nil {
-		yearInt = time.Now().Year()
+		yearInt = time.Now().UTC().Year()
 	}
+	month := time.Month(monthInt)
 
-	targetDt := time.Date(yearInt, time.Month(monthInt), 1, 0, 0, 0, 0, time.UTC).Format("01-02-2006")
-	// By service
-	var svcStats []ServiceStats
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique, service").Where("date_trunc('month', created_at) = ?", targetDt).Group("service").Order("total desc").Find(&svcStats).Error
+	body, err := sc.cached(monthlyCacheKey(yearInt, month), func() (gin.H, error) {
+		return sc.computeMonthly(yearInt, month)
+	})
 	if err != nil {
-		klog.Errorf("Error getting svc stats: %v", err)
+		klog.Errorf("Error getting monthly stats: %v", err)
 		c.String(http.StatusInternalServerError, "Error getting stats")
 		return
 	}
-	var svcStatsRet []map[string]interface{}
-	if len(svcStats) > 0 {
-		for _, s := range svcStats {
-			if s.Service == "" {
-				s.Service = "unspecified"
-			}
-			svcStatsRet = append(svcStatsRet, map[string]interface{}{
-				s.Service: map[string]interface{}{
-					"total":  s.Total,
-					"unique": s.Unique,
-				},
-			})
-		}
-	} else {
-		svcStatsRet = []map[string]interface{}{}
-	}
-
-	// Target
-	var targetStats StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique").Where("date_trunc('month', created_at) = ?", targetDt).Order("total desc").Find(&targetStats).Error
-	if err != nil {
-		klog.Errorf("Error getting today stats: %v", err)
-		c.String(http.StatusInternalServerError, "Error getting stats")
-		return
-	}
-	var targetStatsIP StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ip_address) as unique").Where("date_trunc('month', created_at) = ?", targetDt).Order("total desc").Find(&targetStatsIP).Error
-	if err != nil {
-		klog.Errorf("Error getting today stats IP: %v", err)
-		c.String(http.StatusInternalServerError, "Error getting stats")
-		return
-	}
-
-	// 30 days ago
-	last30dt := time.Now().AddDate(0, 0, -30).Format("01-02-2006")
-	var last30Stats StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ban_address) as unique").Where("date(created_at) >= ?", last30dt).Order("total desc").Find(&last30Stats).Error
-	if err != nil {
-		klog.Errorf("Error getting today stats: %v", err)
-		c.String(http.StatusInternalServerError, "Error getting stats")
-		return
-	}
-	var last30StatsIP StatsNumbers
-	err = sc.DB.Model(&models.Stats{}).Select("sum(count) as total, count(distinct ip_address) as unique").Where("date(created_at) >= ?", last30dt).Order("total desc").Find(&last30StatsIP).Error
-	if err != nil {
-		klog.Errorf("Error getting today stats IP: %v", err)
-		c.String(http.StatusInternalServerError, "Error getting stats")
-		return
-	}
-	// Return response
-	ret := map[string]interface{}{
-		"services": svcStatsRet,
-		"addresses": map[string]interface{}{
-			"total":  targetStats.Total,
-			"unique": targetStats.Unique,
-		},
-		"clients": map[string]interface{}{
-			"total":  targetStatsIP.Total,
-			"unique": targetStatsIP.Unique,
-		},
-		"last30address": map[string]interface{}{
-			"total":  last30Stats.Total,
-			"unique": last30Stats.Unique,
-		},
-		"last30clients": map[string]interface{}{
-			"total":  last30StatsIP.Total,
-			"unique": last30StatsIP.Unique,
-		},
-	}
-	// Cache first
-	serialized, err := json.Marshal(ret)
-	if err != nil {
-		klog.Errorf("Error serializing stats: %v", err)
-	} else {
-		database.GetRedisDB().Set("stats_monthly_cache", string(serialized), time.Second*300)
-	}
-	c.JSON(200, ret)
-	return
+	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(body))
 }
 
 // For generating CSV documents for algorithm analysis

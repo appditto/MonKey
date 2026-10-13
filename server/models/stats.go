@@ -11,7 +11,7 @@ type Stats struct {
 	ID         uuid.UUID `json:"_id" gorm:"primaryKey;autoIncrement:false"`
 	IPAddress  string    `json:"ip_address" gorm:"not null;index:unique_ban_ip,unique"`
 	BanAddress string    `json:"ban_address" gorm:"not null;index:unique_ban_ip,unique"`
-	CreatedAt  time.Time `json:"created_at" gorm:"not null;index:unique_ban_ip,unique"`
+	CreatedAt  time.Time `json:"created_at" gorm:"not null;index:unique_ban_ip,unique;index:idx_stats_created_at"`
 	Service    *string   `json:"service" gorm:"index:unique_ban_ip,unique"`
 	Count      uint64    `json:"count" gorm:"type:numeric;default:0;not null"`
 }
